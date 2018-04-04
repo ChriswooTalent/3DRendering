@@ -1,0 +1,38 @@
+﻿  VolumeRendering.cpp
+d:\project\3dreconstruction\project_carbon11\renderlib\renderlib\openclbase.h(4): fatal error C1083: Cannot open include file: 'GL/freeglut.h': No such file or directory
+  Volumefiltering.cpp
+d:\project\3dreconstruction\project_carbon11\renderlib\renderlib\openclbase.h(4): fatal error C1083: Cannot open include file: 'GL/freeglut.h': No such file or directory
+  ScanApple.cpp
+d:\project\3dreconstruction\project_carbon11\renderlib\renderlib\scanapple.h(19): fatal error C1083: Cannot open include file: 'CL/opencl.h': No such file or directory
+  Rotateslice.cpp
+d:\project\3dreconstruction\project_carbon11\renderlib\renderlib\openclbase.h(4): fatal error C1083: Cannot open include file: 'GL/freeglut.h': No such file or directory
+  RenderBase.cpp
+d:\project\3dreconstruction\project_carbon11\renderlib\renderlib\openclbase.h(4): fatal error C1083: Cannot open include file: 'GL/freeglut.h': No such file or directory
+  ReadConfigFile.cpp
+d:\project\3dreconstruction\project_carbon11\renderlib\renderlib\readconfigfile.cpp(47): error C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(205): note: see declaration of 'fopen'
+d:\project\3dreconstruction\project_carbon11\renderlib\renderlib\readconfigfile.cpp(101): error C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(205): note: see declaration of 'fopen'
+d:\project\3dreconstruction\project_carbon11\renderlib\renderlib\readconfigfile.cpp(169): error C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(205): note: see declaration of 'fopen'
+d:\project\3dreconstruction\project_carbon11\renderlib\renderlib\readconfigfile.cpp(201): error C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(205): note: see declaration of 'fopen'
+  OpenCLBase.cpp
+d:\project\3dreconstruction\project_carbon11\renderlib\renderlib\openclbase.h(4): fatal error C1083: Cannot open include file: 'GL/freeglut.h': No such file or directory
+  MarchingCube.cpp
+d:\project\3dreconstruction\project_carbon11\renderlib\renderlib\openclbase.h(4): fatal error C1083: Cannot open include file: 'GL/freeglut.h': No such file or directory
+  InternalThread.cpp
+d:\project\3dreconstruction\project_carbon11\renderlib\renderlib\internalthread.cpp(32): error C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(1769): note: see declaration of 'sprintf'
+d:\project\3dreconstruction\project_carbon11\renderlib\renderlib\internalthread.cpp(39): error C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(1769): note: see declaration of 'sprintf'
+  ImageBasicProcess.cpp
+d:\project\3dreconstruction\project_carbon11\renderlib\renderlib\imagebasicprocess.cpp(76): warning C4018: '<': signed/unsigned mismatch
+d:\project\3dreconstruction\project_carbon11\renderlib\renderlib\imagebasicprocess.cpp(125): warning C4101: 'value': unreferenced local variable
+d:\project\3dreconstruction\project_carbon11\renderlib\renderlib\imagebasicprocess.cpp(169): error C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(205): note: see declaration of 'fopen'
+  CarbonMed3DRecon_DLL.cpp
+d:\project\3dreconstruction\project_carbon11\renderlib\renderlib\carbonmed3drecon.h(6): fatal error C1083: Cannot open include file: 'GL/freeglut.h': No such file or directory
+  CarbonMed3DRecon.cpp
+d:\project\3dreconstruction\project_carbon11\renderlib\renderlib\carbonmed3drecon.h(6): fatal error C1083: Cannot open include file: 'GL/freeglut.h': No such file or directory
+  Generating Code...

@@ -1,0 +1,26 @@
+clc;
+clear all;
+close all;
+probeimage = imread('probe2.png');
+proberesize = imresize()
+figure();imshow(probeimage);
+temp1 = probeimage(:,:,1);
+temp2 = probeimage(:,:,2);
+temp3 = probeimage(:,:,3);
+figure();imshow(temp1);
+figure();imshow(temp2);
+figure();imshow(temp3);
+sz = size(probeimage);
+height = sz(1);
+width = sz(2);
+channels = sz(3);
+for h = 1:height
+    for w = 1:width
+        for c = 1:channels
+            imagecolor((h-1)*width*channels+channels*(w-1)+c) = probeimage(h, w, c);
+        end
+    end
+end
+fid = fopen('ProbeIcon.dat', 'wb');
+fwrite(fid, imagecolor);
+fclose(fid);

@@ -1,0 +1,311 @@
+﻿生成启动时间为 2018/4/1 22:25:43。
+     1>项目“E:\chriswoocode\project_carbon\RenderLib\RenderLib\RenderLib.vcxproj”在节点 2 上(Build 个目标)。
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /IE:\AMD\include /I..\shared\inc /I..\..\include /Zi /nologo /W3 /WX- /sdl /O2 /Oi /GL /D NDEBUG /D _CONSOLE /D _WINDLL /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Release\\" /Fd"x64\Release\vc120.pdb" /Gd /TP /errorReport:prompt /D_CRT_SECURE_NO_WARNINGS CarbonMed3DRecon.cpp CarbonMed3DRecon_DLL.cpp CorRegisTration.cpp ImageBasicProcess.cpp InternalThread.cpp MarchingCube.cpp Matrices.cpp OpenCLBase.cpp OpenGLBase.cpp RenderBase.cpp Rotateslice.cpp ScanApple.cpp Volumefiltering.cpp VolumeRendering.cpp Window.cpp
+         CarbonMed3DRecon.cpp
+     1>e:\chriswoocode\project_carbon\include\DataTypes.h(242): warning C4172: 返回局部变量或临时变量的地址
+     1>e:\chriswoocode\project_carbon\include\DataTypes.h(284): warning C4172: 返回局部变量或临时变量的地址
+     1>e:\chriswoocode\project_carbon\include\DataTypes.h(294): warning C4172: 返回局部变量或临时变量的地址
+     1>e:\chriswoocode\project_carbon\include\RenderBase.h(57): warning C4275: 非 dll 接口 class“OpenCLBase”用作 dll 接口 class“RenderBase”的基
+                 e:\chriswoocode\project_carbon\include\OpenCLBase.h(30) : 参见“OpenCLBase”的声明
+                 e:\chriswoocode\project_carbon\include\RenderBase.h(57) : 参见“RenderBase”的声明
+     1>e:\chriswoocode\project_carbon\include\RenderBase.h(58): warning C4275: 非 dll 接口 class“InternalThread”用作 dll 接口 class“RenderBase”的基
+                 e:\chriswoocode\project_carbon\include\InternalThread.h(10) : 参见“InternalThread”的声明
+                 e:\chriswoocode\project_carbon\include\RenderBase.h(57) : 参见“RenderBase”的声明
+     1>e:\chriswoocode\project_carbon\include\RenderBase.h(402): warning C4251: “RenderBase::m_EyeCenterPt”: struct“Point3”需要有 dll 接口由 class“RenderBase”的客户端使用
+                 e:\chriswoocode\project_carbon\include\DataTypes.h(247) : 参见“Point3”的声明
+     1>e:\chriswoocode\project_carbon\include\RenderBase.h(403): warning C4251: “RenderBase::m_EyeFoucusCenterPt”: struct“Point3”需要有 dll 接口由 class“RenderBase”的客户端使用
+                 e:\chriswoocode\project_carbon\include\DataTypes.h(247) : 参见“Point3”的声明
+     1>e:\chriswoocode\project_carbon\include\RenderBase.h(404): warning C4251: “RenderBase::m_HeadDirection”: struct“Point3”需要有 dll 接口由 class“RenderBase”的客户端使用
+                 e:\chriswoocode\project_carbon\include\DataTypes.h(247) : 参见“Point3”的声明
+     1>e:\chriswoocode\project_carbon\include\RenderBase.h(406): warning C4251: “RenderBase::volumedatafile”: class“std::basic_string<char,std::char_traits<char>,std::allocator<char>>”需要有 dll 接口由 class“RenderBase”的客户端使用
+     1>e:\chriswoocode\project_carbon\include\RenderBase.h(407): warning C4251: “RenderBase::volumedatamaskfile”: class“std::basic_string<char,std::char_traits<char>,std::allocator<char>>”需要有 dll 接口由 class“RenderBase”的客户端使用
+     1>e:\chriswoocode\project_carbon\include\RenderBase.h(429): warning C4251: “RenderBase::m_WorldPt”: struct“Point3”需要有 dll 接口由 class“RenderBase”的客户端使用
+                 e:\chriswoocode\project_carbon\include\DataTypes.h(247) : 参见“Point3”的声明
+     1>e:\chriswoocode\project_carbon\include\RenderBase.h(430): warning C4251: “RenderBase::m_RefPt1”: struct“Point3”需要有 dll 接口由 class“RenderBase”的客户端使用
+                 e:\chriswoocode\project_carbon\include\DataTypes.h(247) : 参见“Point3”的声明
+     1>e:\chriswoocode\project_carbon\include\RenderBase.h(431): warning C4251: “RenderBase::m_RefPt2”: struct“Point3”需要有 dll 接口由 class“RenderBase”的客户端使用
+                 e:\chriswoocode\project_carbon\include\DataTypes.h(247) : 参见“Point3”的声明
+     1>e:\chriswoocode\project_carbon\include\RenderBase.h(432): warning C4251: “RenderBase::m_RefPt3”: struct“Point3”需要有 dll 接口由 class“RenderBase”的客户端使用
+                 e:\chriswoocode\project_carbon\include\DataTypes.h(247) : 参见“Point3”的声明
+     1>e:\chriswoocode\project_carbon\include\RenderBase.h(433): warning C4251: “RenderBase::m_RefPt4”: struct“Point3”需要有 dll 接口由 class“RenderBase”的客户端使用
+                 e:\chriswoocode\project_carbon\include\DataTypes.h(247) : 参见“Point3”的声明
+     1>e:\chriswoocode\project_carbon\include\RenderBase.h(489): warning C4251: “RenderBase::m_MaskFileNames”: class“std::vector<std::string,std::allocator<_Ty>>”需要有 dll 接口由 class“RenderBase”的客户端使用
+                 with
+                 [
+                     _Ty=std::string
+                 ]
+     1>CarbonMed3DRecon.cpp(338): warning C4101: “currMode”: 未引用的局部变量
+     1>CarbonMed3DRecon.cpp(618): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+     1>CarbonMed3DRecon.cpp(626): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+     1>CarbonMed3DRecon.cpp(646): warning C4244: “=”: 从“float”转换到“int”，可能丢失数据
+     1>CarbonMed3DRecon.cpp(647): warning C4244: “=”: 从“float”转换到“int”，可能丢失数据
+     1>CarbonMed3DRecon.cpp(740): warning C4244: “参数”: 从“int”转换到“float”，可能丢失数据
+     1>CarbonMed3DRecon.cpp(869): warning C4244: “参数”: 从“float”转换到“int”，可能丢失数据
+     1>CarbonMed3DRecon.cpp(870): warning C4244: “参数”: 从“float”转换到“int”，可能丢失数据
+     1>CarbonMed3DRecon.cpp(871): warning C4244: “参数”: 从“float”转换到“int”，可能丢失数据
+     1>CarbonMed3DRecon.cpp(872): warning C4244: “参数”: 从“float”转换到“int”，可能丢失数据
+     1>CarbonMed3DRecon.cpp(875): warning C4244: “参数”: 从“float”转换到“int”，可能丢失数据
+     1>CarbonMed3DRecon.cpp(877): warning C4244: “参数”: 从“float”转换到“int”，可能丢失数据
+     1>CarbonMed3DRecon.cpp(1173): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
+     1>CarbonMed3DRecon.cpp(1174): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
+     1>CarbonMed3DRecon.cpp(1175): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
+     1>CarbonMed3DRecon.cpp(1158): warning C4101: “fps”: 未引用的局部变量
+     1>CarbonMed3DRecon.cpp(1323): warning C4305: “参数”: 从“double”到“GLfloat”截断
+     1>CarbonMed3DRecon.cpp(1351): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
+     1>CarbonMed3DRecon.cpp(1352): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
+     1>CarbonMed3DRecon.cpp(1353): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
+     1>CarbonMed3DRecon.cpp(1437): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+     1>CarbonMed3DRecon.cpp(1438): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+     1>CarbonMed3DRecon.cpp(1439): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+     1>CarbonMed3DRecon.cpp(1440): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+     1>CarbonMed3DRecon.cpp(1441): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+     1>CarbonMed3DRecon.cpp(1442): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+     1>CarbonMed3DRecon.cpp(1571): warning C4244: “+=”: 从“double”转换到“float”，可能丢失数据
+     1>CarbonMed3DRecon.cpp(1572): warning C4244: “+=”: 从“double”转换到“float”，可能丢失数据
+     1>CarbonMed3DRecon.cpp(1586): warning C4244: “-=”: 从“double”转换到“float”，可能丢失数据
+         CarbonMed3DRecon_DLL.cpp
+     1>e:\chriswoocode\project_carbon\include\DataTypes.h(242): warning C4172: 返回局部变量或临时变量的地址
+     1>e:\chriswoocode\project_carbon\include\DataTypes.h(284): warning C4172: 返回局部变量或临时变量的地址
+     1>e:\chriswoocode\project_carbon\include\DataTypes.h(294): warning C4172: 返回局部变量或临时变量的地址
+     1>e:\chriswoocode\project_carbon\include\RenderBase.h(57): warning C4275: 非 dll 接口 class“OpenCLBase”用作 dll 接口 class“RenderBase”的基
+                 e:\chriswoocode\project_carbon\include\OpenCLBase.h(30) : 参见“OpenCLBase”的声明
+                 e:\chriswoocode\project_carbon\include\RenderBase.h(57) : 参见“RenderBase”的声明
+     1>e:\chriswoocode\project_carbon\include\RenderBase.h(58): warning C4275: 非 dll 接口 class“InternalThread”用作 dll 接口 class“RenderBase”的基
+                 e:\chriswoocode\project_carbon\include\InternalThread.h(10) : 参见“InternalThread”的声明
+                 e:\chriswoocode\project_carbon\include\RenderBase.h(57) : 参见“RenderBase”的声明
+     1>e:\chriswoocode\project_carbon\include\RenderBase.h(402): warning C4251: “RenderBase::m_EyeCenterPt”: struct“Point3”需要有 dll 接口由 class“RenderBase”的客户端使用
+                 e:\chriswoocode\project_carbon\include\DataTypes.h(247) : 参见“Point3”的声明
+     1>e:\chriswoocode\project_carbon\include\RenderBase.h(403): warning C4251: “RenderBase::m_EyeFoucusCenterPt”: struct“Point3”需要有 dll 接口由 class“RenderBase”的客户端使用
+                 e:\chriswoocode\project_carbon\include\DataTypes.h(247) : 参见“Point3”的声明
+     1>e:\chriswoocode\project_carbon\include\RenderBase.h(404): warning C4251: “RenderBase::m_HeadDirection”: struct“Point3”需要有 dll 接口由 class“RenderBase”的客户端使用
+                 e:\chriswoocode\project_carbon\include\DataTypes.h(247) : 参见“Point3”的声明
+     1>e:\chriswoocode\project_carbon\include\RenderBase.h(406): warning C4251: “RenderBase::volumedatafile”: class“std::basic_string<char,std::char_traits<char>,std::allocator<char>>”需要有 dll 接口由 class“RenderBase”的客户端使用
+     1>e:\chriswoocode\project_carbon\include\RenderBase.h(407): warning C4251: “RenderBase::volumedatamaskfile”: class“std::basic_string<char,std::char_traits<char>,std::allocator<char>>”需要有 dll 接口由 class“RenderBase”的客户端使用
+     1>e:\chriswoocode\project_carbon\include\RenderBase.h(429): warning C4251: “RenderBase::m_WorldPt”: struct“Point3”需要有 dll 接口由 class“RenderBase”的客户端使用
+                 e:\chriswoocode\project_carbon\include\DataTypes.h(247) : 参见“Point3”的声明
+     1>e:\chriswoocode\project_carbon\include\RenderBase.h(430): warning C4251: “RenderBase::m_RefPt1”: struct“Point3”需要有 dll 接口由 class“RenderBase”的客户端使用
+                 e:\chriswoocode\project_carbon\include\DataTypes.h(247) : 参见“Point3”的声明
+     1>e:\chriswoocode\project_carbon\include\RenderBase.h(431): warning C4251: “RenderBase::m_RefPt2”: struct“Point3”需要有 dll 接口由 class“RenderBase”的客户端使用
+                 e:\chriswoocode\project_carbon\include\DataTypes.h(247) : 参见“Point3”的声明
+     1>e:\chriswoocode\project_carbon\include\RenderBase.h(432): warning C4251: “RenderBase::m_RefPt3”: struct“Point3”需要有 dll 接口由 class“RenderBase”的客户端使用
+                 e:\chriswoocode\project_carbon\include\DataTypes.h(247) : 参见“Point3”的声明
+     1>e:\chriswoocode\project_carbon\include\RenderBase.h(433): warning C4251: “RenderBase::m_RefPt4”: struct“Point3”需要有 dll 接口由 class“RenderBase”的客户端使用
+                 e:\chriswoocode\project_carbon\include\DataTypes.h(247) : 参见“Point3”的声明
+     1>e:\chriswoocode\project_carbon\include\RenderBase.h(489): warning C4251: “RenderBase::m_MaskFileNames”: class“std::vector<std::string,std::allocator<_Ty>>”需要有 dll 接口由 class“RenderBase”的客户端使用
+                 with
+                 [
+                     _Ty=std::string
+                 ]
+         CorRegisTration.cpp
+     1>e:\chriswoocode\project_carbon\include\DataTypes.h(242): warning C4172: 返回局部变量或临时变量的地址
+     1>e:\chriswoocode\project_carbon\include\DataTypes.h(284): warning C4172: 返回局部变量或临时变量的地址
+     1>e:\chriswoocode\project_carbon\include\DataTypes.h(294): warning C4172: 返回局部变量或临时变量的地址
+     1>CorRegisTration.cpp(238): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+     1>CorRegisTration.cpp(481): warning C4101: “i”: 未引用的局部变量
+         ImageBasicProcess.cpp
+     1>e:\chriswoocode\project_carbon\include\DataTypes.h(242): warning C4172: 返回局部变量或临时变量的地址
+     1>e:\chriswoocode\project_carbon\include\DataTypes.h(284): warning C4172: 返回局部变量或临时变量的地址
+     1>e:\chriswoocode\project_carbon\include\DataTypes.h(294): warning C4172: 返回局部变量或临时变量的地址
+     1>ImageBasicProcess.cpp(76): warning C4018: “<”: 有符号/无符号不匹配
+     1>ImageBasicProcess.cpp(125): warning C4101: “value”: 未引用的局部变量
+         InternalThread.cpp
+         MarchingCube.cpp
+     1>e:\chriswoocode\project_carbon\include\DataTypes.h(242): warning C4172: 返回局部变量或临时变量的地址
+     1>e:\chriswoocode\project_carbon\include\DataTypes.h(284): warning C4172: 返回局部变量或临时变量的地址
+     1>e:\chriswoocode\project_carbon\include\DataTypes.h(294): warning C4172: 返回局部变量或临时变量的地址
+     1>e:\chriswoocode\project_carbon\include\RenderBase.h(57): warning C4275: 非 dll 接口 class“OpenCLBase”用作 dll 接口 class“RenderBase”的基
+                 e:\chriswoocode\project_carbon\include\OpenCLBase.h(30) : 参见“OpenCLBase”的声明
+                 e:\chriswoocode\project_carbon\include\RenderBase.h(57) : 参见“RenderBase”的声明
+     1>e:\chriswoocode\project_carbon\include\RenderBase.h(58): warning C4275: 非 dll 接口 class“InternalThread”用作 dll 接口 class“RenderBase”的基
+                 e:\chriswoocode\project_carbon\include\InternalThread.h(10) : 参见“InternalThread”的声明
+                 e:\chriswoocode\project_carbon\include\RenderBase.h(57) : 参见“RenderBase”的声明
+     1>e:\chriswoocode\project_carbon\include\RenderBase.h(402): warning C4251: “RenderBase::m_EyeCenterPt”: struct“Point3”需要有 dll 接口由 class“RenderBase”的客户端使用
+                 e:\chriswoocode\project_carbon\include\DataTypes.h(247) : 参见“Point3”的声明
+     1>e:\chriswoocode\project_carbon\include\RenderBase.h(403): warning C4251: “RenderBase::m_EyeFoucusCenterPt”: struct“Point3”需要有 dll 接口由 class“RenderBase”的客户端使用
+                 e:\chriswoocode\project_carbon\include\DataTypes.h(247) : 参见“Point3”的声明
+     1>e:\chriswoocode\project_carbon\include\RenderBase.h(404): warning C4251: “RenderBase::m_HeadDirection”: struct“Point3”需要有 dll 接口由 class“RenderBase”的客户端使用
+                 e:\chriswoocode\project_carbon\include\DataTypes.h(247) : 参见“Point3”的声明
+     1>e:\chriswoocode\project_carbon\include\RenderBase.h(406): warning C4251: “RenderBase::volumedatafile”: class“std::basic_string<char,std::char_traits<char>,std::allocator<char>>”需要有 dll 接口由 class“RenderBase”的客户端使用
+     1>e:\chriswoocode\project_carbon\include\RenderBase.h(407): warning C4251: “RenderBase::volumedatamaskfile”: class“std::basic_string<char,std::char_traits<char>,std::allocator<char>>”需要有 dll 接口由 class“RenderBase”的客户端使用
+     1>e:\chriswoocode\project_carbon\include\RenderBase.h(429): warning C4251: “RenderBase::m_WorldPt”: struct“Point3”需要有 dll 接口由 class“RenderBase”的客户端使用
+                 e:\chriswoocode\project_carbon\include\DataTypes.h(247) : 参见“Point3”的声明
+     1>e:\chriswoocode\project_carbon\include\RenderBase.h(430): warning C4251: “RenderBase::m_RefPt1”: struct“Point3”需要有 dll 接口由 class“RenderBase”的客户端使用
+                 e:\chriswoocode\project_carbon\include\DataTypes.h(247) : 参见“Point3”的声明
+     1>e:\chriswoocode\project_carbon\include\RenderBase.h(431): warning C4251: “RenderBase::m_RefPt2”: struct“Point3”需要有 dll 接口由 class“RenderBase”的客户端使用
+                 e:\chriswoocode\project_carbon\include\DataTypes.h(247) : 参见“Point3”的声明
+     1>e:\chriswoocode\project_carbon\include\RenderBase.h(432): warning C4251: “RenderBase::m_RefPt3”: struct“Point3”需要有 dll 接口由 class“RenderBase”的客户端使用
+                 e:\chriswoocode\project_carbon\include\DataTypes.h(247) : 参见“Point3”的声明
+     1>e:\chriswoocode\project_carbon\include\RenderBase.h(433): warning C4251: “RenderBase::m_RefPt4”: struct“Point3”需要有 dll 接口由 class“RenderBase”的客户端使用
+                 e:\chriswoocode\project_carbon\include\DataTypes.h(247) : 参见“Point3”的声明
+     1>e:\chriswoocode\project_carbon\include\RenderBase.h(489): warning C4251: “RenderBase::m_MaskFileNames”: class“std::vector<std::string,std::allocator<_Ty>>”需要有 dll 接口由 class“RenderBase”的客户端使用
+                 with
+                 [
+                     _Ty=std::string
+                 ]
+     1>E:\chriswoocode\project_carbon\include\ScanApple.h(25): warning C4005: “NUM_BANKS”: 宏重定义
+                 e:\chriswoocode\project_carbon\include\DataTypes.h(118) : 参见“NUM_BANKS”的前一个定义
+     1>E:\chriswoocode\project_carbon\include\ScanApple.h(29): warning C4005: “min”: 宏重定义
+                 C:\Program Files (x86)\Windows Kits\8.1\Include\shared\minwindef.h(197) : 参见“min”的前一个定义
+     1>MarchingCube.cpp(1386): warning C4244: “参数”: 从“unsigned int”转换到“float”，可能丢失数据
+     1>MarchingCube.cpp(1403): warning C4244: “参数”: 从“unsigned int”转换到“float”，可能丢失数据
+         Matrices.cpp
+         OpenCLBase.cpp
+     1>e:\chriswoocode\project_carbon\include\DataTypes.h(242): warning C4172: 返回局部变量或临时变量的地址
+     1>e:\chriswoocode\project_carbon\include\DataTypes.h(284): warning C4172: 返回局部变量或临时变量的地址
+     1>e:\chriswoocode\project_carbon\include\DataTypes.h(294): warning C4172: 返回局部变量或临时变量的地址
+         OpenGLBase.cpp
+     1>e:\chriswoocode\project_carbon\include\DataTypes.h(242): warning C4172: 返回局部变量或临时变量的地址
+     1>e:\chriswoocode\project_carbon\include\DataTypes.h(284): warning C4172: 返回局部变量或临时变量的地址
+     1>e:\chriswoocode\project_carbon\include\DataTypes.h(294): warning C4172: 返回局部变量或临时变量的地址
+     1>OpenGLBase.cpp(13): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+     1>OpenGLBase.cpp(14): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+     1>OpenGLBase.cpp(70): warning C4305: “初始化”: 从“double”到“GLfloat”截断
+     1>OpenGLBase.cpp(71): warning C4305: “初始化”: 从“double”到“GLfloat”截断
+     1>OpenGLBase.cpp(72): warning C4305: “初始化”: 从“double”到“GLfloat”截断
+     1>OpenGLBase.cpp(73): warning C4305: “初始化”: 从“double”到“GLfloat”截断
+     1>OpenGLBase.cpp(100): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+         RenderBase.cpp
+     1>e:\chriswoocode\project_carbon\include\DataTypes.h(242): warning C4172: 返回局部变量或临时变量的地址
+     1>e:\chriswoocode\project_carbon\include\DataTypes.h(284): warning C4172: 返回局部变量或临时变量的地址
+     1>e:\chriswoocode\project_carbon\include\DataTypes.h(294): warning C4172: 返回局部变量或临时变量的地址
+     1>E:\chriswoocode\project_carbon\include\RenderBase.h(57): warning C4275: 非 dll 接口 class“OpenCLBase”用作 dll 接口 class“RenderBase”的基
+                 e:\chriswoocode\project_carbon\include\OpenCLBase.h(30) : 参见“OpenCLBase”的声明
+                 E:\chriswoocode\project_carbon\include\RenderBase.h(57) : 参见“RenderBase”的声明
+     1>E:\chriswoocode\project_carbon\include\RenderBase.h(58): warning C4275: 非 dll 接口 class“InternalThread”用作 dll 接口 class“RenderBase”的基
+                 e:\chriswoocode\project_carbon\include\InternalThread.h(10) : 参见“InternalThread”的声明
+                 E:\chriswoocode\project_carbon\include\RenderBase.h(57) : 参见“RenderBase”的声明
+     1>E:\chriswoocode\project_carbon\include\RenderBase.h(402): warning C4251: “RenderBase::m_EyeCenterPt”: struct“Point3”需要有 dll 接口由 class“RenderBase”的客户端使用
+                 e:\chriswoocode\project_carbon\include\DataTypes.h(247) : 参见“Point3”的声明
+     1>E:\chriswoocode\project_carbon\include\RenderBase.h(403): warning C4251: “RenderBase::m_EyeFoucusCenterPt”: struct“Point3”需要有 dll 接口由 class“RenderBase”的客户端使用
+                 e:\chriswoocode\project_carbon\include\DataTypes.h(247) : 参见“Point3”的声明
+     1>E:\chriswoocode\project_carbon\include\RenderBase.h(404): warning C4251: “RenderBase::m_HeadDirection”: struct“Point3”需要有 dll 接口由 class“RenderBase”的客户端使用
+                 e:\chriswoocode\project_carbon\include\DataTypes.h(247) : 参见“Point3”的声明
+     1>E:\chriswoocode\project_carbon\include\RenderBase.h(406): warning C4251: “RenderBase::volumedatafile”: class“std::basic_string<char,std::char_traits<char>,std::allocator<char>>”需要有 dll 接口由 class“RenderBase”的客户端使用
+     1>E:\chriswoocode\project_carbon\include\RenderBase.h(407): warning C4251: “RenderBase::volumedatamaskfile”: class“std::basic_string<char,std::char_traits<char>,std::allocator<char>>”需要有 dll 接口由 class“RenderBase”的客户端使用
+     1>E:\chriswoocode\project_carbon\include\RenderBase.h(429): warning C4251: “RenderBase::m_WorldPt”: struct“Point3”需要有 dll 接口由 class“RenderBase”的客户端使用
+                 e:\chriswoocode\project_carbon\include\DataTypes.h(247) : 参见“Point3”的声明
+     1>E:\chriswoocode\project_carbon\include\RenderBase.h(430): warning C4251: “RenderBase::m_RefPt1”: struct“Point3”需要有 dll 接口由 class“RenderBase”的客户端使用
+                 e:\chriswoocode\project_carbon\include\DataTypes.h(247) : 参见“Point3”的声明
+     1>E:\chriswoocode\project_carbon\include\RenderBase.h(431): warning C4251: “RenderBase::m_RefPt2”: struct“Point3”需要有 dll 接口由 class“RenderBase”的客户端使用
+                 e:\chriswoocode\project_carbon\include\DataTypes.h(247) : 参见“Point3”的声明
+     1>E:\chriswoocode\project_carbon\include\RenderBase.h(432): warning C4251: “RenderBase::m_RefPt3”: struct“Point3”需要有 dll 接口由 class“RenderBase”的客户端使用
+                 e:\chriswoocode\project_carbon\include\DataTypes.h(247) : 参见“Point3”的声明
+     1>E:\chriswoocode\project_carbon\include\RenderBase.h(433): warning C4251: “RenderBase::m_RefPt4”: struct“Point3”需要有 dll 接口由 class“RenderBase”的客户端使用
+                 e:\chriswoocode\project_carbon\include\DataTypes.h(247) : 参见“Point3”的声明
+     1>E:\chriswoocode\project_carbon\include\RenderBase.h(489): warning C4251: “RenderBase::m_MaskFileNames”: class“std::vector<std::string,std::allocator<_Ty>>”需要有 dll 接口由 class“RenderBase”的客户端使用
+                 with
+                 [
+                     _Ty=std::string
+                 ]
+     1>RenderBase.cpp(824): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+     1>RenderBase.cpp(825): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+     1>RenderBase.cpp(826): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+     1>RenderBase.cpp(872): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+     1>RenderBase.cpp(873): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+     1>RenderBase.cpp(874): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+     1>RenderBase.cpp(882): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+     1>RenderBase.cpp(883): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+     1>RenderBase.cpp(884): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+     1>RenderBase.cpp(964): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+     1>RenderBase.cpp(966): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+     1>RenderBase.cpp(988): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+     1>RenderBase.cpp(1329): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+     1>RenderBase.cpp(1330): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+     1>RenderBase.cpp(1331): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+     1>RenderBase.cpp(1338): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+     1>RenderBase.cpp(1339): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+     1>RenderBase.cpp(1340): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+     1>RenderBase.cpp(1347): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+     1>RenderBase.cpp(1348): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+     1>RenderBase.cpp(1349): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+     1>RenderBase.cpp(1356): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+     1>RenderBase.cpp(1357): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+     1>RenderBase.cpp(1358): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+     1>RenderBase.cpp(1395): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+     1>RenderBase.cpp(1408): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+     1>RenderBase.cpp(1511): warning C4018: “<”: 有符号/无符号不匹配
+     1>RenderBase.cpp(1515): warning C4018: “<”: 有符号/无符号不匹配
+     1>RenderBase.cpp(1519): warning C4018: “<”: 有符号/无符号不匹配
+         Rotateslice.cpp
+     1>e:\chriswoocode\project_carbon\include\DataTypes.h(242): warning C4172: 返回局部变量或临时变量的地址
+     1>e:\chriswoocode\project_carbon\include\DataTypes.h(284): warning C4172: 返回局部变量或临时变量的地址
+     1>e:\chriswoocode\project_carbon\include\DataTypes.h(294): warning C4172: 返回局部变量或临时变量的地址
+     1>E:\chriswoocode\project_carbon\include\ScanApple.h(25): warning C4005: “NUM_BANKS”: 宏重定义
+                 e:\chriswoocode\project_carbon\include\DataTypes.h(118) : 参见“NUM_BANKS”的前一个定义
+     1>E:\chriswoocode\project_carbon\include\ScanApple.h(29): warning C4005: “min”: 宏重定义
+                 C:\Program Files (x86)\Windows Kits\8.1\Include\shared\minwindef.h(197) : 参见“min”的前一个定义
+     1>Rotateslice.cpp(518): warning C4244: “=”: 从“cl_uint”转换到“float”，可能丢失数据
+     1>Rotateslice.cpp(544): warning C4244: “=”: 从“cl_uint”转换到“float”，可能丢失数据
+     1>Rotateslice.cpp(569): warning C4244: “=”: 从“cl_uint”转换到“float”，可能丢失数据
+     1>Rotateslice.cpp(1534): warning C4244: “=”: 从“float”转换到“short”，可能丢失数据
+     1>Rotateslice.cpp(1567): warning C4244: “=”: 从“float”转换到“short”，可能丢失数据
+         ScanApple.cpp
+     1>ScanApple.cpp(534): warning C4267: “=”: 从“size_t”转换到“int”，可能丢失数据
+         Volumefiltering.cpp
+     1>e:\chriswoocode\project_carbon\include\DataTypes.h(242): warning C4172: 返回局部变量或临时变量的地址
+     1>e:\chriswoocode\project_carbon\include\DataTypes.h(284): warning C4172: 返回局部变量或临时变量的地址
+     1>e:\chriswoocode\project_carbon\include\DataTypes.h(294): warning C4172: 返回局部变量或临时变量的地址
+         VolumeRendering.cpp
+     1>e:\chriswoocode\project_carbon\include\DataTypes.h(242): warning C4172: 返回局部变量或临时变量的地址
+     1>e:\chriswoocode\project_carbon\include\DataTypes.h(284): warning C4172: 返回局部变量或临时变量的地址
+     1>e:\chriswoocode\project_carbon\include\DataTypes.h(294): warning C4172: 返回局部变量或临时变量的地址
+     1>e:\chriswoocode\project_carbon\include\RenderBase.h(57): warning C4275: 非 dll 接口 class“OpenCLBase”用作 dll 接口 class“RenderBase”的基
+                 e:\chriswoocode\project_carbon\include\OpenCLBase.h(30) : 参见“OpenCLBase”的声明
+                 e:\chriswoocode\project_carbon\include\RenderBase.h(57) : 参见“RenderBase”的声明
+     1>e:\chriswoocode\project_carbon\include\RenderBase.h(58): warning C4275: 非 dll 接口 class“InternalThread”用作 dll 接口 class“RenderBase”的基
+                 e:\chriswoocode\project_carbon\include\InternalThread.h(10) : 参见“InternalThread”的声明
+                 e:\chriswoocode\project_carbon\include\RenderBase.h(57) : 参见“RenderBase”的声明
+     1>e:\chriswoocode\project_carbon\include\RenderBase.h(402): warning C4251: “RenderBase::m_EyeCenterPt”: struct“Point3”需要有 dll 接口由 class“RenderBase”的客户端使用
+                 e:\chriswoocode\project_carbon\include\DataTypes.h(247) : 参见“Point3”的声明
+     1>e:\chriswoocode\project_carbon\include\RenderBase.h(403): warning C4251: “RenderBase::m_EyeFoucusCenterPt”: struct“Point3”需要有 dll 接口由 class“RenderBase”的客户端使用
+                 e:\chriswoocode\project_carbon\include\DataTypes.h(247) : 参见“Point3”的声明
+     1>e:\chriswoocode\project_carbon\include\RenderBase.h(404): warning C4251: “RenderBase::m_HeadDirection”: struct“Point3”需要有 dll 接口由 class“RenderBase”的客户端使用
+                 e:\chriswoocode\project_carbon\include\DataTypes.h(247) : 参见“Point3”的声明
+     1>e:\chriswoocode\project_carbon\include\RenderBase.h(406): warning C4251: “RenderBase::volumedatafile”: class“std::basic_string<char,std::char_traits<char>,std::allocator<char>>”需要有 dll 接口由 class“RenderBase”的客户端使用
+     1>e:\chriswoocode\project_carbon\include\RenderBase.h(407): warning C4251: “RenderBase::volumedatamaskfile”: class“std::basic_string<char,std::char_traits<char>,std::allocator<char>>”需要有 dll 接口由 class“RenderBase”的客户端使用
+     1>e:\chriswoocode\project_carbon\include\RenderBase.h(429): warning C4251: “RenderBase::m_WorldPt”: struct“Point3”需要有 dll 接口由 class“RenderBase”的客户端使用
+                 e:\chriswoocode\project_carbon\include\DataTypes.h(247) : 参见“Point3”的声明
+     1>e:\chriswoocode\project_carbon\include\RenderBase.h(430): warning C4251: “RenderBase::m_RefPt1”: struct“Point3”需要有 dll 接口由 class“RenderBase”的客户端使用
+                 e:\chriswoocode\project_carbon\include\DataTypes.h(247) : 参见“Point3”的声明
+     1>e:\chriswoocode\project_carbon\include\RenderBase.h(431): warning C4251: “RenderBase::m_RefPt2”: struct“Point3”需要有 dll 接口由 class“RenderBase”的客户端使用
+                 e:\chriswoocode\project_carbon\include\DataTypes.h(247) : 参见“Point3”的声明
+     1>e:\chriswoocode\project_carbon\include\RenderBase.h(432): warning C4251: “RenderBase::m_RefPt3”: struct“Point3”需要有 dll 接口由 class“RenderBase”的客户端使用
+                 e:\chriswoocode\project_carbon\include\DataTypes.h(247) : 参见“Point3”的声明
+     1>e:\chriswoocode\project_carbon\include\RenderBase.h(433): warning C4251: “RenderBase::m_RefPt4”: struct“Point3”需要有 dll 接口由 class“RenderBase”的客户端使用
+                 e:\chriswoocode\project_carbon\include\DataTypes.h(247) : 参见“Point3”的声明
+     1>e:\chriswoocode\project_carbon\include\RenderBase.h(489): warning C4251: “RenderBase::m_MaskFileNames”: class“std::vector<std::string,std::allocator<_Ty>>”需要有 dll 接口由 class“RenderBase”的客户端使用
+                 with
+                 [
+                     _Ty=std::string
+                 ]
+     1>VolumeRendering.cpp(271): warning C4244: “初始化”: 从“float”转换到“short”，可能丢失数据
+     1>VolumeRendering.cpp(272): warning C4244: “初始化”: 从“float”转换到“short”，可能丢失数据
+     1>VolumeRendering.cpp(355): warning C4244: “初始化”: 从“float”转换到“short”，可能丢失数据
+     1>VolumeRendering.cpp(356): warning C4244: “初始化”: 从“float”转换到“short”，可能丢失数据
+         Window.cpp
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"..\..\lib\Release\RenderLib.dll" /INCREMENTAL:NO /NOLOGO /LIBPATH:E:\AMD\lib\x86_64 /LIBPATH:..\..\lib\Debug glew64.lib OpenCL.lib PrintLog_DLL.lib NDIResult.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"..\..\lib\Release\RenderLib.pdb" /SUBSYSTEM:CONSOLE /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"..\..\lib\Release\RenderLib.lib" /MACHINE:X64 /DLL x64\Release\CarbonMed3DRecon.obj
+         x64\Release\CarbonMed3DRecon_DLL.obj
+         x64\Release\CorRegisTration.obj
+         x64\Release\ImageBasicProcess.obj
+         x64\Release\InternalThread.obj
+         x64\Release\MarchingCube.obj
+         x64\Release\Matrices.obj
+         x64\Release\OpenCLBase.obj
+         x64\Release\OpenGLBase.obj
+         x64\Release\RenderBase.obj
+         x64\Release\Rotateslice.obj
+         x64\Release\ScanApple.obj
+         x64\Release\Volumefiltering.obj
+         x64\Release\VolumeRendering.obj
+         x64\Release\Window.obj
+            正在创建库 ..\..\lib\Release\RenderLib.lib 和对象 ..\..\lib\Release\RenderLib.exp
+         正在生成代码
+         已完成代码的生成
+         RenderLib.vcxproj -> E:\chriswoocode\project_carbon\RenderLib\RenderLib\..\..\lib\Release\RenderLib.dll
+     1>已完成生成项目“E:\chriswoocode\project_carbon\RenderLib\RenderLib\RenderLib.vcxproj”(Build 个目标)的操作。
+
+生成成功。
+
+已用时间 00:00:13.67

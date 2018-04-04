@@ -1,0 +1,8 @@
+D:\Code_local\project_carbon\RenderLib\WpfApplication1\obj\Release\WpfApplication1.csprojResolveAssemblyReference.cache
+D:\Code_local\project_carbon\RenderLib\WpfApplication1\obj\Release\MainWindow.baml
+D:\Code_local\project_carbon\RenderLib\WpfApplication1\obj\Release\MainWindow.g.cs
+D:\Code_local\project_carbon\RenderLib\WpfApplication1\obj\Release\App.g.cs
+D:\Code_local\project_carbon\RenderLib\WpfApplication1\obj\Release\WpfApplication1_MarkupCompile.cache
+D:\Code_local\project_carbon\RenderLib\WpfApplication1\obj\Release\WpfApplication1.g.resources
+D:\Code_local\project_carbon\RenderLib\WpfApplication1\obj\Release\WpfApplication1.Properties.Resources.resources
+D:\Code_local\project_carbon\RenderLib\WpfApplication1\obj\Release\WpfApplication1.csproj.GenerateResource.Cache

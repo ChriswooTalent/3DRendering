@@ -1,0 +1,16 @@
+﻿Build started 2018/1/29 11:22:56.
+     1>Project "D:\Code_local\project_carbon\PrintLog_DLL\PrintLog_DLL\PrintLog_DLL.vcxproj" on node 2 (Build target(s)).
+     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppBuild.targets(364,5): warning MSB8004: Output Directory does not end with a trailing slash.  This build instance will add the slash as it is required to allow proper evaluation of the Output Directory.
+     1>Link:
+         D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"..\..\lib\Release\PrintLog_DLL.dll" /INCREMENTAL:NO /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"..\..\lib\Release\PrintLog_DLL.pdb" /SUBSYSTEM:WINDOWS /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"..\..\lib\Release\PrintLog_DLL.lib" /MACHINE:X64 /DLL x64\Release\PrintLog.obj
+         x64\Release\PrintLog_DLL.obj
+         x64\Release\ProcessMutex.obj
+            Creating library ..\..\lib\Release\PrintLog_DLL.lib and object ..\..\lib\Release\PrintLog_DLL.exp
+         Generating code
+         Finished generating code
+         PrintLog_DLL.vcxproj -> D:\Code_local\project_carbon\PrintLog_DLL\PrintLog_DLL\..\..\lib\Release\PrintLog_DLL.dll
+     1>Done Building Project "D:\Code_local\project_carbon\PrintLog_DLL\PrintLog_DLL\PrintLog_DLL.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:02.12

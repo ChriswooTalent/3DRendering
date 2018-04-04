@@ -1,0 +1,19 @@
+﻿Build started 2018/4/4 11:12:38.
+     1>Project "D:\Code_local\project_carbon\GetSynchronousRecord Sample\NDIResult.vcxproj" on node 2 (Build target(s)).
+     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppBuild.targets(364,5): warning MSB8004: Output Directory does not end with a trailing slash.  This build instance will add the slash as it is required to allow proper evaluation of the Output Directory.
+     1>ClCompile:
+         D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /I..\include /I"D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include" /I"D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\atlmfc\include" /I"C:\Program Files (x86)\Windows Kits\8.1\Include\um" /I"C:\Program Files (x86)\Windows Kits\8.1\Include\shared" /I"C:\Program Files (x86)\Windows Kits\8.1\Include\winrt" /Zi /nologo /W3 /WX- /Od /D WIN32 /D _DEBUG /D _CONSOLE /D _WINDLL /Gm /EHsc /RTC1 /MDd /GS /Zc:wchar_t /Zc:forScope /Fo"x64\Debug\\" /Fd"x64\Debug\vc120.pdb" /Gd /TP /errorReport:prompt NDIDrivebay.cpp
+         NDIDrivebay.cpp
+     1>NDIDrivebay.cpp(9): warning C4101: 'sensorID' : unreferenced local variable
+     1>NDIDrivebay.cpp(252): warning C4267: '=' : conversion from 'size_t' to 'int', possible loss of data
+     1>NDIDrivebay.cpp(254): warning C4172: returning address of local variable or temporary
+       Link:
+         D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"..\lib\Debug\NDIResult.dll" /INCREMENTAL /NOLOGO /LIBPATH:..\lib\Debug /LIBPATH:"D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\lib\amd64" /LIBPATH:"D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\atlmfc\lib\amd64" /LIBPATH:"C:\Program Files (x86)\Windows Kits\8.1\lib\winv6.3\um\x64" /LIBPATH:Lib\um\x64 ATC3DG64.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST:NO /DEBUG /PDB:"..\lib\Debug\NDIResult.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"..\lib\Debug\NDIResult.lib" /MACHINE:X64 /DLL x64\Debug\NDIDrivebay.obj
+         x64\Debug\NDI_DLL.obj
+         x64\Debug\StdAfx.obj
+         NDIResult.vcxproj -> D:\Code_local\project_carbon\GetSynchronousRecord Sample\..\lib\Debug\NDIResult.dll
+     1>Done Building Project "D:\Code_local\project_carbon\GetSynchronousRecord Sample\NDIResult.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:02.23
