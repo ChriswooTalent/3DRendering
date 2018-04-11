@@ -4,8 +4,10 @@
 #include "stdafx.h"
 #include "DataTypes.h"
 #include "InternalThread.h"
+#include "QuaternionProcess.h"
 using namespace std;
 #define DEFAULTCYLINDERSLICE 1080
+using namespace QuaternionProcess;
 
 enum RegistrationStep
 {
@@ -38,6 +40,8 @@ public:
 	void SetBasePuncvec(vector3d basepuncvec, bool cylinderflag);
 	void GetRegistrationCorInfo(float *rmat, float *tvec);
 	void SetRegistrationCorInfo(float *rmat, float *tvec);
+	void GetRegistrationQCorInfo(Quaternion &rq, float *tvec);
+	void SetRegistrationQCorInfo(Quaternion &rq, float *tvec);
 	void GetPuncAngle(float &angle);
 
 	//Registration step
@@ -62,16 +66,32 @@ public:
 	Point3f GetRegistrationPt3();
 	Point3f GetRegistrationPt4();
 
+	//Quaternion Process
+	// 获取旋转四元数
+	void GetRotationQuaternion(Quaternion &Qrotation);
+	// 设置旋转四元数
+	void SetRotationQuaternion(Quaternion &rq);
+	// 获取坐标轴旋转四元数
+	void GetRefRotationQuaternion(Quaternion &Qrotation);
+	// 设置坐标轴旋转四元数
+	void SetRefAxisRotationQuaternion(Quaternion &rq);
+
 	//PunctureLine
 	void GetPuncNeedlePtArray(GLfloat *topcptarray, GLfloat *botcptarray, GLfloat *cylindercenter, GLfloat *ConeCircleArray, GLfloat *NeedleTop);
+	void GetDrawingSensorPositionDown(Point3f sensor_pt, int interpflag);
 	void CalcingCylinderPtArray();
 	void CalcingPunctureLineStart(Point3f &pt_start);
 	void CalcingPunctureLineEnd(Point3f &pt_end);
 	void CalcingPunctureLineVector(float &x, float &y, float &z);
 
 	//Registration Process
-	//calcing RotationMat and Translation vector
+	//Registration with Quaternion
+	void RegistrationQuaternion();
+	//Registration with RotationMat/calcing RotationMat and Translation vector
 	void Registration();
+	//Registration simplely with Quaternion
+	void RegistrationQuaternionSimple();
+	//Registration simplely with RotationMat
 	void RegistrationSimple();
 	void CalcingRotationMatAndTVec(Point3f pt1, Point3f pt1_match, Point3f pt2, Point3f pt2_match, 
 		                           Point3f pt3, Point3f pt3_match, Point3f pt4, Point3f pt4_match, 
@@ -79,6 +99,10 @@ public:
 	void CalcingTranslateVecSimple(Point3f pt, Point3f pt_match, float *Tvec);
 
 	void GetRotationMat(float azimuth, float elevation, float roll, float *RMat);
+
+	void GetQuaternionRotation(float azimuth, float roll, float elevation, int radian_flag, vector3d &inputvec, vector3d &resultvec);
+
+	void GetRegistrationQuaternion(Quaternion &rq);
 
 	void matrix_matrix_mult(float *m1, float *m2, float *result);
 
@@ -124,6 +148,10 @@ private:
 	float m_RefAxisRotationMat[9];
 	float m_RotationMat[9];
 	float m_TransVec[3];
+	//Quaternion
+	Quaternion m_RotationQuObj;
+	Quaternion m_RefAxisQuObj;
+	Quaternion m_RegQuObj;
 
 	//Registration Angle Info
 	float m_Rollstart;

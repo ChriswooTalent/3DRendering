@@ -77,6 +77,18 @@ void CorRegisTration::GetPuncAngle(float &angle)
 	angle = m_Angle;
 }
 
+void CorRegisTration::GetRegistrationQCorInfo(Quaternion &rq, float *tvec)
+{
+	rq = m_RegQuObj;
+	memcpy(tvec, m_TransVec, 3 * sizeof(float));
+}
+
+void CorRegisTration::SetRegistrationQCorInfo(Quaternion &rq, float *tvec)
+{
+	m_RegQuObj = rq;
+	memcpy(m_TransVec, tvec, 3 * sizeof(float));
+}
+
 void CorRegisTration::GetRegistrationCorInfo(float *rmat, float *tvec)
 {
 	memcpy(rmat, m_RotationMat, 9 * sizeof(float));
@@ -110,6 +122,27 @@ void CorRegisTration::SetSensorRotationMat(float *rmat)
 void CorRegisTration::SetRefAxisRotationMat(float *rmat)
 {
 	memcpy(m_RefAxisRotationMat, rmat, 9 * sizeof(float));
+}
+
+//Quaternion
+void CorRegisTration::GetRotationQuaternion(Quaternion &Qrotation)
+{
+	Qrotation = m_RotationQuObj;
+}
+
+void CorRegisTration::SetRotationQuaternion(Quaternion &rq)
+{
+	m_RotationQuObj = rq;
+}
+
+void CorRegisTration::GetRefRotationQuaternion(Quaternion &Qrotation)
+{
+	Qrotation = m_RefAxisQuObj;
+}
+
+void CorRegisTration::SetRefAxisRotationQuaternion(Quaternion &rq)
+{
+	m_RefAxisQuObj = rq;
 }
 
 void CorRegisTration::SetBasePuncvec(vector3d basepuncvec, bool cylinderflag)
@@ -256,6 +289,10 @@ void CorRegisTration::GetPuncNeedlePtArray(GLfloat *topcptarray, GLfloat *botcpt
 	memcpy(NeedleTop, m_ConeNeedleTopPt, 3 * sizeof(GLfloat));
 }
 
+void CorRegisTration::GetDrawingSensorPositionDown(Point3f sensor_pt, int interpflag)
+{
+}
+
 void CorRegisTration::CalcingCylinderPtArray()
 {
 	m_PuncConLength = m_PuncLength / 4.0;
@@ -299,18 +336,24 @@ void CorRegisTration::CalcingCylinderPtArray()
 				bottomcylindervec.fY = radius*cos(theta);
 				bottomcylindervec.fZ = radius*sin(theta);
 			}
-			vector3d topvec = matrix_mult(m_RefAxisRotationMat, topcylindervec);
+			/*vector3d topvec = matrix_mult(m_RefAxisRotationMat, topcylindervec);
 			vector3d bottomvec = matrix_mult(m_RefAxisRotationMat, bottomcylindervec);
 			vector3d rtopvec = matrix_mult(m_SensorRotationMat, topvec);
-			vector3d rbottomvec = matrix_mult(m_SensorRotationMat, bottomvec);
+			vector3d rbottomvec = matrix_mult(m_SensorRotationMat, bottomvec);*/
+			Quaternion q_topcylindervec(0.0f, topcylindervec.fX, topcylindervec.fY, topcylindervec.fZ);
+			Quaternion q_topvec = m_RefAxisQuObj.GetQRotationResult(q_topcylindervec);
+			Quaternion q_rtopvec = m_RotationQuObj.GetQRotationResult(q_topvec);
+			Quaternion q_bottomcylindervec(0.0f, bottomcylindervec.fX, bottomcylindervec.fY, bottomcylindervec.fZ);
+			Quaternion q_bottomvec = m_RefAxisQuObj.GetQRotationResult(q_bottomcylindervec);
+			Quaternion q_rbottomvec = m_RotationQuObj.GetQRotationResult(q_bottomvec);
 			Point3f toppt;
 			Point3f bottompt;
-			toppt.x = rtopvec.fX;
-			toppt.y = rtopvec.fY;
-			toppt.z = rtopvec.fZ;
-			bottompt.x = rbottomvec.fX;
-			bottompt.y = rbottomvec.fY;
-			bottompt.z = rbottomvec.fZ;
+			toppt.x = q_rtopvec.GetQuaternionX();
+			toppt.y = q_rtopvec.GetQuaternionY();
+			toppt.z = q_rtopvec.GetQuaternionZ();
+			bottompt.x = q_rbottomvec.GetQuaternionX();
+			bottompt.y = q_rbottomvec.GetQuaternionY();
+			bottompt.z = q_rbottomvec.GetQuaternionZ();
 			toppt = toppt + m_PuncStartPt;
 			bottompt = bottompt + m_PuncStartPt;
 			m_TopCylinderPtArray[i * 3 + 0] = toppt.x;
@@ -336,12 +379,16 @@ void CorRegisTration::CalcingCylinderPtArray()
 	{
 		cylindercentervec.fX = halfLength;
 	}
-	vector3d centervec = matrix_mult(m_RefAxisRotationMat, cylindercentervec);
-	vector3d rcentervec = matrix_mult(m_SensorRotationMat, centervec);
+	//vector3d centervec = matrix_mult(m_RefAxisRotationMat, cylindercentervec);
+	//vector3d rcentervec = matrix_mult(m_SensorRotationMat, centervec);
+	Quaternion q_cylindercentervec(0.0f, cylindercentervec.fX, cylindercentervec.fY, cylindercentervec.fZ);
+	Quaternion q_centervec = m_RefAxisQuObj.GetQRotationResult(q_cylindercentervec);
+	Quaternion q_rcentervec = m_RotationQuObj.GetQRotationResult(q_centervec);
+
 	Point3f cpt;
-	cpt.x = rcentervec.fX;
-	cpt.y = rcentervec.fY;
-	cpt.z = rcentervec.fZ;
+	cpt.x = q_rcentervec.GetQuaternionX();
+	cpt.y = q_rcentervec.GetQuaternionY();
+	cpt.z = q_rcentervec.GetQuaternionZ();
 	cpt = cpt + m_PuncStartPt;
 	m_CylinderCenter[0] = cpt.x;
 	m_CylinderCenter[1] = cpt.y;
@@ -357,7 +404,11 @@ void CorRegisTration::CalcingCylinderPtArray()
 //PunctureLine
 void CorRegisTration::CalcingPunctureLineStart(Point3f &pt_start)
 {
-	vector3d tempvec = matrix_mult(m_SensorRotationMat, m_RefAxis);
+	Quaternion q_RefAxis(0.0f, m_RefAxis.fX, m_RefAxis.fY, m_RefAxis.fZ);
+	//Quaternion q_centervec = m_RefAxisQuObj.GetQRotationResult(q_cylindercentervec);
+	Quaternion q_tempvec = m_RotationQuObj.GetQRotationResult(q_RefAxis);
+	//vector3d tempvec = matrix_mult(m_SensorRotationMat, m_RefAxis);
+	vector3d tempvec(q_tempvec.GetQuaternionX(), q_tempvec.GetQuaternionY(), q_tempvec.GetQuaternionZ());
 	vector3d tempvar;
 	tempvar.fX = tempvec.fX*m_RefDis;
 	tempvar.fY = tempvec.fY*m_RefDis;
@@ -377,8 +428,10 @@ void CorRegisTration::CalcingPunctureLineStart(Point3f &pt_start)
 
 void CorRegisTration::CalcingPunctureLineEnd(Point3f &pt_end)
 {
-	vector3d tempvec = matrix_mult(m_SensorRotationMat, m_BasePuncvec);
-	//vector3d tempvec = m_BasePuncvec;
+	//vector3d tempvec = matrix_mult(m_SensorRotationMat, m_BasePuncvec);
+	Quaternion q_BasePuncvec(0.0f, m_BasePuncvec.fX, m_BasePuncvec.fY, m_BasePuncvec.fZ);
+	Quaternion q_tempvec = m_RotationQuObj.GetQRotationResult(q_BasePuncvec);
+	vector3d tempvec(q_tempvec.GetQuaternionX(), q_tempvec.GetQuaternionY(), q_tempvec.GetQuaternionZ());
 	vector3d tempvar;
 	tempvar.fX = tempvec.fX*m_PuncLength;
 	tempvar.fY = tempvec.fY*m_PuncLength;
@@ -419,12 +472,35 @@ void CorRegisTration::Registration()
 	CalcingRotationMatAndTVec(m_RegPt1, m_RegMatchPt1, m_RegPt2, m_RegMatchPt2, m_RegPt3, m_RegMatchPt3, m_RegPt4, m_RegMatchPt4, m_RotationMat, m_TransVec);
 }
 
+void CorRegisTration::RegistrationQuaternion()
+{}
+
 void CorRegisTration::RegistrationSimple()
 {
-	//GetRotationMat(PI, PI/2, 0, m_RotationMat);
-
 	GetRotationMat(0, PI / 2, PI, m_RotationMat);
 	CalcingTranslateVecSimple(m_RegPt1, m_RegMatchPt1, m_TransVec);
+}
+
+void CorRegisTration::RegistrationQuaternionSimple()
+{
+	m_RegQuObj.FromEuler(0.0f, PI / 2, PI, 1);
+	CalcingTranslateVecSimple(m_RegPt1, m_RegMatchPt1, m_TransVec);
+}
+
+void CorRegisTration::GetQuaternionRotation(float azimuth, float roll, float elevation, int radian_flag, vector3d &inputvec, vector3d &resultvec)
+{
+	Quaternion q_obj_src(0.0f, inputvec.fX, inputvec.fY, inputvec.fZ);
+	Quaternion q_obj_result;
+	m_RotationQuObj.FromEuler(azimuth, roll, elevation, radian_flag);
+	q_obj_result = m_RotationQuObj.GetQRotationResult(q_obj_src);
+	resultvec.fX = q_obj_result.GetQuaternionX();
+	resultvec.fY = q_obj_result.GetQuaternionY();
+	resultvec.fZ = q_obj_result.GetQuaternionZ();
+}
+
+void CorRegisTration::GetRegistrationQuaternion(Quaternion &rq)
+{
+	rq = m_RegQuObj;
 }
 
 void CorRegisTration::GetRotationMat(float azimuth, float roll, float elevation, float *RMat)

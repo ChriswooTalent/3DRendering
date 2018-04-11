@@ -60,7 +60,7 @@ public:
 	void RenderTexSlice(GLuint tex2d, int orderflag);
 	void RenderTexSlicePBO(GLuint tex2d);
 	void RenderRegHintPBO(GLuint tex2d, int bufindex, int orderflag);
-	void RenderingPunctureLine();
+	void RenderingPunctureLine(int index);
 	void RenderingProbesensor(GLuint tex2d, int orderflag);
 
 	//animation
@@ -79,6 +79,8 @@ public:
 	void SetRenderFeature();
 	void SetRenderFeatureBone();
 	void SetRenderFeatureMask();
+	void SetRenderFeatureSlice();
+	void SetRenderFeatureNeedle();
 
 	void GetNeiborInfo(int *FacesA, int *FacesB, int *FacesC, int **NU, int *NU_length, int FacesN, int VertexN, int maxnbs, int *NeArray, int *NeArrayNums);
 	void LaunchMeshFiltering(cl_mem vtxfiltered, cl_mem pos, int factiveVoxels, int ftotalverts, int *vertscount, int *facecount, int maxverts, int itertimes);

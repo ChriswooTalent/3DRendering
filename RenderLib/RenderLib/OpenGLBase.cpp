@@ -49,7 +49,6 @@ namespace openglRendering
 		int i = 0;
 		for (i = 0; i < Slice - 1; i++)
 		{
-			glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 			glVertex3f(conetop[0], conetop[1], conetop[2]);
 			glVertex3f(conecircle[i * 3], conecircle[i * 3 + 1], conecircle[i * 3 + 2]);
 		}
@@ -58,36 +57,8 @@ namespace openglRendering
 
 	void DrawingPuncNeedle(GLfloat *topvertpt, GLfloat *bottomvertpt, GLfloat cylindercenter[3], GLfloat *conecircle, GLfloat conetop[3], int Slice)
 	{
-		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-		GLfloat light_ambient[] = { 0.0, 0.0, 0.0, 1.0 };
-		GLfloat light_diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
-		GLfloat light_specular[] = { 1.0, 1.0, 1.0, 1.0 };
-		GLfloat light_position0[] = { 100.0, 100.0, 100.0, 0 };
-		glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient); //环境光
-		glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse); //漫射光
-		glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular); //镜面反射
-		glLightfv(GL_LIGHT0, GL_POSITION, light_position0); //光照位置
-		GLfloat mat_ambient[] = { 0.192250, 0.192250, 0.192250, 1.000000, };
-		GLfloat mat_diffuse[] = { 0.507540, 0.507540, 0.507540, 1.000000 };
-		GLfloat mat_specular[] = { 0.508273, 0.508273, 0.508273, 1.000000 };
-		GLfloat mat_shininess[] = { 51.200001 }; //材质RGBA镜面指数，数值在0～128范围内
-
-		/*GLfloat mat_ambient[] = { 0.231250, 0.231250, 0.231250, 1.000000 };
-		GLfloat mat_diffuse[] = { 0.277500, 0.277500, 0.277500, 1.000000 };
-		GLfloat mat_specular[] = { 0.773911, 0.773911, 0.773911, 1.000000 };
-		GLfloat mat_shininess[] = { 89.599998 }; //材质RGBA镜面指数，数值在0～128范围内*/
-
-
-		glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient);
-		glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
-		glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
-		glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
-		glEnable(GL_LIGHTING); //启动光照
-		glEnable(GL_LIGHT0); //使第一盏灯有效
 		DrawingCylinderDirectly(topvertpt, bottomvertpt, cylindercenter, Slice);
 		DrawingConeDirectly(conecircle, conetop, Slice);
-		glDisable(GL_LIGHTING);
-		glDisable(GL_LIGHT0); //使第一盏灯有效
 	}
 
 	void DrawingCircle()

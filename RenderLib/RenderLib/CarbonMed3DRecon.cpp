@@ -1147,14 +1147,20 @@ void CCarbonMed3DRecon::draw(int winwidth, int winheight)
 {
 	wglMakeCurrent(CarbonhDC, CarbonhRC);
 	shrDeltaT(0);
+	RenderWinInfo(winwidth, winheight);
 	draw3DReconstruction(winwidth, winheight);
 	totalTime += shrDeltaT(0);
 	drawAxisInterface();
-	RenderWinInfo();
 }
 
-void CCarbonMed3DRecon::RenderWinInfo()
+void CCarbonMed3DRecon::RenderWinInfo(int width, int height)
 {
+	// set bottom viewport
+	//setViewport(100, 100, winwidth, winheight);
+	setViewport(0, 0, width, height);
+
+	// clear buffer
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	char charFramRate[256] = { 0 };
 	frameCount++;
 	if (frameCount == fpsLimit)
@@ -1170,9 +1176,9 @@ void CCarbonMed3DRecon::RenderWinInfo()
 
 	string strErrorRate = "Error Rate:";
 	string winName = "3D Win";
-	GLfloat wnamecolor[3] = { 0.5f, 0.5f, 0.0f };
-	GLfloat frameratecolor[3] = { 1.0f, 1.0f, 1.0f };
-	GLfloat errorRatecolor[3] = { 1.0f, 1.0f, 1.0f };
+	GLfloat wnamecolor[4] = { 0.5f, 0.5f, 0.0f, 1.0f };
+	GLfloat frameratecolor[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
+	GLfloat errorRatecolor[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
 	glDepthFunc(GL_ALWAYS);     // to avoid visual artifacts with grid lines
 	glDisable(GL_LIGHTING);
 	drawString(winName.c_str(), winName.length(), wnamecolor, -glhalfworldsize*m_ZoomAspect + 30.0f, glhalfworldsize*m_ZoomAspect - 50.0f, 0.0f);
@@ -1218,8 +1224,8 @@ void CCarbonMed3DRecon::draw3DReconstruction(int winwidth, int winheight)
 	setViewport(0, 0, winwidth, winheight);
 
 	// clear buffer
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	glPushMatrix();
 
 	// First, transform the camera (viewing matrix) from world space to eye space
@@ -1321,7 +1327,7 @@ void CCarbonMed3DRecon::drawAxis(float size)
 	glVertex3f(0.0f, 0.0f, 0.0f);
 	glVertex3f(size, 0, 0);
 
-	glColor4f(0.0f, 1.0f, 0.0f, 0.0f);
+	glColor4f(0.0f, 1.0f, 0.0f, 1.0f);
 	glVertex3f(0, 0, 0);
 	glVertex3f(0, size, 0);
 	
@@ -1351,7 +1357,6 @@ void CCarbonMed3DRecon::drawAxis(float size)
 	DrawingCone(zvertspt, zaxiscolor, arrowangle, arrowlen, 2);
 
 	// restore default settings
-	glEnable(GL_LIGHTING);
 	glDepthFunc(GL_LEQUAL);
 	drawString(strxaxis.c_str(), strxaxis.length(), straxiscolor, size*1.2f, 0.0f, 0.0f);
 	drawString(stryaxis.c_str(), stryaxis.length(), straxiscolor, 0.0f, size*1.2f, 0.0f);

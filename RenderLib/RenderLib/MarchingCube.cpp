@@ -246,7 +246,7 @@ void MarchingCube::GLDataRendering(cl_float translate[4], cl_float clrotate[4], 
 		m_Sliceobj->GetSlicePlane(d_volume);
 		if (m_NDIConnectedFlag)
 		{
-			//if (m_Sliceobj->SliceBorderConfine())
+			if (m_Sliceobj->SliceBorderConfine())
 			{
 				if (!m_PboSWflag)
 				{
@@ -260,7 +260,7 @@ void MarchingCube::GLDataRendering(cl_float translate[4], cl_float clrotate[4], 
 				if (m_PunctureLineRenderFlag)
 				{
 					// render punc
-					RenderingPunctureLine();
+					//RenderingPunctureLine();
 					RenderingProbesensor(m_ProbeTexture, orderflag);
 				}
 			}
@@ -281,7 +281,7 @@ void MarchingCube::GLDataRendering(cl_float translate[4], cl_float clrotate[4], 
 				// render punc
 				RenderingProbesensor(m_ProbeTexture, orderflag);
 			}
-			RenderingPunctureLine();
+			//RenderingPunctureLine();
 		}
 	}
 
@@ -312,7 +312,7 @@ void MarchingCube::WGLDataRendering(int orderflag)
 		m_Sliceobj->GetSlicePlane(d_volume);
 		if (m_NDIConnectedFlag)
 		{
-			//if (m_Sliceobj->SliceBorderConfine())
+			if (m_Sliceobj->SliceBorderConfine())
 			{
 				if (!m_PboSWflag)
 				{
@@ -327,7 +327,11 @@ void MarchingCube::WGLDataRendering(int orderflag)
 					RenderingProbesensor(m_ProbeTexture, orderflag);
 				}
 				// render punc
-				RenderingPunctureLine();
+				RenderingPunctureLine(0);
+			}
+			for (int k = 1; k < m_ValidSensorCount; k++)
+			{
+				RenderingPunctureLine(k);
 			}
 		}
 		else
@@ -345,11 +349,19 @@ void MarchingCube::WGLDataRendering(int orderflag)
 				RenderingProbesensor(m_ProbeTexture, orderflag);
 			}
 			// render punc
-			RenderingPunctureLine();
+			RenderingPunctureLine(0);
 		}
 	}
-	//RenderingPunctureLine();
-	//RenderTexSlice(m_Texture[1], 1);
+	if ((regflag) && (!regrenderfinishflag))
+	{
+		if (!m_NDIConnectedFlag)
+		{
+			for (int k = 1; k < m_ValidSensorCount; k++)
+			{
+				RenderingPunctureLine(k);
+			}
+		}
+	}
 	RenderProcess();
 }
 
@@ -606,7 +618,7 @@ void MarchingCube::SetRenderFeature()
 	glDisable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	// good old-fashioned fixed function lighting
 	float black[] = { 0.0f, 0.0f, 0.0f, 1.0f };
 	float white[] = { 1.0f, 1.0f, 1.0f, 1.0f };
@@ -628,6 +640,74 @@ void MarchingCube::SetRenderFeature()
 	glColor4f(m_SkinColor[0], m_SkinColor[1], m_SkinColor[2], m_SkinColor[3]);
 }
 
+void MarchingCube::SetRenderFeatureNeedle()
+{
+	glDisable(GL_BLEND);
+	glDisable(GL_COLOR_MATERIAL);
+	glDisable(GL_LIGHTING);
+	glDisable(GL_DEPTH_TEST);
+	glDisable(GL_NORMALIZE);
+	glEnable(GL_COLOR_MATERIAL);        //启动颜色材质
+	glEnable(GL_LIGHTING);
+	glEnable(GL_NORMALIZE);
+	glEnable(GL_DEPTH_TEST);
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+	GLfloat light_ambient[] = { 0.0, 0.0, 0.0, 1.0 };
+	GLfloat light_diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
+	GLfloat light_specular[] = { 1.0, 1.0, 1.0, 1.0 };
+	GLfloat light_position0[] = { 100.0, 100.0, 100.0, 0 };
+	glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient); //环境光
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse); //漫射光
+	glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular); //镜面反射
+	glLightfv(GL_LIGHT0, GL_POSITION, light_position0); //光照位置
+	/*GLfloat mat_ambient[] = { 0.192250, 0.192250, 0.192250, 1.000000, };
+	GLfloat mat_diffuse[] = { 0.507540, 0.507540, 0.507540, 1.000000 };
+	GLfloat mat_specular[] = { 0.508273, 0.508273, 0.508273, 1.000000 };
+	GLfloat mat_shininess[] = { 51.200001 }; //材质RGBA镜面指数，数值在0～128范围内*/
+
+	GLfloat mat_ambient[] = { 0.231250, 0.231250, 0.231250, 1.000000 };
+	GLfloat mat_diffuse[] = { 0.277500, 0.277500, 0.277500, 1.000000 };
+	GLfloat mat_specular[] = { 0.773911, 0.773911, 0.773911, 1.000000 };
+	GLfloat mat_shininess[] = { 89.599998 }; //材质RGBA镜面指数，数值在0～128范围内
+
+	glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient);
+	glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
+	glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
+	glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
+
+	//肤色
+	glColor4f(0.0f, 0.79, 0.87, 1.0f);
+}
+
+void MarchingCube::SetRenderFeatureSlice()
+{
+	glDisable(GL_BLEND);
+	glDisable(GL_COLOR_MATERIAL);
+	glDisable(GL_LIGHTING);
+	glDisable(GL_DEPTH_TEST);
+	glDisable(GL_NORMALIZE);
+	glEnable(GL_COLOR_MATERIAL);        //启动颜色材质
+	glEnable(GL_LIGHTING);
+	glEnable(GL_NORMALIZE);
+	glEnable(GL_DEPTH_TEST);
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+	// good old-fashioned fixed function lighting
+	float black[] = { 0.0f, 0.0f, 0.0f, 1.0f };
+	float white[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+	float ambient[] = { 0.1f, 0.1f, 0.1f, 1.0f };
+	float diffuse[] = { 0.9f, 0.9f, 0.9f, 1.0f };
+
+	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambient);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffuse);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, black);
+
+	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, black);
+
+	glColorMaterial(GL_FRONT_AND_BACK, GL_DIFFUSE);    //最开始颜色材质对应的是ambient的。所以要给为diffuse
+	//切片白色
+	glColor4f(m_BoneColor[0], m_BoneColor[1], m_BoneColor[2], m_BoneColor[3]);
+}
+
 void MarchingCube::SetRenderFeatureBone()
 {
 	glDisable(GL_BLEND);
@@ -639,8 +719,7 @@ void MarchingCube::SetRenderFeatureBone()
 	glEnable(GL_LIGHTING);
 	glEnable(GL_NORMALIZE);
 	glEnable(GL_DEPTH_TEST);
-	//glEnable(GL_BLEND);
-	//glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
 	// good old-fashioned fixed function lighting
 	float black[] = { 0.0f, 0.0f, 0.0f, 1.0f };
@@ -662,8 +741,6 @@ void MarchingCube::SetRenderFeatureBone()
 
 void MarchingCube::SetRenderFeatureMask()
 {
-	//glClearColor(0.0f, 0.0f, 0.0f, 1);
-	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	glDisable(GL_BLEND);
 	glDisable(GL_COLOR_MATERIAL);
 	glDisable(GL_LIGHTING);
@@ -673,12 +750,13 @@ void MarchingCube::SetRenderFeatureMask()
 	glEnable(GL_LIGHTING);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_NORMALIZE);
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	float black[] = { 0.5f, 0.5f, 0.5f, 1.0f };
 	GLfloat afAmbientWhite[] = { 0.25, 0.25, 0.25, 1.00 };   // 周围 环绕 白 
-	GLfloat afAmbientRed[] = { 0.25, 0.00, 0.00, 1.00 };   // 周围 环绕 红
+	GLfloat afAmbientRed[] = { 0.25, 0.00, 0.00, 1.00 };     // 周围 环绕 红
 	GLfloat afDiffuseWhite[] = { 0.75, 0.75, 0.75, 1.00 };   // 漫射 白
-	GLfloat afDiffuseRed[] = { 0.75, 0.00, 0.00, 0.00 };   // 漫射 红
-	GLfloat afSpecularRed[] = { 1.00, 0.25, 0.25, 1.00 };   // 反射 红
+	GLfloat afDiffuseRed[] = { 0.75, 0.00, 0.00, 0.00 };     // 漫射 红
+	GLfloat afSpecularRed[] = { 1.00, 0.25, 0.25, 1.00 };    // 反射 红
 	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, afAmbientRed);
 	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, afDiffuseRed);
 	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, black);
@@ -1502,14 +1580,14 @@ void MarchingCube::RenderTexSlicePBO(GLuint tex2d)
 
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 	glRasterPos2i(0, 0);
-	//glActiveTexture(GL_TEXTURE0);
+	glClearColor(0.0, 0.0, 0.0, 0.0f);
 	glBindBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB, slicepbo);
 	glBindTexture(GL_TEXTURE_2D, tex2d);
 	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, WIDTH, HEIGHT, GL_RGBA, GL_UNSIGNED_BYTE, 0);
 	glBindBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB, 0);
 
 	// draw textured quad
-	glColor3f(1.0, 1.0, 1.0);
+	SetRenderFeatureSlice();
 	glEnable(GL_TEXTURE_2D);
 	glBegin(GL_QUADS);
 	glTexCoord2f(0.0f, 0.0f); glVertex3f(pt_tl.x, pt_tl.y, pt_tl.z);
@@ -1539,7 +1617,7 @@ void MarchingCube::RenderRegHintPBO(GLuint tex2d, int bufindex, int orderflag)
 	GetHintOriginFlagCor(pt_tl, pt_tr, pt_bl, pt_br);
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 	glRasterPos2i(0, 0);
-	//glActiveTexture(GL_TEXTURE0);
+	glClearColor(0.0, 0.0, 0.0, 0.0f);
 	glDisable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
@@ -1551,7 +1629,7 @@ void MarchingCube::RenderRegHintPBO(GLuint tex2d, int bufindex, int orderflag)
 	glBindBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB, 0);
 
 	// draw textured quad
-	glColor3f(1.0, 1.0, 1.0);
+	glColor4f(1.0, 1.0, 1.0, 1.0f);
 	glEnable(GL_TEXTURE_2D);
 	glBegin(GL_QUADS);
 	glTexCoord2f(0.0f, orderflag - 0.0f); glVertex3f(pt_tl.x, pt_tl.y, pt_tl.z);
@@ -1566,17 +1644,16 @@ void MarchingCube::RenderRegHintPBO(GLuint tex2d, int bufindex, int orderflag)
 	glDisable(GL_BLEND);
 }
 
-void MarchingCube::RenderingPunctureLine()
+void MarchingCube::RenderingPunctureLine(int index)
 {
-	GLfloat startpt[3] = { 0.0f };
-	GLfloat endpt[3] = { 0.0f };
 	GLfloat puncvector[3] = { 0.0f };
 	GLfloat cylindercenter[3] = { 0.0f };
 	GLfloat puncneedletop[3] = { 0.0f };
 	GLfloat toptemparray[DEFAULTCYLINDERSLICE * 3] = { 0.0f };
 	GLfloat bottemparray[DEFAULTCYLINDERSLICE * 3] = { 0.0f };
 	GLfloat conecirclearray[DEFAULTCYLINDERSLICE * 3] = { 0.0f };
-	for (int i = 0; i < m_ValidSensorCount; i++)
+	int i = index;
+	//for (int i = 0; i < m_ValidSensorCount; i++)
 	{
 		if (m_PunctureLineRenderFlag[i])
 		{
@@ -1588,32 +1665,28 @@ void MarchingCube::RenderingPunctureLine()
 			m_RegObj[i]->GetPuncNeedlePtArray(toptemparray, bottemparray, cylindercenter, conecirclearray, puncneedletop);
 			if (i == 0)
 			{
+				glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 				glLineStipple(1, 0x00ff);
 				glEnable(GL_LINE_STIPPLE);
 				glColor4f(m_PuncLineColor[i][0], m_PuncLineColor[i][1], m_PuncLineColor[i][2], m_PuncLineColor[i][3]);
 				glBegin(GL_LINES);
 				glVertex3f(pt_lineStart.x, pt_lineStart.y, pt_lineStart.z);
 				glVertex3f(pt_lineEnd.x, pt_lineEnd.y, pt_lineEnd.z);
-
 				glEnd();
 				glDisable(GL_LINE_STIPPLE);
 			}
-
-			startpt[0] = pt_lineStart.x;
-			startpt[1] = pt_lineStart.y;
-			startpt[2] = pt_lineStart.z;
-
-			endpt[0] = pt_lineEnd.x;
-			endpt[1] = pt_lineEnd.y;
-			endpt[2] = pt_lineEnd.z;
-
-			DrawingPuncNeedle(toptemparray, bottemparray, cylindercenter, conecirclearray, puncneedletop, DEFAULTCYLINDERSLICE);
+			else
+			{
+				SetRenderFeatureNeedle();
+				DrawingPuncNeedle(toptemparray, bottemparray, cylindercenter, conecirclearray, puncneedletop, DEFAULTCYLINDERSLICE);
+			}
 		}
 	}
 }
 
 void MarchingCube::RenderingProbesensor(GLuint tex2d, int orderflag)
 {
+	SetLightsForRendering();
 	int texwidth = PROBEICONWIDTH;
 	int texheight = PROBEICONHEIGHT;
 	InitImageBufAlpha(m_ProbeIconImBuf, texwidth, texheight);
@@ -1650,13 +1723,12 @@ void MarchingCube::RenderingProbesensor(GLuint tex2d, int orderflag)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-
 		// Step3 设定filter参数
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, texwidth, texheight, 0, GL_RGB, GL_UNSIGNED_BYTE, m_ProbeIconImBuf);
 
-		glColor3f(1.0, 1.0, 1.0);
+		glColor4f(1.0, 1.0, 1.0, 1.0f);
 		glBegin(GL_QUADS);
 		glTexCoord2f(0.0f, orderflag-0.0f);  glVertex3f(pt_sensorul.x, pt_sensorul.y, pt_sensorul.z);
 		glTexCoord2f(1.0f, orderflag-0.0f);  glVertex3f(pt_sensorur.x, pt_sensorur.y, pt_sensorur.z);

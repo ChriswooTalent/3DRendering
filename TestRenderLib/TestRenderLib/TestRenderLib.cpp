@@ -189,7 +189,7 @@ inline void EnableMemLeakCheck()
 {
 	_CrtSetDbgFlag(_CrtSetDbgFlag(_CRTDBG_REPORT_FLAG) | _CRTDBG_LEAK_CHECK_DF);
 }
-//#define MHE 1
+#define MHE 1
 int main(int argc, char **argv)
 {
 #ifdef MHE

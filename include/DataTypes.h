@@ -122,9 +122,6 @@ typedef __int64 LONGLONG;
 #define  MAXNEIGHBORNUMUD 30
 #define  MAXITERTIMES 8
 
-//math
-#define PI 3.1415926f
-
 typedef struct DICOMInfo
 {
 	DICOMInfo() :

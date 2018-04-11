@@ -47,6 +47,7 @@ using namespace std;
 #define PROBEICONWIDTH  162
 #define PROBEICONHEIGHT 192
 #define DEFAULTSENSORCOUNT 4
+#define CHANGE_THRESH 0.001745
 
 // PrintLog
 extern "C" __declspec(dllimport) void OpenLog();
@@ -430,6 +431,12 @@ protected:
 	float m_Rollstart;
 	float m_Elevationstart;
 	float m_Azimuthstart;
+	float m_OldRoll;
+	float m_OldElevation;
+	float m_OldAzimuth;
+	float m_CurRoll;
+	float m_CurElevation;
+	float m_CurAzimuth;
 	//Registration Ref pt
 	Point3f m_WorldPt;
 	Point3f m_RefPt1;

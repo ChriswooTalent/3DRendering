@@ -11,9 +11,11 @@
 #include "OpenCLBase.h"
 #include <stdlib.h>
 #include <sys/types.h> 
+#include "QuaternionProcess.h"
 
 #define GROUP_SIZE 256
 #define MAXSLICENUM 512
+using namespace QuaternionProcess;
 
 typedef struct PositionAngleUnit
 {
@@ -72,6 +74,9 @@ public:
 
 	//根据旋转角度获取旋转矩阵
 	void GetRotationMat(float azimuth, float elevation, float roll, float *RMat);
+
+	//根据四元数获取相应的旋转结果
+	void GetQuaternionRotation(float azimuth, float roll, float elevation, int radian_flag, vector3d &inputvec, vector3d &resultvec);
 
 	//根据旋转角度和公式直接获取旋转矩阵
 	void GetRotationMatDirectly(float azimuth, float elevation, float roll, float *RMat);
@@ -239,6 +244,11 @@ public:
 	//获取旋转矩阵
 	void GetRotationMat(float *rmat);
 
+	//获取旋转四元数
+	void GetRotationQuaternion(Quaternion &Qrotation);
+	//设置旋转四元数
+	void SetRotationQuaternion(Quaternion &rq);
+
 	//定义一个函数计算平面系数
 	void CalcingClipPlaneCoefs(float norma, float normb, float normc, Point3f ptOnplane);
 
@@ -318,6 +328,9 @@ private:
 	float m_Pb;
 	float m_Pc;
 	float m_Pd;
+
+	//四元数旋转
+	Quaternion m_QuObj;
 
 	//定义当前旋转矩阵和中间变量的旋转矩阵
 	float m_TempRMat[9];

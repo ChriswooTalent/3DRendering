@@ -9,11 +9,12 @@ d:\code_local\project_carbon\renderlib\renderlib\x64\debug\marchingcube.obj
 d:\code_local\project_carbon\renderlib\renderlib\x64\debug\matrices.obj
 d:\code_local\project_carbon\renderlib\renderlib\x64\debug\openclbase.obj
 d:\code_local\project_carbon\renderlib\renderlib\x64\debug\openglbase.obj
+d:\code_local\project_carbon\renderlib\renderlib\x64\debug\quaternionprocess.obj
 d:\code_local\project_carbon\renderlib\renderlib\x64\debug\renderbase.obj
 d:\code_local\project_carbon\renderlib\renderlib\x64\debug\rotateslice.obj
 d:\code_local\project_carbon\renderlib\renderlib\x64\debug\scanapple.obj
-d:\code_local\project_carbon\renderlib\renderlib\x64\debug\volumerendering.obj
 d:\code_local\project_carbon\renderlib\renderlib\x64\debug\volumefiltering.obj
+d:\code_local\project_carbon\renderlib\renderlib\x64\debug\volumerendering.obj
 d:\code_local\project_carbon\renderlib\renderlib\x64\debug\window.obj
 d:\code_local\project_carbon\lib\debug\renderlib.ilk
 d:\code_local\project_carbon\lib\debug\renderlib.dll

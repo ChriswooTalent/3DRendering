@@ -1,72 +1,20 @@
-﻿Build started 2018/4/4 13:55:33.
+﻿Build started 2018/4/11 15:29:52.
      1>Project "D:\Code_local\project_carbon\RenderLib\RenderLib\RenderLib.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /ID:\AMD\include /I..\shared\inc /I..\..\include /Zi /nologo /W3 /WX- /sdl /Od /D _CRT_SECURE_NO_WARNINGS /D _DEBUG /D _CONSOLE /D _WINDLL /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /Zc:wchar_t /Zc:forScope /Fo"x64\Debug\\" /Fd"x64\Debug\vc120.pdb" /Gd /TP /errorReport:prompt /D_CRT_SECURE_NO_WARNINGS RenderBase.cpp
-         RenderBase.cpp
-     1>d:\code_local\project_carbon\include\DataTypes.h(242): warning C4172: returning address of local variable or temporary
-     1>d:\code_local\project_carbon\include\DataTypes.h(284): warning C4172: returning address of local variable or temporary
-     1>d:\code_local\project_carbon\include\DataTypes.h(294): warning C4172: returning address of local variable or temporary
-     1>D:\Code_local\project_carbon\include\RenderBase.h(57): warning C4275: non dll-interface class 'OpenCLBase' used as base for dll-interface class 'RenderBase'
-                 d:\code_local\project_carbon\include\OpenCLBase.h(30) : see declaration of 'OpenCLBase'
-                 D:\Code_local\project_carbon\include\RenderBase.h(57) : see declaration of 'RenderBase'
-     1>D:\Code_local\project_carbon\include\RenderBase.h(58): warning C4275: non dll-interface class 'InternalThread' used as base for dll-interface class 'RenderBase'
-                 d:\code_local\project_carbon\include\InternalThread.h(10) : see declaration of 'InternalThread'
-                 D:\Code_local\project_carbon\include\RenderBase.h(57) : see declaration of 'RenderBase'
-     1>D:\Code_local\project_carbon\include\RenderBase.h(403): warning C4251: 'RenderBase::m_EyeCenterPt' : struct 'Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
-                 d:\code_local\project_carbon\include\DataTypes.h(247) : see declaration of 'Point3'
-     1>D:\Code_local\project_carbon\include\RenderBase.h(404): warning C4251: 'RenderBase::m_EyeFoucusCenterPt' : struct 'Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
-                 d:\code_local\project_carbon\include\DataTypes.h(247) : see declaration of 'Point3'
-     1>D:\Code_local\project_carbon\include\RenderBase.h(405): warning C4251: 'RenderBase::m_HeadDirection' : struct 'Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
-                 d:\code_local\project_carbon\include\DataTypes.h(247) : see declaration of 'Point3'
-     1>D:\Code_local\project_carbon\include\RenderBase.h(407): warning C4251: 'RenderBase::volumedatafile' : class 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of class 'RenderBase'
-     1>D:\Code_local\project_carbon\include\RenderBase.h(408): warning C4251: 'RenderBase::volumedatamaskfile' : class 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of class 'RenderBase'
-     1>D:\Code_local\project_carbon\include\RenderBase.h(434): warning C4251: 'RenderBase::m_WorldPt' : struct 'Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
-                 d:\code_local\project_carbon\include\DataTypes.h(247) : see declaration of 'Point3'
-     1>D:\Code_local\project_carbon\include\RenderBase.h(435): warning C4251: 'RenderBase::m_RefPt1' : struct 'Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
-                 d:\code_local\project_carbon\include\DataTypes.h(247) : see declaration of 'Point3'
-     1>D:\Code_local\project_carbon\include\RenderBase.h(436): warning C4251: 'RenderBase::m_RefPt2' : struct 'Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
-                 d:\code_local\project_carbon\include\DataTypes.h(247) : see declaration of 'Point3'
-     1>D:\Code_local\project_carbon\include\RenderBase.h(437): warning C4251: 'RenderBase::m_RefPt3' : struct 'Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
-                 d:\code_local\project_carbon\include\DataTypes.h(247) : see declaration of 'Point3'
-     1>D:\Code_local\project_carbon\include\RenderBase.h(438): warning C4251: 'RenderBase::m_RefPt4' : struct 'Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
-                 d:\code_local\project_carbon\include\DataTypes.h(247) : see declaration of 'Point3'
-     1>D:\Code_local\project_carbon\include\RenderBase.h(494): warning C4251: 'RenderBase::m_MaskFileNames' : class 'std::vector<std::string,std::allocator<_Ty>>' needs to have dll-interface to be used by clients of class 'RenderBase'
-                 with
-                 [
-                     _Ty=std::string
-                 ]
-     1>RenderBase.cpp(827): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>RenderBase.cpp(828): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>RenderBase.cpp(829): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>RenderBase.cpp(833): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>RenderBase.cpp(834): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>RenderBase.cpp(835): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>RenderBase.cpp(878): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>RenderBase.cpp(879): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>RenderBase.cpp(880): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>RenderBase.cpp(888): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>RenderBase.cpp(889): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>RenderBase.cpp(890): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>RenderBase.cpp(974): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>RenderBase.cpp(975): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>RenderBase.cpp(976): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>RenderBase.cpp(1366): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>RenderBase.cpp(1367): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>RenderBase.cpp(1368): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>RenderBase.cpp(1375): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>RenderBase.cpp(1376): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>RenderBase.cpp(1377): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>RenderBase.cpp(1384): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>RenderBase.cpp(1385): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>RenderBase.cpp(1386): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>RenderBase.cpp(1393): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>RenderBase.cpp(1394): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>RenderBase.cpp(1395): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>RenderBase.cpp(1432): warning C4267: 'initializing' : conversion from 'size_t' to 'int', possible loss of data
-     1>RenderBase.cpp(1445): warning C4267: 'initializing' : conversion from 'size_t' to 'int', possible loss of data
-     1>RenderBase.cpp(1548): warning C4018: '<' : signed/unsigned mismatch
-     1>RenderBase.cpp(1552): warning C4018: '<' : signed/unsigned mismatch
-     1>RenderBase.cpp(1556): warning C4018: '<' : signed/unsigned mismatch
+         D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /ID:\AMD\include /I..\shared\inc /I..\..\include /Zi /nologo /W3 /WX- /sdl /Od /D _CRT_SECURE_NO_WARNINGS /D _DEBUG /D _CONSOLE /D _WINDLL /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /Zc:wchar_t /Zc:forScope /Fo"x64\Debug\\" /Fd"x64\Debug\vc120.pdb" /Gd /TP /errorReport:prompt /D_CRT_SECURE_NO_WARNINGS Rotateslice.cpp
+         Rotateslice.cpp
+     1>d:\code_local\project_carbon\include\DataTypes.h(239): warning C4172: returning address of local variable or temporary
+     1>d:\code_local\project_carbon\include\DataTypes.h(281): warning C4172: returning address of local variable or temporary
+     1>d:\code_local\project_carbon\include\DataTypes.h(291): warning C4172: returning address of local variable or temporary
+     1>D:\Code_local\project_carbon\include\ScanApple.h(25): warning C4005: 'NUM_BANKS' : macro redefinition
+                 d:\code_local\project_carbon\include\DataTypes.h(118) : see previous definition of 'NUM_BANKS'
+     1>D:\Code_local\project_carbon\include\ScanApple.h(29): warning C4005: 'min' : macro redefinition
+                 C:\Program Files (x86)\Windows Kits\8.1\Include\shared\minwindef.h(197) : see previous definition of 'min'
+     1>Rotateslice.cpp(562): warning C4244: '=' : conversion from 'cl_uint' to 'float', possible loss of data
+     1>Rotateslice.cpp(588): warning C4244: '=' : conversion from 'cl_uint' to 'float', possible loss of data
+     1>Rotateslice.cpp(613): warning C4244: '=' : conversion from 'cl_uint' to 'float', possible loss of data
+     1>Rotateslice.cpp(1581): warning C4244: '=' : conversion from 'float' to 'short', possible loss of data
+     1>Rotateslice.cpp(1614): warning C4244: '=' : conversion from 'float' to 'short', possible loss of data
        Link:
          D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"..\..\lib\Debug\RenderLib.dll" /INCREMENTAL /NOLOGO /LIBPATH:D:\AMD\lib\x86_64 /LIBPATH:..\..\lib\Debug glew64.lib OpenCL.lib PrintLog_DLL.lib NDIResult.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST:NO /DEBUG /PDB:"..\..\lib\Debug\RenderLib.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"..\..\lib\Debug\RenderLib.lib" /MACHINE:X64 /DLL x64\Debug\CarbonMed3DRecon.obj
          x64\Debug\CarbonMed3DRecon_DLL.obj
@@ -77,6 +25,7 @@
          x64\Debug\Matrices.obj
          x64\Debug\OpenCLBase.obj
          x64\Debug\OpenGLBase.obj
+         x64\Debug\QuaternionProcess.obj
          x64\Debug\RenderBase.obj
          x64\Debug\Rotateslice.obj
          x64\Debug\ScanApple.obj
@@ -88,4 +37,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:01.73
+Time Elapsed 00:00:01.51

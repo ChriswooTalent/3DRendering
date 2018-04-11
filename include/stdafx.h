@@ -10,3 +10,6 @@
 #include <CL/cl_gl.h>
 #include "DataTypes.h"
 #define  RENDERLIB_EXPORTS
+//math
+#define PI 3.1415926f
+#define TOLERANCE 0.1

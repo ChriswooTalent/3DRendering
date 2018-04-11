@@ -181,6 +181,27 @@ void Rotateslice::GetRotationMat(float *rmat)
 	memcpy(rmat, m_RMat, 9 * sizeof(float));
 }
 
+void Rotateslice::GetRotationQuaternion(Quaternion &Qrotation)
+{
+	Qrotation = m_QuObj;
+}
+
+void Rotateslice::SetRotationQuaternion(Quaternion &rq)
+{
+	m_QuObj = rq;
+}
+
+void Rotateslice::GetQuaternionRotation(float azimuth, float roll, float elevation, int radian_flag, vector3d &inputvec, vector3d &resultvec)
+{
+	Quaternion q_obj_src(0.0f, inputvec.fX, inputvec.fY, inputvec.fZ);
+	Quaternion q_obj_result;
+	m_QuObj.FromEuler(azimuth, roll, elevation, radian_flag);
+	q_obj_result = m_QuObj.GetQRotationResult(q_obj_src);
+	resultvec.fX = q_obj_result.GetQuaternionX();
+	resultvec.fY = q_obj_result.GetQuaternionY();
+	resultvec.fZ = q_obj_result.GetQuaternionZ();
+}
+
 void Rotateslice::GetRotationMat(float azimuth, float roll, float elevation, float *RMat)
 {
 	float Rmatx[9] = { 0.0f };
@@ -208,8 +229,6 @@ void Rotateslice::GetRotationMat(float azimuth, float roll, float elevation, flo
 
 	matrix_matrix_mult(Rmatx, Rmaty, RmatTemp);
 	matrix_matrix_mult(RmatTemp, Rmatz, RMat);
-	/*matrix_matrix_mult(Rmatz, Rmaty, RmatTemp);
-	matrix_matrix_mult(RmatTemp, Rmatx, RMat);*/
 }
 
 void Rotateslice::GetRotationMatDirectly(float azimuth, float roll, float elevation, float *RMat)
@@ -616,22 +635,6 @@ void Rotateslice::GetDrawingSensorPositionDown()
 	m_WorldSensorPt.x = m_StdSensorPt.x;
 	m_WorldSensorPt.y = m_StdSensorPt.y;
 	m_WorldSensorPt.z = m_StdSensorPt.z;
-
-	m_WorldSensorFULPt.x = m_WorldSensorFULPt.x;
-	m_WorldSensorFULPt.y = m_WorldSensorFULPt.y;
-	m_WorldSensorFULPt.z = m_WorldSensorFULPt.z;
-
-	m_WorldSensorFURPt.x = m_WorldSensorFURPt.x;
-	m_WorldSensorFURPt.y = m_WorldSensorFURPt.y;
-	m_WorldSensorFURPt.z = m_WorldSensorFURPt.z;
-
-	m_WorldSensorFDLPt.x = m_WorldSensorFDLPt.x;
-	m_WorldSensorFDLPt.y = m_WorldSensorFDLPt.y;
-	m_WorldSensorFDLPt.z = m_WorldSensorFDLPt.z;
-
-	m_WorldSensorFDRPt.x = m_WorldSensorFDRPt.x;
-	m_WorldSensorFDRPt.y = m_WorldSensorFDRPt.y;
-	m_WorldSensorFDRPt.z = m_WorldSensorFDRPt.z;
 }
 
 void Rotateslice::GetDrawingSensorPositionUp()
@@ -724,22 +727,6 @@ void Rotateslice::GetDrawingSensorPositionUp()
 	m_WorldSensorPt.x = m_StdSensorPt.x;
 	m_WorldSensorPt.y = m_StdSensorPt.y;
 	m_WorldSensorPt.z = m_StdSensorPt.z;
-
-	m_WorldSensorFULPt.x = m_WorldSensorFULPt.x;
-	m_WorldSensorFULPt.y = m_WorldSensorFULPt.y;
-	m_WorldSensorFULPt.z = m_WorldSensorFULPt.z;
-
-	m_WorldSensorFURPt.x = m_WorldSensorFURPt.x;
-	m_WorldSensorFURPt.y = m_WorldSensorFURPt.y;
-	m_WorldSensorFURPt.z = m_WorldSensorFURPt.z;
-
-	m_WorldSensorFDLPt.x = m_WorldSensorFDLPt.x;
-	m_WorldSensorFDLPt.y = m_WorldSensorFDLPt.y;
-	m_WorldSensorFDLPt.z = m_WorldSensorFDLPt.z;
-
-	m_WorldSensorFDRPt.x = m_WorldSensorFDRPt.x;
-	m_WorldSensorFDRPt.y = m_WorldSensorFDRPt.y;
-	m_WorldSensorFDRPt.z = m_WorldSensorFDRPt.z;
 }
 
 void Rotateslice::GetStdBoundCorOfSlice(Point3f &tlpt, Point3f &trpt, Point3f &blpt, Point3f &brpt, int flag)
@@ -1353,6 +1340,7 @@ void Rotateslice::GetSlicePlane(cl_mem volume)
 
 void Rotateslice::InitSlicePlaneInfo(vector3d axisvec, float x, float y, float z, float azimuth, float roll, float elevation, float *basicRmat)
 {
+	vector3d transformvec(0.0f, 0.0f, 0.0f);
 	if (fabs(roll) > PI / 2)
 	{
 		m_ProbeUpdirectionFlag = true;
@@ -1401,42 +1389,21 @@ void Rotateslice::InitSlicePlaneInfo(vector3d axisvec, float x, float y, float z
 			printf("\n");
 		}
 	}*/
-
-	GetRotationMat(azimuth, roll, elevation, m_RMat);
-	/*printf("TempRMat\n"););
-	printf("basicRmat\n");
-	for (int i = 0; i < 9; i++)
-	{
-		printf("%f ", basicRmat[i]);
-		if (((i + 1) % 3 == 0) && (i>0))
-		{
-			printf("\n");
-		}
-	}
-	printf("\n");
-	printf("TempRMat\n");
-	for (int i = 0; i < 9; i++)
-	{
-		printf("%f ", m_TempRMat[i]);
-		if (((i + 1) % 3 == 0) && (i>0))
-		{
-			printf("\n");
-		}
-	}
-	printf("\n");
-	printf("m_RMat\n");
-	for (int i = 0; i < 9; i++)
-	{
-		printf("%f ", m_RMat[i]);
-		if (((i + 1) % 3 == 0) && (i>0))
-		{
-			printf("\n");
-		}
-	}
+	/*printf("angles!\n");
+	printf("x angle %f\n", roll);
+	printf("y angle %f\n", elevation);
+	printf("z angle %f\n", azimuth);
 	printf("\n");*/
 
-	//GetRotationMat(azimuth, elevation, roll, m_RMat);
-	vector3d normvec = matrix_mult(m_RMat, axisvec);
+	GetQuaternionRotation(azimuth, roll, elevation, 1, axisvec, transformvec);
+
+	vector3d normvec = transformvec;
+
+	/*printf("rotate axis!\n");
+	printf("%f ", normvec.fX);
+	printf("%f ", normvec.fY);
+	printf("%f ", normvec.fZ);
+	printf("\n");*/
 
 	m_Zind = (int)std::round(z);
 

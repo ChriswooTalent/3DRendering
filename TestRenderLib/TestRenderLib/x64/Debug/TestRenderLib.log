@@ -1,11 +1,9 @@
-﻿Build started 2018/4/4 13:51:56.
+﻿Build started 2018/4/11 15:28:38.
      1>Project "D:\Code_local\project_carbon\TestRenderLib\TestRenderLib\TestRenderLib.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
          D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /Zi /nologo /W3 /WX- /sdl /Od /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /Zc:wchar_t /Zc:forScope /Fo"x64\Debug\\" /Fd"x64\Debug\vc120.pdb" /Gd /TP /errorReport:prompt /D_CRT_SECURE_NO_WARNINGS TestRenderLib.cpp
+         Skipping... (no relevant changes detected)
          TestRenderLib.cpp
-     1>TestRenderLib.cpp(101): warning C4267: 'initializing' : conversion from 'size_t' to 'int', possible loss of data
-     1>TestRenderLib.cpp(118): warning C4267: 'initializing' : conversion from 'size_t' to 'int', possible loss of data
-     1>TestRenderLib.cpp(275): warning C4305: '=' : truncation from 'double' to 'float'
        Link:
          D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"..\..\lib\Debug\TestRenderLib.exe" /INCREMENTAL /NOLOGO /LIBPATH:..\..\lib\Debug RenderLib.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"..\..\lib\Debug\TestRenderLib.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"..\..\lib\Debug\TestRenderLib.lib" /MACHINE:X64 x64\Debug\TestRenderLib.obj
          TestRenderLib.vcxproj -> D:\Code_local\project_carbon\TestRenderLib\TestRenderLib\..\..\lib\Debug\TestRenderLib.exe
@@ -13,4 +11,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:01.44
+Time Elapsed 00:00:01.04

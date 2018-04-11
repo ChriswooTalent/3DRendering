@@ -175,6 +175,7 @@
     <ClCompile Include="Matrices.cpp" />
     <ClCompile Include="OpenCLBase.cpp" />
     <ClCompile Include="OpenGLBase.cpp" />
+    <ClCompile Include="QuaternionProcess.cpp" />
     <ClCompile Include="RenderBase.cpp" />
     <ClCompile Include="Rotateslice.cpp" />
     <ClCompile Include="ScanApple.cpp" />
@@ -194,6 +195,7 @@
     <ClInclude Include="..\..\include\MCTables.h" />
     <ClInclude Include="..\..\include\OpenCLBase.h" />
     <ClInclude Include="..\..\include\OpenGLBase.h" />
+    <ClInclude Include="..\..\include\QuaternionProcess.h" />
     <ClInclude Include="..\..\include\RenderBase.h" />
     <ClInclude Include="..\..\include\Rotateslice.h" />
     <ClInclude Include="..\..\include\ScanApple.h" />

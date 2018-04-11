@@ -195,7 +195,7 @@ protected:
 
 private:
 	static void draw(int winwidth, int winheight);
-	static void RenderWinInfo();
+	static void RenderWinInfo(int width, int height);
 	static void drawString(const char* str, int len, GLfloat strcolor[4], float drawstartx, float drawstarty, float drawstartz);
 	static void setViewport(int x, int y, int width, int height);
 	static void setViewportSub(int left, int bottom, int width, int height, float nearPlane, float farPlane);

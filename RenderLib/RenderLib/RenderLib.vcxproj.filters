@@ -60,6 +60,9 @@
     <ClCompile Include="OpenGLBase.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="QuaternionProcess.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\CarbonMed3DRecon.h">
@@ -117,6 +120,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\OpenGLBase.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\QuaternionProcess.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
