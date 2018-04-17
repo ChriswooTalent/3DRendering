@@ -89,7 +89,7 @@ namespace QuaternionProcess
 		vecQuat.w_ = 0.0f;
 
 		//ConjugateQuat = getConjugate();
-		ConjugateQuat = Quaternion(w_, - x_, -y_, -z_);
+		ConjugateQuat = Quaternion(w_, -x_, -y_, -z_);
 		resQuat = vecQuat * ConjugateQuat;
 		resQuat = *this * resQuat;
 
@@ -162,20 +162,34 @@ namespace QuaternionProcess
 		*angle = acos(w_) * 2.0f;
 	}
 
-	void Quaternion::GetXYZAxisAngleByQuaternion(float &xangle, float &yangle, float zangle)
+	void Quaternion::GetXYZAxisAngleByQuaternion(float &xangle, float &yangle, float &zangle)
 	{
-		float t11 = w_*w_ + x_*x_ - y_*y_ - z_*z_;
+		/*float t11 = w_*w_ + x_*x_ - y_*y_ - z_*z_;
 		float t12 = 2 * (x_*y_ - w_*z_);
 		float t13 = 2 * (x_*z_ + w_*y_);
 		float t21 = 2 * (x_*y_ + w_*z_);
-		float t22 = w_*w_ - x_*x_ + y_*y_ - z_*z_;
+		float t22 = w_*w_ - x_*x_ - y_*y_ + z_*z_;
 		float t23 = 2 * (y_*z_ - w_*x_);
 		float t31 = 2 * (x_*z_ - w_*y_);
 		float t32 = 2 * (y_*z_ + w_*x_);
-		float t33 = w_*w_ - x_*x_ - y_*y_ + z_*z_;
-		xangle = asin(t32);
-		yangle = atan(-1.0f*t31 / t33);
-		zangle = atan(t12 / t22);
+		float t33 = w_*w_ - x_*x_ - y_*y_ + z_*z_;*/
+
+		float xtemp1 = 2 * (w_*x_ + y_*z_);
+		float xtemp2 = w_*w_ - x_*x_ - y_*y_ + z_*z_;
+		float ytemp = 2 * (w_*y_ - z_*x_);
+		if (ytemp > 1.0f)
+		{
+			ytemp = 1.0f;
+		}
+		else if (ytemp < -1.0f)
+		{
+			ytemp = -1.0f;
+		}
+		float ztemp1 = 2 * (w_*z_ + x_*y_);
+		float ztemp2 = w_*w_ + x_*x_ - y_*y_ - z_*z_;
+		xangle = atan2(xtemp1, xtemp2) * 180 / PI;
+		yangle = asin(ytemp) * 180 / PI;
+		zangle = atan2(ztemp1, ztemp2) * 180 / PI;
 	}
 
 	Quaternion Quaternion::GetQRotationResult(const Quaternion &rq)

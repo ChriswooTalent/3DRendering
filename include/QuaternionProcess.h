@@ -26,7 +26,7 @@ namespace QuaternionProcess
 			z_ = z_ / length_;
 		}
 	}Vector3f;
-	
+
 	class Quaternion
 	{
 	public:
@@ -51,7 +51,7 @@ namespace QuaternionProcess
 		// Convert to Axis/Angles
 		void getAxisAngle(Vector3f *axis, float *angle);
 		// Get each angle around xyz axis by the calced Quaternion
-		void GetXYZAxisAngleByQuaternion(float &xangle, float &yangle, float zangle);
+		void GetXYZAxisAngleByQuaternion(float &xangle, float &yangle, float &zangle);
 		// GetRotationResult in the form of Quaternion
 		Quaternion GetQRotationResult(const Quaternion &rq2);
 		// Set the Quaternion element
@@ -63,7 +63,7 @@ namespace QuaternionProcess
 		// Get the Quaternion Result
 		float GetQuaternionW();
 		float GetQuaternionX();
-		float GetQuaternionY(); 
+		float GetQuaternionY();
 		float GetQuaternionZ();
 	private:
 		float w_;

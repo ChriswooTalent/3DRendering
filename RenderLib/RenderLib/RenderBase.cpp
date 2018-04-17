@@ -866,6 +866,7 @@ void RenderBase::GetRealTimeNDIRecord()
 	vector3d originpt;
 	vector3d rotatedpt;
 	vector3d transformpt;
+	vector3d transformptCMP;
 	vector3d transvec3d;
 	if (m_NDIConnectedFlag)
 	{
@@ -882,13 +883,13 @@ void RenderBase::GetRealTimeNDIRecord()
 				//use the Regrmat and the tvec of the first Registration object
 				if (0 == kn)
 				{
-					//m_RegObj[kn]->GetRegistrationCorInfo(Regrmat, tvec);
+					m_RegObj[kn]->GetRegistrationCorInfo(Regrmat, tvec);
 					m_RegObj[kn]->GetRegistrationQCorInfo(RegQuaternion, tvec);
 				}
 				else
 				{
 					m_RegObj[kn]->SetRegistrationQCorInfo(RegQuaternion, tvec);
-					//m_RegObj[kn]->SetRegistrationCorInfo(Regrmat, tvec);
+					m_RegObj[kn]->SetRegistrationCorInfo(Regrmat, tvec);
 				}
 				float x_onplane = pRecord[kn].x;
 				float y_onplane = pRecord[kn].y;
@@ -899,7 +900,7 @@ void RenderBase::GetRealTimeNDIRecord()
 				transvec3d.fX = tvec[0];
 				transvec3d.fY = tvec[1];
 				transvec3d.fZ = tvec[2];
-				//transformpt = m_Sliceobj->matrix_mult(Regrmat, originpt) + transvec3d;
+				transformptCMP = m_Sliceobj->matrix_mult(Regrmat, originpt) + transvec3d;
 				Quaternion tempquater(0.0f, originpt.fX, originpt.fY, originpt.fZ);
 				tempquater = RegQuaternion.GetQRotationResult(tempquater);
 				rotatedpt.fX = tempquater.GetQuaternionX();
@@ -907,9 +908,21 @@ void RenderBase::GetRealTimeNDIRecord()
 				rotatedpt.fZ = tempquater.GetQuaternionZ();
 				transformpt = rotatedpt + transvec3d;
 
-				float azimuth = (pRecord[kn].e - m_Elevationstart)*PI / 180.0;//z angle
-				float elevation = (pRecord[kn].r - m_Rollstart)*PI / 180.0;//y angle
-				float roll = (pRecord[kn].a - m_Azimuthstart)*PI / 180;//x angle
+				float azimuth = -1.0f*(pRecord[kn].r - m_Rollstart)*PI / 180.0;//z angle
+				float elevation = -1.0f*(pRecord[kn].a - m_Azimuthstart)*PI / 180.0;//y angle
+				float roll = (pRecord[kn].e - m_Elevationstart)*PI / 180;//x angle
+
+				//float elevation = 1.0f*(pRecord[kn].r+180.0f - m_Rollstart)*PI / 180.0;//z angle
+				//float roll = 1.0f*(pRecord[kn].a+180.0f - m_Azimuthstart)*PI / 180.0;//y angle
+				//float azimuth = (pRecord[kn].e+180.0f - m_Elevationstart)*PI / 180;//x angle
+
+				printf("transformptCMP X is %f\n", transformptCMP.fX);
+				printf("transformptCMP Y is %f\n", transformptCMP.fY);
+				printf("transformptCMP Z is %f\n", transformptCMP.fZ);
+
+				printf("transformpt X is %f\n", transformpt.fX);
+				printf("transformpt Y is %f\n", transformpt.fY);
+				printf("transformpt Z is %f\n", transformpt.fZ);
 
 				/*TestQuaternion.FromEuler(azimuth, roll, elevation, 1);
 				TempResQuaternion = RegQuaternion.GetQRotationResult(TestQuaternion);
@@ -919,6 +932,14 @@ void RenderBase::GetRealTimeNDIRecord()
 				TempResQuaternion.GetXYZAxisAngleByQuaternion(xangletest, yangletest, zangletest);*/
 				if (fabs(azimuth - m_OldAzimuth) >= CHANGE_THRESH)
 				{
+					if (azimuth > PI)
+					{
+						azimuth = azimuth - 2 * PI;
+					}
+					else if (azimuth < -PI)
+					{
+						azimuth = azimuth + 2 * PI;
+					}
 					m_OldAzimuth = azimuth;
 					m_CurAzimuth = azimuth;
 				}
@@ -928,6 +949,14 @@ void RenderBase::GetRealTimeNDIRecord()
 				}
 				if (fabs(elevation - m_OldElevation) >= CHANGE_THRESH)
 				{
+					if (elevation > PI)
+					{
+						elevation = elevation - 2 * PI;
+					}
+					else if (elevation < -PI)
+					{
+						elevation = elevation + 2 * PI;
+					}
 					m_OldElevation = elevation;
 					m_CurElevation = elevation;
 				}
@@ -937,6 +966,14 @@ void RenderBase::GetRealTimeNDIRecord()
 				}
 				if (fabs(roll - m_OldRoll) >= CHANGE_THRESH)
 				{
+					if (roll > PI)
+					{
+						roll = roll - 2 * PI;
+					}
+					else if (roll < -PI)
+					{
+						roll = roll + 2 * PI;
+					}
 					m_OldRoll = roll;
 					m_CurRoll = roll;
 				}
@@ -946,7 +983,7 @@ void RenderBase::GetRealTimeNDIRecord()
 				}
 				if (kn == 0)
 				{
-					m_Sliceobj->InitSlicePlaneInfo(axisvectest, transformpt.fX, transformpt.fY, transformpt.fZ, m_CurAzimuth, m_OldRoll, m_OldElevation, Regrmat);
+					m_Sliceobj->InitSlicePlaneInfo(axisvectest, transformpt.fX, transformpt.fY, transformpt.fZ, m_CurAzimuth, m_CurRoll, m_CurElevation, Regrmat);
 					m_Sliceobj->GetDrawingSensorPositionReal();
 
 					Point3f pt_sensor = m_Sliceobj->GetWorldSensorPosition();
@@ -957,10 +994,7 @@ void RenderBase::GetRealTimeNDIRecord()
 					m_Sliceobj->GetRotationQuaternion(QuNionTemp[kn]);
 					m_RegObj[kn]->SetRotationQuaternion(QuNionTemp[kn]);
 					m_RegObj[kn]->SetSensorPoint(pt_sensor);
-					printf("\n");
-					printf("X ANGLE is %f\n", roll);
-					printf("Y ANGLE is %f\n", elevation);
-					printf("Z ANGLE is %f\n", azimuth);
+
 				}
 				else
 				{
@@ -973,7 +1007,19 @@ void RenderBase::GetRealTimeNDIRecord()
 					/*m_Sliceobj->GetRotationMat(m_CurAzimuth, m_OldRoll, m_OldElevation, rmat);
 					m_RegObj[kn]->SetSensorRotationMat(rmat);
 					m_RegObj[kn]->SetSensorPoint(pt_sensor);*/
-					QuNionTemp[kn].FromEuler(azimuth, roll, elevation, 1);
+					printf("\n");
+					printf("start X ANGLE is %f\n", m_Azimuthstart);
+					printf("start Y ANGLE is %f\n", m_Rollstart);
+					printf("start Z ANGLE is %f\n", m_Elevationstart);
+
+					printf("X ANGLE is %f\n", roll);
+					printf("Y ANGLE is %f\n", elevation);
+					printf("Z ANGLE is %f\n", azimuth);
+
+					printf("CUR X ANGLE is %f\n", m_CurRoll);
+					printf("CUR Y ANGLE is %f\n", m_CurElevation);
+					printf("CUR Z ANGLE is %f\n", m_CurAzimuth);
+					QuNionTemp[kn].FromEuler(m_CurAzimuth, m_CurRoll, m_CurElevation, 1);
 					m_RegObj[kn]->SetRotationQuaternion(QuNionTemp[kn]);
 					m_RegObj[kn]->SetSensorPoint(pt_sensor);
 				}
@@ -1000,7 +1046,7 @@ void RenderBase::GetRealTimeNDIRecord()
 				y_center = 255.0f;
 				z_center = (double)GridSize[2] / 2;
 				azimuth = (-0.0f*m_Count - m_Azimuthstart)*PI / 180.0;
-				elevation = (0.0f - m_Elevationstart)*PI / 180.0;
+				elevation = (90.0f - m_Elevationstart)*PI / 180.0;
 				roll = (-1.0f*m_Count - m_Rollstart)*PI / 180;
 
 				/*azimuth = 0.0f*PI / 180.0f;
@@ -1018,6 +1064,14 @@ void RenderBase::GetRealTimeNDIRecord()
 				printf("zangletest is %f\n", zangletest);*/
 				if (fabs(azimuth - m_OldAzimuth) >= CHANGE_THRESH)
 				{
+					if (azimuth > PI)
+					{
+						azimuth = azimuth - 2 * PI;
+					}
+					else if (azimuth < -PI)
+					{
+						azimuth = azimuth + 2 * PI;
+					}
 					m_OldAzimuth = azimuth;
 					m_CurAzimuth = azimuth;
 				}
@@ -1027,6 +1081,14 @@ void RenderBase::GetRealTimeNDIRecord()
 				}
 				if (fabs(elevation - m_OldElevation) >= CHANGE_THRESH)
 				{
+					if (elevation > PI)
+					{
+						elevation = elevation - 2 * PI;
+					}
+					else if (elevation < -PI)
+					{
+						elevation = elevation + 2 * PI;
+					}
 					m_OldElevation = elevation;
 					m_CurElevation = elevation;
 				}
@@ -1036,6 +1098,14 @@ void RenderBase::GetRealTimeNDIRecord()
 				}
 				if (fabs(roll - m_OldRoll) >= CHANGE_THRESH)
 				{
+					if (roll > PI)
+					{
+						roll = roll - 2 * PI;
+					}
+					else if (roll < -PI)
+					{
+						roll = roll + 2 * PI;
+					}
 					m_OldRoll = roll;
 					m_CurRoll = roll;
 				}
@@ -1050,7 +1120,7 @@ void RenderBase::GetRealTimeNDIRecord()
 				m_RegObj[kn]->SetRotationQuaternion(QuNionTemp[kn]);
 				m_RegObj[kn]->SetSensorPoint(pt_sensor);
 				m_Count = m_Count + 0.2f;
-				if (m_Count >= 180)
+				if (m_Count >= 360)
 				{
 					m_Count = 0.0;
 				}
@@ -1061,8 +1131,8 @@ void RenderBase::GetRealTimeNDIRecord()
 				x_center = 250.0f;
 				y_center = 380.0f;
 				z_center = 50.0f;
-				azimuth = 1.0f*m_PunCtCount*PI / 180.0;
-				elevation = 0.0f*PI / 180.0;
+				azimuth = 0.0f*PI / 180.0;
+				elevation = 1.0f*m_PunCtCount*PI / 180.0;
 				roll = 0.0f*PI / 180;
 				m_PunCtCount = m_PunCtCount + 0.1f;
 				if (m_PunCtCount >= 360)
@@ -1074,7 +1144,7 @@ void RenderBase::GetRealTimeNDIRecord()
 				pt_sensor.y = y_center;
 				pt_sensor.z = z_center;
                 
-				QuNionTemp[kn].FromEuler(azimuth, roll, elevation, 1);
+				QuNionTemp[kn].FromEuler(m_CurAzimuth, m_CurRoll, m_CurElevation, 1);
 				m_RegObj[kn]->SetRotationQuaternion(QuNionTemp[kn]);
 				m_RegObj[kn]->SetSensorPoint(pt_sensor);
 			}
@@ -1388,7 +1458,7 @@ void RenderBase::RegistrationSimple()
 	if (m_RegObj[0]->GetRegFinshedFlag())
 	{
 		m_RegObj[0]->RegistrationSimple();
-		//m_RegObj[0]->RegistrationQuaternionSimple();
+		m_RegObj[0]->RegistrationQuaternionSimple();
 	}
 }
 
