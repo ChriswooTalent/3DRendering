@@ -4,10 +4,18 @@
 #include <string>
 #include <windows.h> 
 using namespace std;
-extern "C" __declspec(dllimport) int Initial3DReconResource(float *dicominfo, float *dicomdata, int framecount, HWND cwnd, int startx, int starty, int winwidth, int winheight);
+extern "C" __declspec(dllimport) int Initial3DReconResource(float *dicominfo, float *dicomdata, int framecount, HWND cwnd[3], int *_3dwindowinfo, int *slicewindowinfow, int *uswindowinfo);
 extern "C" __declspec(dllimport) void Release3DReconResource();
 extern "C" __declspec(dllimport) void Call3DRecon(float *maskdata, float *maskinfo);
+extern "C" __declspec(dllimport) void RenderingInit(float *maskdata, float *maskinfo);
+extern "C" __declspec(dllimport) void Showing3D();
+extern "C" __declspec(dllimport) bool Get3DWindowActiveFlag();
+extern "C" __declspec(dllimport) void ShowingSlice();
+extern "C" __declspec(dllimport) bool GetSliceWindowActiveFlag();
+extern "C" __declspec(dllimport) void ShowingUltrasound();
+extern "C" __declspec(dllimport) bool GetUSWindowActiveFlag();
 extern "C" __declspec(dllimport) void UIGetSliceData(float *buf, int len);
+extern "C" __declspec(dllimport) void UISetUltraSoundBuf(float *buf, int len);
 #define MAXSLICENUM 512
 typedef struct DICOMInfo
 {
@@ -178,11 +186,12 @@ inline void PixelRescale(float * floatbuffer, short *shortbuffer, _DICOMInfo* Sl
 	vmin = (SliceInfo->WindowCenter - 0.5f) - (SliceInfo->WindowWidth - 1.0f) / 2.0f;
 	vmax = (SliceInfo->WindowCenter - 0.5f) + (SliceInfo->WindowWidth - 1.0f) / 2.0f;
 	/*if (tempvalue <= vmin)
-		floatbuffer[index] = 0.0f;
+	floatbuffer[index] = 0.0f;
 	else if (tempvalue > vmax)
-		floatbuffer[index] = 1.0f;
+	floatbuffer[index] = 1.0f;
 	else*/
-		floatbuffer[index] = (tempvalue - vmin) / (vmax - vmin);
+	floatbuffer[index] = (tempvalue - vmin) / (vmax - vmin);
+	//floatbuffer[index] = tempvalue;
 }
 
 inline void EnableMemLeakCheck()
@@ -195,10 +204,10 @@ int main(int argc, char **argv)
 #ifdef MHE
 	string volumeinfofile = "../../data/MHEInfoData.txt";
 #else
-    string volumeinfofile = "../../data/Luohu2InfoData.txt";
+	string volumeinfofile = "../../data/Luohu2InfoData.txt";
 #endif
 	//string volumeinfofile = "../../data/prostateinfofinal.txt";
-	_DICOMInfo dicomobj[MAXSLICENUM];
+	_DICOMInfo *dicomobj = new _DICOMInfo[MAXSLICENUM];
 	int slicenum1 = 0;
 	GetVolumeInfoFromFile1(volumeinfofile.c_str(), dicomobj, &slicenum1);
 	float *dicominfo = (float *)malloc(7 * slicenum1 * sizeof(float));
@@ -212,6 +221,7 @@ int main(int argc, char **argv)
 		dicominfo[i * 7 + 5] = dicomobj[i].WindowCenter;
 		dicominfo[i * 7 + 6] = dicomobj[i].WindowWidth;
 	}
+	
 	int datanum = 512 * 512 * slicenum1;
 	int size = 512 * 512 * slicenum1 * sizeof(short);
 	int floatsize = 512 * 512 * slicenum1 * sizeof(float);
@@ -226,6 +236,7 @@ int main(int argc, char **argv)
 	{
 		PixelRescale(volumedataf, volumedata, dicomobj, i);
 	}
+	
 #else
 	string file = "../../data/CS_volume.dat";
 	GetfloatVolumeDataFromFile(file.c_str(), volumedataf, floatsize, 512);
@@ -259,10 +270,13 @@ int main(int argc, char **argv)
 		//volumemaskdataf[i] = (float)volumemaskdata[i];
 		PixelRescale(volumemaskdataf, volumemaskdata, dicomobj, i);
 	}
-
+	delete[]dicomobj;
 	//CCarbonMed3DRecon *_3DRender = new CCarbonMed3DRecon();
-	//slicenum1 = 40;
-	Initial3DReconResource(dicominfo, volumedataf, slicenum1, NULL, 0,0,512,512);
+	//slicenum1 = 20;
+	int _3dWin[4] = { 0, 0, 512, 512 };
+	int SliceWin[4] = { 513, 0, 512, 512 };
+	int UltrasoundWin[4] = { 1023, 0, 512, 512 };
+	Initial3DReconResource(dicominfo, volumedataf, slicenum1, NULL, _3dWin, SliceWin, UltrasoundWin);
 	/*Point3f refpt1(260.0f, 368.0f, 82.0f, 0.0f);
 	Point3f refpt2(260.0f, 368.0f, 82.0f, 0.0f);
 	Point3f refpt3(260.0f, 368.0f, 82.0f, 0.0f);
@@ -274,7 +288,58 @@ int main(int argc, char **argv)
 
 	inputB[1] = 4.94444466;
 	inputB[2] = 20;
-	Call3DRecon(volumemaskdataf, inputB);
+	//Call3DRecon(volumemaskdataf, inputB);
+	RenderingInit(volumemaskdataf, inputB);
+	MSG msg;                                // Windowsx消息结构
+	bool done = false;
+	while (!done)
+	{
+		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))           // 有消息在等待吗?
+		{
+			if (msg.message == WM_QUIT)               // 收到退出消息?
+			{
+				done = TRUE;                  // 是，则done=TRUE
+			}
+			else                            // 不是，处理窗口消息
+			{
+				TranslateMessage(&msg);             // 翻译消息
+				DispatchMessage(&msg);              // 发送消息
+			}
+		}
+		else
+		{
+			if (Get3DWindowActiveFlag())                     // 程序激活的么?
+			{
+				Showing3D();
+			}
+			if (GetSliceWindowActiveFlag())
+			{
+				ShowingSlice();
+#ifdef TEST_NORM_OUT
+				float *test_buf = (float *)malloc(512*512 * sizeof(float));
+				UIGetSliceData(test_buf, 512 * 512 * sizeof(float));
+				FILE *fp = fopen("D:/CarbonMed/testdata1/test_normlize.txt", "w+");
+				for (int i = 0; i < 512; i++)
+				{
+					for (int j = 0; j < 512; j++)
+					{
+						fprintf(fp, "%f ", test_buf[i * 512 + j]);
+					}
+					fprintf(fp, "\n");
+				}
+				fclose(fp);
+#endif
+			}
+			if (GetUSWindowActiveFlag())
+			{
+				ShowingUltrasound();
+#ifdef TEST_US_RENDERING
+				float *test_buf = (float *)malloc(512 * 512 * sizeof(float));
+				UISetUltraSoundBuf(test_buf, 512 * 512 * sizeof(float));
+#endif
+			}
+		}
+	}
 	Release3DReconResource();
 	//delete _3DRender;
 

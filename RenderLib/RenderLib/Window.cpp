@@ -31,7 +31,7 @@ using namespace Win;
 // To prevent the parent window from drawing over its child window area, the
 // parent window must have WS_CLIPCHILDREN flag.
 ///////////////////////////////////////////////////////////////////////////////
-Window::Window(WNDPROC _procfunc) : handle(0), winStyle(WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN),
+Window::Window(WNDPROC _procfunc, wchar_t const* win_name, wchar_t const* win_title) : handle(0), winStyle(WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN),
                                                  winStyleEx(WS_EX_CLIENTEDGE), x(CW_USEDEFAULT), y(CW_USEDEFAULT),
 												 width(WINWIDTH), height(WINHEIGHT),
                                                  menuHandle(0)
@@ -39,8 +39,8 @@ Window::Window(WNDPROC _procfunc) : handle(0), winStyle(WS_OVERLAPPEDWINDOW | WS
 	instance = GetModuleHandle(NULL);
 	parentHandle = NULL;
     // copy string
-	wcsncpy(this->title, L"WindowGL", MAX_STRING - 1);
-	wcsncpy(this->className, L"WindowGL", MAX_STRING - 1);
+	wcsncpy(this->title, win_title, MAX_STRING - 1);
+	wcsncpy(this->className, win_name, MAX_STRING - 1);
 
     // populate window class struct
     winClass.cbSize        = sizeof(WNDCLASSEX);
@@ -91,8 +91,6 @@ HWND Window::create()
                               menuHandle,           // handle to menu
                               instance,             // application instance
                               NULL);  // window creation data
-
-    //this->show(SW_SHOWDEFAULT);                     // make it visible
 
     return handle;
 }

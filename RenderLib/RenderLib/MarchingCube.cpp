@@ -8,9 +8,14 @@
 #include "ScanApple.h" 
 #include "MCTables.h"
 #include "OpenGLBase.h"
+#include "ImageBasicProcess.h"
+/*#include <Eigen/Core>
+#include <Eigen/Sparse>
+#include <Eigen/IterativeLinearSolvers>*/
 
 using namespace openglRendering;
 using namespace std;
+using namespace RenderingDataTypes;
 
 // shader for displaying floating-point texture
 static const char *shader_code =
@@ -324,7 +329,7 @@ void MarchingCube::WGLDataRendering(int orderflag)
 				}
 				if (m_PunctureLineRenderFlag[0])
 				{
-					RenderingProbesensor(m_ProbeTexture, orderflag);
+					//RenderingProbesensor(m_ProbeTexture, orderflag);
 				}
 				// render punc
 				RenderingPunctureLine(0);
@@ -363,6 +368,20 @@ void MarchingCube::WGLDataRendering(int orderflag)
 		}
 	}
 	RenderProcess();
+}
+
+void MarchingCube::WGLSliceRendering(int orderflag)
+{
+	gluLookAt(m_EyeCenterPt.x, m_EyeCenterPt.y, m_EyeCenterPt.z, m_EyeFoucusCenterPt.x, m_EyeFoucusCenterPt.y, m_EyeFoucusCenterPt.z,
+		m_HeadDirection.x, m_HeadDirection.y, m_HeadDirection.z);
+	// render
+	glScalef(m_ScaleParam, m_ScaleParam, m_ScaleParam);
+	GLfloat modelView[16];
+	glGetFloatv(GL_MODELVIEW_MATRIX, modelView);
+	Render2DSlicePBO(m_Texture[3]);
+	//RenderTexSlice(m_Texture[1], 1);
+	//RenderTexSlice(m_Texture[1], 1);
+	SetLightsForRendering();
 }
 
 void MarchingCube::KeyBoard()
@@ -1201,7 +1220,7 @@ void MarchingCube::LaunchMeshFiltering(cl_mem vtxfiltered, cl_mem pos, int facti
 	float *h_vertsPosition = (float *)malloc(maxVerts*sizeof(float));
 	error = clEnqueueReadBuffer(m_Queue, pos, CL_TRUE, 0, maxVerts * sizeof(float), h_vertsPosition, 0, 0, 0);
 	clCheckErrorIP(error, CL_SUCCESS);
-#if 0
+#if 1
 	FILE *fpverts = 0;
 	fopen_s(&fpverts, "fileverts.txt", "w+");
 	for (int s = 0; s < totalVerts; s++)
@@ -1517,16 +1536,6 @@ void MarchingCube::computeIsosurface(cl_mem de_volume, cl_mem &de_pos, cl_mem &d
 //Reshape func
 void MarchingCube::RenderTexSlice(GLuint tex2d, int orderflag)
 {
-	Init2DTexture();
-	//绘制切面的纹理
-	glEnable(GL_TEXTURE_2D);
-	glShadeModel(GL_SMOOTH);
-	glClearDepth(1.0f);
-	glEnable(GL_DEPTH_TEST);
-	glDepthFunc(GL_LEQUAL);
-	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
-	glBindTexture(GL_TEXTURE_2D, tex2d);
-
 	Point3f pt_tl;
 	Point3f pt_tr;
 	Point3f pt_bl;
@@ -1536,68 +1545,150 @@ void MarchingCube::RenderTexSlice(GLuint tex2d, int orderflag)
 	pt_offset.y = m_YCenterOffset;
 	pt_offset.z = m_ZCenterOffset;
 	GetRealBoundCorOfSlice(pt_tl, pt_tr, pt_bl, pt_br, 2);
-	pt_tl = pt_tl + pt_offset;
-	pt_tr = pt_tr + pt_offset;
-	pt_bl = pt_bl + pt_offset;
-	pt_br = pt_br + pt_offset;
+	float width = m_Sliceobj->CalcDistance(pt_tl, pt_tr);
+	float height = m_Sliceobj->CalcDistance(pt_bl, pt_br);
+	if ((width == 0) || (height == 0))
+	{
+		return;
+	}
+	else
+	{
+		Init2DTexture();
+		//绘制切面的纹理
+		glEnable(GL_TEXTURE_2D);
+		glShadeModel(GL_SMOOTH);
+		glClearDepth(1.0f);
+		glEnable(GL_DEPTH_TEST);
+		glDepthFunc(GL_LEQUAL);
+		glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+		glBindTexture(GL_TEXTURE_2D, tex2d);
+		pt_tl = pt_tl + pt_offset;
+		pt_tr = pt_tr + pt_offset;
+		pt_bl = pt_bl + pt_offset;
+		pt_br = pt_br + pt_offset;
 
-	glColor3f(1.0, 1.0, 1.0);
+		glColor3f(1.0, 1.0, 1.0);
 
-	glBegin(GL_QUADS);//绘制场景，提供纹理坐标和几何坐标   
-	//纹理坐标：是指使用纹理的哪部分，每个绘制顶点前面跟个纹理坐标，表示整个图元都会被贴图   
-	/*glTexCoord2f(0.0f, 0.0f); glVertex3f(pt_tl.x, pt_tl.y, pt_tl.z);
-	glTexCoord2f(1.0f, 0.0f); glVertex3f(pt_tr.x, pt_tr.y, pt_tr.z);
-	glTexCoord2f(1.0f, 1.0f); glVertex3f(pt_br.x, pt_br.y, pt_br.z);
-	glTexCoord2f(0.0f, 1.0f); glVertex3f(pt_bl.x, pt_bl.y, pt_bl.z);*/
+		glBegin(GL_QUADS);//绘制场景，提供纹理坐标和几何坐标   
+		//纹理坐标：是指使用纹理的哪部分，每个绘制顶点前面跟个纹理坐标，表示整个图元都会被贴图   
+		/*glTexCoord2f(0.0f, 0.0f); glVertex3f(-width / 2, -height / 2, -256);
+		glTexCoord2f(1.0f, 0.0f); glVertex3f(width / 2, -height / 2, -256);
+		glTexCoord2f(1.0f, 1.0f); glVertex3f(width / 2, height / 2, -256);
+		glTexCoord2f(0.0f, 1.0f); glVertex3f(width / 2, -height / 2, -256);*/
+		glTexCoord2f(0.0f, 0.0f); glVertex3f(pt_tl.x, pt_tl.y, pt_tl.z);
+		glTexCoord2f(1.0f, 0.0f); glVertex3f(pt_tr.x, pt_tr.y, pt_tr.z);
+		glTexCoord2f(1.0f, 1.0f); glVertex3f(pt_br.x, pt_br.y, pt_br.z);
+		glTexCoord2f(0.0f, 1.0f); glVertex3f(pt_bl.x, pt_bl.y, pt_bl.z);
 
-	glTexCoord2f(0.0f, 0.0f); glVertex2f(0.2f, 0.2f);
-	glTexCoord2f(1.0f, 0.0f); glVertex2f(0.8f, 0.2f);
-	glTexCoord2f(1.0f, 1.0f); glVertex2f(0.8f, 0.8f);
-	glTexCoord2f(0.0f, 1.0f); glVertex2f(0.2f, 0.8f);
+		/*glTexCoord2f(0.0f, 0.0f); glVertex2f(0.2f, 0.2f);
+		glTexCoord2f(1.0f, 0.0f); glVertex2f(0.8f, 0.2f);
+		glTexCoord2f(1.0f, 1.0f); glVertex2f(0.8f, 0.8f);
+		glTexCoord2f(0.0f, 1.0f); glVertex2f(0.2f, 0.8f);*/
 
 
-	glEnd();
-	glDisable(GL_TEXTURE_2D);    //禁止使用纹理
-	glBindTexture(GL_TEXTURE_2D, 0);
+		glEnd();
+		glDisable(GL_TEXTURE_2D);    //禁止使用纹理
+		glBindTexture(GL_TEXTURE_2D, 0);
+	}
+}
+
+void MarchingCube::Render2DSlicePBO(GLuint tex2d)
+{
+	bool regflag = GetRegFinshedFlag();
+	bool regrenderfinishflag = m_RegFinishRenderFlag;
+	if ((regflag) && (!regrenderfinishflag))
+	{
+		GetOriginSlice(m_HostSliceBuf);
+		Point3f pt_tl;
+		Point3f pt_tr;
+		Point3f pt_bl;
+		Point3f pt_br;
+		Point3f pt_offset;
+		pt_offset.x = m_XCenterOffset;
+		pt_offset.y = m_YCenterOffset;
+		pt_offset.z = m_ZCenterOffset;
+		GetRealBoundCorOfSlice(pt_tl, pt_tr, pt_bl, pt_br, 2);
+		pt_tl = pt_tl + pt_offset;
+		pt_tr = pt_tr + pt_offset;
+		pt_bl = pt_bl + pt_offset;
+		pt_br = pt_br + pt_offset;
+		float width = m_Sliceobj->CalcDistance(pt_tl, pt_tr);
+		float height = m_Sliceobj->CalcDistance(pt_tl, pt_bl);
+		float scalex = width / WIDTH;
+		float scaley = height / HEIGHT;
+		SetPixelScale(scalex, scaley);
+		if ((width == 0) || (height == 0))
+		{
+			return;
+		}
+		else
+		{
+			glEnable(GL_TEXTURE_2D);
+
+			float base_size = WIDTH /2;
+			float base_size1 = HEIGHT/2;
+			glBindTexture(GL_TEXTURE_2D, tex2d);
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, WIDTH, HEIGHT, 0, GL_LUMINANCE, GL_FLOAT, m_HostSliceBuf);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			glColor3f(255, 255, 255);
+			glBegin(GL_QUADS);
+			glTexCoord2f(0.0f, 0.0f); glVertex3f(-base_size, -base_size1, -80);
+			glTexCoord2f(1.0f, 0.0f); glVertex3f(base_size, -base_size1, -80);
+			glTexCoord2f(1.0f, 1.0f); glVertex3f(base_size, base_size1, -80);
+			glTexCoord2f(0.0f, 1.0f); glVertex3f(-base_size, base_size1, -80);
+			glBindTexture(GL_TEXTURE_2D, 0);
+			glEnd();
+
+			glDisable(GL_TEXTURE_2D);
+			glBindTexture(GL_TEXTURE_2D, 0);
+		}
+		//free(h_pbo);
+	}
 }
 
 void MarchingCube::RenderTexSlicePBO(GLuint tex2d)
 {
-	GetPBO();
-	Point3f pt_tl;
-	Point3f pt_tr;
-	Point3f pt_bl;
-	Point3f pt_br;
-	Point3f pt_offset;
-	pt_offset.x = m_XCenterOffset;
-	pt_offset.y = m_YCenterOffset;
-	pt_offset.z = m_ZCenterOffset;
-	GetRealBoundCorOfSlice(pt_tl, pt_tr, pt_bl, pt_br, 2);
-	pt_tl = pt_tl + pt_offset;
-	pt_tr = pt_tr + pt_offset;
-	pt_bl = pt_bl + pt_offset;
-	pt_br = pt_br + pt_offset;
+	bool regflag = GetRegFinshedFlag();
+	bool regrenderfinishflag = m_RegFinishRenderFlag;
+	if ((regflag) && (!regrenderfinishflag))
+	{
+		GetPBO();
+		Point3f pt_tl;
+		Point3f pt_tr;
+		Point3f pt_bl;
+		Point3f pt_br;
+		Point3f pt_offset;
+		pt_offset.x = m_XCenterOffset;
+		pt_offset.y = m_YCenterOffset;
+		pt_offset.z = m_ZCenterOffset;
+		GetRealBoundCorOfSlice(pt_tl, pt_tr, pt_bl, pt_br, 2);
+		pt_tl = pt_tl + pt_offset;
+		pt_tr = pt_tr + pt_offset;
+		pt_bl = pt_bl + pt_offset;
+		pt_br = pt_br + pt_offset;
 
-	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-	glRasterPos2i(0, 0);
-	glClearColor(0.0, 0.0, 0.0, 0.0f);
-	glBindBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB, slicepbo);
-	glBindTexture(GL_TEXTURE_2D, tex2d);
-	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, WIDTH, HEIGHT, GL_RGBA, GL_UNSIGNED_BYTE, 0);
-	glBindBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB, 0);
+		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+		glRasterPos2i(0, 0);
+		glClearColor(0.0, 0.0, 0.0, 0.0f);
+		glBindTexture(GL_TEXTURE_2D, tex2d);
+		glBindBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB, slicepbo);
+		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, WIDTH, HEIGHT, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+		glBindBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB, 0);
 
-	// draw textured quad
-	SetRenderFeatureSlice();
-	glEnable(GL_TEXTURE_2D);
-	glBegin(GL_QUADS);
-	glTexCoord2f(0.0f, 0.0f); glVertex3f(pt_tl.x, pt_tl.y, pt_tl.z);
-	glTexCoord2f(1.0f, 0.0f); glVertex3f(pt_tr.x, pt_tr.y, pt_tr.z);
-	glTexCoord2f(1.0f, 1.0f); glVertex3f(pt_br.x, pt_br.y, pt_br.z);
-	glTexCoord2f(0.0f, 1.0f); glVertex3f(pt_bl.x, pt_bl.y, pt_bl.z);
-	glEnd();
+		// draw textured quad
+		SetRenderFeatureSlice();
+		glEnable(GL_TEXTURE_2D);
+		glBegin(GL_QUADS);
+		glTexCoord2f(0.0f, 0.0f); glVertex3f(pt_tl.x, pt_tl.y, pt_tl.z);
+		glTexCoord2f(1.0f, 0.0f); glVertex3f(pt_tr.x, pt_tr.y, pt_tr.z);
+		glTexCoord2f(1.0f, 1.0f); glVertex3f(pt_br.x, pt_br.y, pt_br.z);
+		glTexCoord2f(0.0f, 1.0f); glVertex3f(pt_bl.x, pt_bl.y, pt_bl.z);
+		glEnd();
 
-	glDisable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, 0);
+		glDisable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, 0);
+	}
 }
 
 void MarchingCube::RenderRegHintPBO(GLuint tex2d, int bufindex, int orderflag)
@@ -1659,9 +1750,14 @@ void MarchingCube::RenderingPunctureLine(int index)
 		{
 			Point3f pt_lineStart;
 			Point3f pt_lineEnd;
-			m_RegObj[i]->CalcingPunctureLineStart(pt_lineStart);
-			m_RegObj[i]->CalcingPunctureLineEnd(pt_lineEnd);
-			m_RegObj[i]->CalcingCylinderPtArray();
+			//m_RegObj[i]->CalcingPunctureLineStart(pt_lineStart);
+			//m_RegObj[i]->CalcingPunctureLineEnd(pt_lineEnd);
+			//m_RegObj[i]->CalcingCylinderPtArray();
+			//m_RegObj[i]->GetPuncNeedlePtArray(toptemparray, bottemparray, cylindercenter, conecirclearray, puncneedletop);
+
+			m_RegObj[i]->CalcingPunctureLineStartSpace(pt_lineStart);
+			m_RegObj[i]->CalcingPunctureLineEndSpace(pt_lineEnd);
+			m_RegObj[i]->CalcingCylinderPtArraySpace();
 			m_RegObj[i]->GetPuncNeedlePtArray(toptemparray, bottemparray, cylindercenter, conecirclearray, puncneedletop);
 			if (i == 0)
 			{

@@ -1,24 +1,6 @@
-﻿Build started 2018/1/29 11:22:06.
-     1>Project "D:\Code_local\project_carbon\GetSynchronousRecord Sample\NDIResult.vcxproj" on node 2 (Build target(s)).
-     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppBuild.targets(364,5): warning MSB8004: Output Directory does not end with a trailing slash.  This build instance will add the slash as it is required to allow proper evaluation of the Output Directory.
-     1>ClCompile:
-         D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /Zi /nologo /W3 /WX- /O2 /D WIN32 /D NDEBUG /D _CONSOLE /D _WINDLL /Gm- /EHsc /MD /GS /Zc:wchar_t /Zc:forScope /Fo"x64\Release\\" /Fd"x64\Release\vc120.pdb" /Gd /TP /errorReport:prompt NDIDrivebay.cpp NDI_DLL.cpp StdAfx.cpp
-         NDIDrivebay.cpp
-     1>NDIDrivebay.cpp(9): warning C4101: 'sensorID' : unreferenced local variable
-     1>NDIDrivebay.cpp(174): warning C4267: '=' : conversion from 'size_t' to 'int', possible loss of data
-     1>NDIDrivebay.cpp(176): warning C4172: returning address of local variable or temporary
-         NDI_DLL.cpp
-         StdAfx.cpp
-         Generating Code...
-       Link:
-         D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"../lib/Release\NDIResult.dll" /INCREMENTAL /NOLOGO ATC3DG64.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"../lib/Release\NDIResult.pdb" /SUBSYSTEM:CONSOLE /OPT:REF /OPT:ICF /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"../lib/Release\NDIResult.lib" /MACHINE:X64 /DLL x64\Release\NDIDrivebay.obj
-         x64\Release\NDI_DLL.obj
-         x64\Release\StdAfx.obj
-     1>LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/OPT:ICF' specification
-            Creating library ../lib/Release\NDIResult.lib and object ../lib/Release\NDIResult.exp
-         NDIResult.vcxproj -> D:\Code_local\project_carbon\GetSynchronousRecord Sample\../lib/Release\NDIResult.dll
-     1>Done Building Project "D:\Code_local\project_carbon\GetSynchronousRecord Sample\NDIResult.vcxproj" (Build target(s)).
-
-Build succeeded.
-
-Time Elapsed 00:00:03.32
+﻿C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V140\Microsoft.CppBuild.targets(368,5): warning MSB8004: Output Directory does not end with a trailing slash.  This build instance will add the slash as it is required to allow proper evaluation of the Output Directory.
+  NDI_DLL.cpp
+LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/OPT:ICF' specification
+     Creating library ../lib/Release\NDIResult.lib and object ../lib/Release\NDIResult.exp
+  NDIResult.vcxproj -> D:\Code\3DRendering-master\GetSynchronousRecord Sample\../lib/Release\NDIResult.dll
+  NDIResult.vcxproj -> ../lib/Release\NDIResult.pdb (Full PDB)

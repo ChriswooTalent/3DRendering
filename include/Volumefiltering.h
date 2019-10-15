@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <sys/types.h> 
 using namespace std;
+using namespace RenderingDataTypes;
 
 const char VoFilterKernelFile[256] = "D:/CarbonMed/Config/Local/CL/VolumeFilter_kernel.cl";
 class VolumeFiler:public OpenCLBase

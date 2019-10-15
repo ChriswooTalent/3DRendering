@@ -8,6 +8,7 @@ NDIDRIVEVAY_API void InitNDIDriveBay(const char *err, int &errorCode);
 NDIDRIVEVAY_API void GetNDIDriveBaySynRecord(void *pRecord, int elementsize, int recordSize, int &validsensornum, int *sensorindex, int &errorCode, const char *err);
 NDIDRIVEVAY_API void GetNDIDriveBayRecordOffset(void *pRecord, int elementsize, int recordsize, int sensorid, double offsetx, double offsety, double offsetz, int &errorcode, const char *err);
 NDIDRIVEVAY_API void GetNDIDriveBayRotationMatrix(int sensorid, double *RMatrix, int &errorCode, const char *err);
+NDIDRIVEVAY_API void GetNDIDriveBayQuaterNion(int sensorid, double *Quaternion, int &errorCode, const char *err);
 NDIDRIVEVAY_API void ReleaseNDIDriveBayResource();
 
 void InitNDIDriveBay(const char *err, int &errorCode)
@@ -29,6 +30,12 @@ void GetNDIDriveBayRecordOffset(void *pRecord, int elementsize, int recordsize, 
 void GetNDIDriveBayRotationMatrix(int sensorid, double *RMatrix, int &errorCode, const char *err)
 {
 	_NDIObj.GetNDIDriveBaySensorRMatrix(sensorid, RMatrix, errorCode, err);
+}
+
+void GetNDIDriveBayQuaterNion(int sensorid, double *Quaternion, int &errorCode, const char *err)
+{
+	_NDIObj.GetNDIDriveBaySensorQuaterNion(sensorid, Quaternion, errorCode, err);
+	//printf("fuck your mother");
 }
 
 void ReleaseNDIDriveBayResource()

@@ -1,310 +1,312 @@
-﻿Build started 2018/4/17 17:37:58.
-     1>Project "D:\Code_local\project_carbon\RenderLib\RenderLib\RenderLib.vcxproj" on node 2 (Build target(s)).
-     1>ClCompile:
-         D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /ID:\AMD\include /I..\shared\inc /I..\..\include /Zi /nologo /W3 /WX- /sdl /Od /D _CRT_SECURE_NO_WARNINGS /D _DEBUG /D _CONSOLE /D _WINDLL /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /Zc:wchar_t /Zc:forScope /Fo"x64\Debug\\" /Fd"x64\Debug\vc120.pdb" /Gd /TP /errorReport:prompt /D_CRT_SECURE_NO_WARNINGS CarbonMed3DRecon.cpp CarbonMed3DRecon_DLL.cpp CorRegisTration.cpp MarchingCube.cpp OpenCLBase.cpp OpenGLBase.cpp QuaternionProcess.cpp RenderBase.cpp Rotateslice.cpp VolumeRendering.cpp Volumefiltering.cpp
-         VolumeRendering.cpp
-     1>d:\code_local\project_carbon\include\DataTypes.h(239): warning C4172: returning address of local variable or temporary
-     1>d:\code_local\project_carbon\include\DataTypes.h(281): warning C4172: returning address of local variable or temporary
-     1>d:\code_local\project_carbon\include\DataTypes.h(291): warning C4172: returning address of local variable or temporary
-     1>d:\code_local\project_carbon\include\RenderBase.h(58): warning C4275: non dll-interface class 'OpenCLBase' used as base for dll-interface class 'RenderBase'
-                 d:\code_local\project_carbon\include\OpenCLBase.h(30) : see declaration of 'OpenCLBase'
-                 d:\code_local\project_carbon\include\RenderBase.h(58) : see declaration of 'RenderBase'
-     1>d:\code_local\project_carbon\include\RenderBase.h(59): warning C4275: non dll-interface class 'InternalThread' used as base for dll-interface class 'RenderBase'
-                 d:\code_local\project_carbon\include\InternalThread.h(10) : see declaration of 'InternalThread'
-                 d:\code_local\project_carbon\include\RenderBase.h(58) : see declaration of 'RenderBase'
-     1>d:\code_local\project_carbon\include\RenderBase.h(404): warning C4251: 'RenderBase::m_EyeCenterPt' : struct 'Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
-                 d:\code_local\project_carbon\include\DataTypes.h(244) : see declaration of 'Point3'
-     1>d:\code_local\project_carbon\include\RenderBase.h(405): warning C4251: 'RenderBase::m_EyeFoucusCenterPt' : struct 'Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
-                 d:\code_local\project_carbon\include\DataTypes.h(244) : see declaration of 'Point3'
-     1>d:\code_local\project_carbon\include\RenderBase.h(406): warning C4251: 'RenderBase::m_HeadDirection' : struct 'Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
-                 d:\code_local\project_carbon\include\DataTypes.h(244) : see declaration of 'Point3'
-     1>d:\code_local\project_carbon\include\RenderBase.h(408): warning C4251: 'RenderBase::volumedatafile' : class 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of class 'RenderBase'
-     1>d:\code_local\project_carbon\include\RenderBase.h(409): warning C4251: 'RenderBase::volumedatamaskfile' : class 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of class 'RenderBase'
-     1>d:\code_local\project_carbon\include\RenderBase.h(441): warning C4251: 'RenderBase::m_WorldPt' : struct 'Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
-                 d:\code_local\project_carbon\include\DataTypes.h(244) : see declaration of 'Point3'
-     1>d:\code_local\project_carbon\include\RenderBase.h(442): warning C4251: 'RenderBase::m_RefPt1' : struct 'Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
-                 d:\code_local\project_carbon\include\DataTypes.h(244) : see declaration of 'Point3'
-     1>d:\code_local\project_carbon\include\RenderBase.h(443): warning C4251: 'RenderBase::m_RefPt2' : struct 'Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
-                 d:\code_local\project_carbon\include\DataTypes.h(244) : see declaration of 'Point3'
-     1>d:\code_local\project_carbon\include\RenderBase.h(444): warning C4251: 'RenderBase::m_RefPt3' : struct 'Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
-                 d:\code_local\project_carbon\include\DataTypes.h(244) : see declaration of 'Point3'
-     1>d:\code_local\project_carbon\include\RenderBase.h(445): warning C4251: 'RenderBase::m_RefPt4' : struct 'Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
-                 d:\code_local\project_carbon\include\DataTypes.h(244) : see declaration of 'Point3'
-     1>d:\code_local\project_carbon\include\RenderBase.h(501): warning C4251: 'RenderBase::m_MaskFileNames' : class 'std::vector<std::string,std::allocator<_Ty>>' needs to have dll-interface to be used by clients of class 'RenderBase'
-                 with
-                 [
-                     _Ty=std::string
-                 ]
-     1>VolumeRendering.cpp(271): warning C4244: 'initializing' : conversion from 'float' to 'short', possible loss of data
-     1>VolumeRendering.cpp(272): warning C4244: 'initializing' : conversion from 'float' to 'short', possible loss of data
-     1>VolumeRendering.cpp(355): warning C4244: 'initializing' : conversion from 'float' to 'short', possible loss of data
-     1>VolumeRendering.cpp(356): warning C4244: 'initializing' : conversion from 'float' to 'short', possible loss of data
-         RenderBase.cpp
-     1>d:\code_local\project_carbon\include\DataTypes.h(239): warning C4172: returning address of local variable or temporary
-     1>d:\code_local\project_carbon\include\DataTypes.h(281): warning C4172: returning address of local variable or temporary
-     1>d:\code_local\project_carbon\include\DataTypes.h(291): warning C4172: returning address of local variable or temporary
-     1>D:\Code_local\project_carbon\include\RenderBase.h(58): warning C4275: non dll-interface class 'OpenCLBase' used as base for dll-interface class 'RenderBase'
-                 d:\code_local\project_carbon\include\OpenCLBase.h(30) : see declaration of 'OpenCLBase'
-                 D:\Code_local\project_carbon\include\RenderBase.h(58) : see declaration of 'RenderBase'
-     1>D:\Code_local\project_carbon\include\RenderBase.h(59): warning C4275: non dll-interface class 'InternalThread' used as base for dll-interface class 'RenderBase'
-                 d:\code_local\project_carbon\include\InternalThread.h(10) : see declaration of 'InternalThread'
-                 D:\Code_local\project_carbon\include\RenderBase.h(58) : see declaration of 'RenderBase'
-     1>D:\Code_local\project_carbon\include\RenderBase.h(404): warning C4251: 'RenderBase::m_EyeCenterPt' : struct 'Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
-                 d:\code_local\project_carbon\include\DataTypes.h(244) : see declaration of 'Point3'
-     1>D:\Code_local\project_carbon\include\RenderBase.h(405): warning C4251: 'RenderBase::m_EyeFoucusCenterPt' : struct 'Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
-                 d:\code_local\project_carbon\include\DataTypes.h(244) : see declaration of 'Point3'
-     1>D:\Code_local\project_carbon\include\RenderBase.h(406): warning C4251: 'RenderBase::m_HeadDirection' : struct 'Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
-                 d:\code_local\project_carbon\include\DataTypes.h(244) : see declaration of 'Point3'
-     1>D:\Code_local\project_carbon\include\RenderBase.h(408): warning C4251: 'RenderBase::volumedatafile' : class 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of class 'RenderBase'
-     1>D:\Code_local\project_carbon\include\RenderBase.h(409): warning C4251: 'RenderBase::volumedatamaskfile' : class 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of class 'RenderBase'
-     1>D:\Code_local\project_carbon\include\RenderBase.h(441): warning C4251: 'RenderBase::m_WorldPt' : struct 'Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
-                 d:\code_local\project_carbon\include\DataTypes.h(244) : see declaration of 'Point3'
-     1>D:\Code_local\project_carbon\include\RenderBase.h(442): warning C4251: 'RenderBase::m_RefPt1' : struct 'Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
-                 d:\code_local\project_carbon\include\DataTypes.h(244) : see declaration of 'Point3'
-     1>D:\Code_local\project_carbon\include\RenderBase.h(443): warning C4251: 'RenderBase::m_RefPt2' : struct 'Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
-                 d:\code_local\project_carbon\include\DataTypes.h(244) : see declaration of 'Point3'
-     1>D:\Code_local\project_carbon\include\RenderBase.h(444): warning C4251: 'RenderBase::m_RefPt3' : struct 'Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
-                 d:\code_local\project_carbon\include\DataTypes.h(244) : see declaration of 'Point3'
-     1>D:\Code_local\project_carbon\include\RenderBase.h(445): warning C4251: 'RenderBase::m_RefPt4' : struct 'Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
-                 d:\code_local\project_carbon\include\DataTypes.h(244) : see declaration of 'Point3'
-     1>D:\Code_local\project_carbon\include\RenderBase.h(501): warning C4251: 'RenderBase::m_MaskFileNames' : class 'std::vector<std::string,std::allocator<_Ty>>' needs to have dll-interface to be used by clients of class 'RenderBase'
-                 with
-                 [
-                     _Ty=std::string
-                 ]
-     1>RenderBase.cpp(835): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>RenderBase.cpp(836): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>RenderBase.cpp(837): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>RenderBase.cpp(841): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>RenderBase.cpp(842): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>RenderBase.cpp(843): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>RenderBase.cpp(894): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>RenderBase.cpp(895): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>RenderBase.cpp(896): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>RenderBase.cpp(911): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>RenderBase.cpp(912): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>RenderBase.cpp(913): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>RenderBase.cpp(1047): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>RenderBase.cpp(1048): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>RenderBase.cpp(1049): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>RenderBase.cpp(1135): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>RenderBase.cpp(1507): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>RenderBase.cpp(1508): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>RenderBase.cpp(1509): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>RenderBase.cpp(1516): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>RenderBase.cpp(1517): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>RenderBase.cpp(1518): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>RenderBase.cpp(1525): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>RenderBase.cpp(1526): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>RenderBase.cpp(1527): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>RenderBase.cpp(1534): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>RenderBase.cpp(1535): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>RenderBase.cpp(1536): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>RenderBase.cpp(1573): warning C4267: 'initializing' : conversion from 'size_t' to 'int', possible loss of data
-     1>RenderBase.cpp(1586): warning C4267: 'initializing' : conversion from 'size_t' to 'int', possible loss of data
-     1>RenderBase.cpp(1689): warning C4018: '<' : signed/unsigned mismatch
-     1>RenderBase.cpp(1693): warning C4018: '<' : signed/unsigned mismatch
-     1>RenderBase.cpp(1697): warning C4018: '<' : signed/unsigned mismatch
-         Generating Code...
-         Compiling...
-         Volumefiltering.cpp
-     1>d:\code_local\project_carbon\include\DataTypes.h(239): warning C4172: returning address of local variable or temporary
-     1>d:\code_local\project_carbon\include\DataTypes.h(281): warning C4172: returning address of local variable or temporary
-     1>d:\code_local\project_carbon\include\DataTypes.h(291): warning C4172: returning address of local variable or temporary
-         Rotateslice.cpp
-     1>d:\code_local\project_carbon\include\DataTypes.h(239): warning C4172: returning address of local variable or temporary
-     1>d:\code_local\project_carbon\include\DataTypes.h(281): warning C4172: returning address of local variable or temporary
-     1>d:\code_local\project_carbon\include\DataTypes.h(291): warning C4172: returning address of local variable or temporary
-     1>D:\Code_local\project_carbon\include\ScanApple.h(25): warning C4005: 'NUM_BANKS' : macro redefinition
-                 d:\code_local\project_carbon\include\DataTypes.h(118) : see previous definition of 'NUM_BANKS'
-     1>D:\Code_local\project_carbon\include\ScanApple.h(29): warning C4005: 'min' : macro redefinition
-                 C:\Program Files (x86)\Windows Kits\8.1\Include\shared\minwindef.h(197) : see previous definition of 'min'
-     1>Rotateslice.cpp(562): warning C4244: '=' : conversion from 'cl_uint' to 'float', possible loss of data
-     1>Rotateslice.cpp(588): warning C4244: '=' : conversion from 'cl_uint' to 'float', possible loss of data
-     1>Rotateslice.cpp(613): warning C4244: '=' : conversion from 'cl_uint' to 'float', possible loss of data
-     1>Rotateslice.cpp(1581): warning C4244: '=' : conversion from 'float' to 'short', possible loss of data
-     1>Rotateslice.cpp(1614): warning C4244: '=' : conversion from 'float' to 'short', possible loss of data
-         QuaternionProcess.cpp
-     1>d:\code_local\project_carbon\include\DataTypes.h(239): warning C4172: returning address of local variable or temporary
-     1>d:\code_local\project_carbon\include\DataTypes.h(281): warning C4172: returning address of local variable or temporary
-     1>d:\code_local\project_carbon\include\DataTypes.h(291): warning C4172: returning address of local variable or temporary
-     1>QuaternionProcess.cpp(75): warning C4172: returning address of local variable or temporary
-         OpenGLBase.cpp
-     1>d:\code_local\project_carbon\include\DataTypes.h(239): warning C4172: returning address of local variable or temporary
-     1>d:\code_local\project_carbon\include\DataTypes.h(281): warning C4172: returning address of local variable or temporary
-     1>d:\code_local\project_carbon\include\DataTypes.h(291): warning C4172: returning address of local variable or temporary
-     1>OpenGLBase.cpp(13): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>OpenGLBase.cpp(14): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>OpenGLBase.cpp(71): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-         OpenCLBase.cpp
-     1>d:\code_local\project_carbon\include\DataTypes.h(239): warning C4172: returning address of local variable or temporary
-     1>d:\code_local\project_carbon\include\DataTypes.h(281): warning C4172: returning address of local variable or temporary
-     1>d:\code_local\project_carbon\include\DataTypes.h(291): warning C4172: returning address of local variable or temporary
-         MarchingCube.cpp
-     1>d:\code_local\project_carbon\include\DataTypes.h(239): warning C4172: returning address of local variable or temporary
-     1>d:\code_local\project_carbon\include\DataTypes.h(281): warning C4172: returning address of local variable or temporary
-     1>d:\code_local\project_carbon\include\DataTypes.h(291): warning C4172: returning address of local variable or temporary
-     1>d:\code_local\project_carbon\include\RenderBase.h(58): warning C4275: non dll-interface class 'OpenCLBase' used as base for dll-interface class 'RenderBase'
-                 d:\code_local\project_carbon\include\OpenCLBase.h(30) : see declaration of 'OpenCLBase'
-                 d:\code_local\project_carbon\include\RenderBase.h(58) : see declaration of 'RenderBase'
-     1>d:\code_local\project_carbon\include\RenderBase.h(59): warning C4275: non dll-interface class 'InternalThread' used as base for dll-interface class 'RenderBase'
-                 d:\code_local\project_carbon\include\InternalThread.h(10) : see declaration of 'InternalThread'
-                 d:\code_local\project_carbon\include\RenderBase.h(58) : see declaration of 'RenderBase'
-     1>d:\code_local\project_carbon\include\RenderBase.h(404): warning C4251: 'RenderBase::m_EyeCenterPt' : struct 'Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
-                 d:\code_local\project_carbon\include\DataTypes.h(244) : see declaration of 'Point3'
-     1>d:\code_local\project_carbon\include\RenderBase.h(405): warning C4251: 'RenderBase::m_EyeFoucusCenterPt' : struct 'Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
-                 d:\code_local\project_carbon\include\DataTypes.h(244) : see declaration of 'Point3'
-     1>d:\code_local\project_carbon\include\RenderBase.h(406): warning C4251: 'RenderBase::m_HeadDirection' : struct 'Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
-                 d:\code_local\project_carbon\include\DataTypes.h(244) : see declaration of 'Point3'
-     1>d:\code_local\project_carbon\include\RenderBase.h(408): warning C4251: 'RenderBase::volumedatafile' : class 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of class 'RenderBase'
-     1>d:\code_local\project_carbon\include\RenderBase.h(409): warning C4251: 'RenderBase::volumedatamaskfile' : class 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of class 'RenderBase'
-     1>d:\code_local\project_carbon\include\RenderBase.h(441): warning C4251: 'RenderBase::m_WorldPt' : struct 'Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
-                 d:\code_local\project_carbon\include\DataTypes.h(244) : see declaration of 'Point3'
-     1>d:\code_local\project_carbon\include\RenderBase.h(442): warning C4251: 'RenderBase::m_RefPt1' : struct 'Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
-                 d:\code_local\project_carbon\include\DataTypes.h(244) : see declaration of 'Point3'
-     1>d:\code_local\project_carbon\include\RenderBase.h(443): warning C4251: 'RenderBase::m_RefPt2' : struct 'Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
-                 d:\code_local\project_carbon\include\DataTypes.h(244) : see declaration of 'Point3'
-     1>d:\code_local\project_carbon\include\RenderBase.h(444): warning C4251: 'RenderBase::m_RefPt3' : struct 'Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
-                 d:\code_local\project_carbon\include\DataTypes.h(244) : see declaration of 'Point3'
-     1>d:\code_local\project_carbon\include\RenderBase.h(445): warning C4251: 'RenderBase::m_RefPt4' : struct 'Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
-                 d:\code_local\project_carbon\include\DataTypes.h(244) : see declaration of 'Point3'
-     1>d:\code_local\project_carbon\include\RenderBase.h(501): warning C4251: 'RenderBase::m_MaskFileNames' : class 'std::vector<std::string,std::allocator<_Ty>>' needs to have dll-interface to be used by clients of class 'RenderBase'
-                 with
-                 [
-                     _Ty=std::string
-                 ]
-     1>D:\Code_local\project_carbon\include\ScanApple.h(25): warning C4005: 'NUM_BANKS' : macro redefinition
-                 d:\code_local\project_carbon\include\DataTypes.h(118) : see previous definition of 'NUM_BANKS'
-     1>D:\Code_local\project_carbon\include\ScanApple.h(29): warning C4005: 'min' : macro redefinition
-                 C:\Program Files (x86)\Windows Kits\8.1\Include\shared\minwindef.h(197) : see previous definition of 'min'
-     1>MarchingCube.cpp(668): warning C4305: 'initializing' : truncation from 'double' to 'GLfloat'
-     1>MarchingCube.cpp(669): warning C4305: 'initializing' : truncation from 'double' to 'GLfloat'
-     1>MarchingCube.cpp(670): warning C4305: 'initializing' : truncation from 'double' to 'GLfloat'
-     1>MarchingCube.cpp(671): warning C4305: 'initializing' : truncation from 'double' to 'GLfloat'
-     1>MarchingCube.cpp(679): warning C4305: 'argument' : truncation from 'double' to 'GLfloat'
-     1>MarchingCube.cpp(1464): warning C4244: 'argument' : conversion from 'unsigned int' to 'float', possible loss of data
-     1>MarchingCube.cpp(1481): warning C4244: 'argument' : conversion from 'unsigned int' to 'float', possible loss of data
-         CorRegisTration.cpp
-     1>d:\code_local\project_carbon\include\DataTypes.h(239): warning C4172: returning address of local variable or temporary
-     1>d:\code_local\project_carbon\include\DataTypes.h(281): warning C4172: returning address of local variable or temporary
-     1>d:\code_local\project_carbon\include\DataTypes.h(291): warning C4172: returning address of local variable or temporary
-     1>CorRegisTration.cpp(298): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>CorRegisTration.cpp(583): warning C4101: 'i' : unreferenced local variable
-         CarbonMed3DRecon_DLL.cpp
-     1>d:\code_local\project_carbon\include\DataTypes.h(239): warning C4172: returning address of local variable or temporary
-     1>d:\code_local\project_carbon\include\DataTypes.h(281): warning C4172: returning address of local variable or temporary
-     1>d:\code_local\project_carbon\include\DataTypes.h(291): warning C4172: returning address of local variable or temporary
-     1>d:\code_local\project_carbon\include\RenderBase.h(58): warning C4275: non dll-interface class 'OpenCLBase' used as base for dll-interface class 'RenderBase'
-                 d:\code_local\project_carbon\include\OpenCLBase.h(30) : see declaration of 'OpenCLBase'
-                 d:\code_local\project_carbon\include\RenderBase.h(58) : see declaration of 'RenderBase'
-     1>d:\code_local\project_carbon\include\RenderBase.h(59): warning C4275: non dll-interface class 'InternalThread' used as base for dll-interface class 'RenderBase'
-                 d:\code_local\project_carbon\include\InternalThread.h(10) : see declaration of 'InternalThread'
-                 d:\code_local\project_carbon\include\RenderBase.h(58) : see declaration of 'RenderBase'
-     1>d:\code_local\project_carbon\include\RenderBase.h(404): warning C4251: 'RenderBase::m_EyeCenterPt' : struct 'Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
-                 d:\code_local\project_carbon\include\DataTypes.h(244) : see declaration of 'Point3'
-     1>d:\code_local\project_carbon\include\RenderBase.h(405): warning C4251: 'RenderBase::m_EyeFoucusCenterPt' : struct 'Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
-                 d:\code_local\project_carbon\include\DataTypes.h(244) : see declaration of 'Point3'
-     1>d:\code_local\project_carbon\include\RenderBase.h(406): warning C4251: 'RenderBase::m_HeadDirection' : struct 'Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
-                 d:\code_local\project_carbon\include\DataTypes.h(244) : see declaration of 'Point3'
-     1>d:\code_local\project_carbon\include\RenderBase.h(408): warning C4251: 'RenderBase::volumedatafile' : class 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of class 'RenderBase'
-     1>d:\code_local\project_carbon\include\RenderBase.h(409): warning C4251: 'RenderBase::volumedatamaskfile' : class 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of class 'RenderBase'
-     1>d:\code_local\project_carbon\include\RenderBase.h(441): warning C4251: 'RenderBase::m_WorldPt' : struct 'Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
-                 d:\code_local\project_carbon\include\DataTypes.h(244) : see declaration of 'Point3'
-     1>d:\code_local\project_carbon\include\RenderBase.h(442): warning C4251: 'RenderBase::m_RefPt1' : struct 'Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
-                 d:\code_local\project_carbon\include\DataTypes.h(244) : see declaration of 'Point3'
-     1>d:\code_local\project_carbon\include\RenderBase.h(443): warning C4251: 'RenderBase::m_RefPt2' : struct 'Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
-                 d:\code_local\project_carbon\include\DataTypes.h(244) : see declaration of 'Point3'
-     1>d:\code_local\project_carbon\include\RenderBase.h(444): warning C4251: 'RenderBase::m_RefPt3' : struct 'Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
-                 d:\code_local\project_carbon\include\DataTypes.h(244) : see declaration of 'Point3'
-     1>d:\code_local\project_carbon\include\RenderBase.h(445): warning C4251: 'RenderBase::m_RefPt4' : struct 'Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
-                 d:\code_local\project_carbon\include\DataTypes.h(244) : see declaration of 'Point3'
-     1>d:\code_local\project_carbon\include\RenderBase.h(501): warning C4251: 'RenderBase::m_MaskFileNames' : class 'std::vector<std::string,std::allocator<_Ty>>' needs to have dll-interface to be used by clients of class 'RenderBase'
-                 with
-                 [
-                     _Ty=std::string
-                 ]
-         CarbonMed3DRecon.cpp
-     1>d:\code_local\project_carbon\include\DataTypes.h(239): warning C4172: returning address of local variable or temporary
-     1>d:\code_local\project_carbon\include\DataTypes.h(281): warning C4172: returning address of local variable or temporary
-     1>d:\code_local\project_carbon\include\DataTypes.h(291): warning C4172: returning address of local variable or temporary
-     1>d:\code_local\project_carbon\include\RenderBase.h(58): warning C4275: non dll-interface class 'OpenCLBase' used as base for dll-interface class 'RenderBase'
-                 d:\code_local\project_carbon\include\OpenCLBase.h(30) : see declaration of 'OpenCLBase'
-                 d:\code_local\project_carbon\include\RenderBase.h(58) : see declaration of 'RenderBase'
-     1>d:\code_local\project_carbon\include\RenderBase.h(59): warning C4275: non dll-interface class 'InternalThread' used as base for dll-interface class 'RenderBase'
-                 d:\code_local\project_carbon\include\InternalThread.h(10) : see declaration of 'InternalThread'
-                 d:\code_local\project_carbon\include\RenderBase.h(58) : see declaration of 'RenderBase'
-     1>d:\code_local\project_carbon\include\RenderBase.h(404): warning C4251: 'RenderBase::m_EyeCenterPt' : struct 'Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
-                 d:\code_local\project_carbon\include\DataTypes.h(244) : see declaration of 'Point3'
-     1>d:\code_local\project_carbon\include\RenderBase.h(405): warning C4251: 'RenderBase::m_EyeFoucusCenterPt' : struct 'Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
-                 d:\code_local\project_carbon\include\DataTypes.h(244) : see declaration of 'Point3'
-     1>d:\code_local\project_carbon\include\RenderBase.h(406): warning C4251: 'RenderBase::m_HeadDirection' : struct 'Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
-                 d:\code_local\project_carbon\include\DataTypes.h(244) : see declaration of 'Point3'
-     1>d:\code_local\project_carbon\include\RenderBase.h(408): warning C4251: 'RenderBase::volumedatafile' : class 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of class 'RenderBase'
-     1>d:\code_local\project_carbon\include\RenderBase.h(409): warning C4251: 'RenderBase::volumedatamaskfile' : class 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of class 'RenderBase'
-     1>d:\code_local\project_carbon\include\RenderBase.h(441): warning C4251: 'RenderBase::m_WorldPt' : struct 'Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
-                 d:\code_local\project_carbon\include\DataTypes.h(244) : see declaration of 'Point3'
-     1>d:\code_local\project_carbon\include\RenderBase.h(442): warning C4251: 'RenderBase::m_RefPt1' : struct 'Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
-                 d:\code_local\project_carbon\include\DataTypes.h(244) : see declaration of 'Point3'
-     1>d:\code_local\project_carbon\include\RenderBase.h(443): warning C4251: 'RenderBase::m_RefPt2' : struct 'Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
-                 d:\code_local\project_carbon\include\DataTypes.h(244) : see declaration of 'Point3'
-     1>d:\code_local\project_carbon\include\RenderBase.h(444): warning C4251: 'RenderBase::m_RefPt3' : struct 'Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
-                 d:\code_local\project_carbon\include\DataTypes.h(244) : see declaration of 'Point3'
-     1>d:\code_local\project_carbon\include\RenderBase.h(445): warning C4251: 'RenderBase::m_RefPt4' : struct 'Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
-                 d:\code_local\project_carbon\include\DataTypes.h(244) : see declaration of 'Point3'
-     1>d:\code_local\project_carbon\include\RenderBase.h(501): warning C4251: 'RenderBase::m_MaskFileNames' : class 'std::vector<std::string,std::allocator<_Ty>>' needs to have dll-interface to be used by clients of class 'RenderBase'
-                 with
-                 [
-                     _Ty=std::string
-                 ]
-     1>CarbonMed3DRecon.cpp(338): warning C4101: 'currMode' : unreferenced local variable
-     1>CarbonMed3DRecon.cpp(618): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>CarbonMed3DRecon.cpp(626): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>CarbonMed3DRecon.cpp(646): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
-     1>CarbonMed3DRecon.cpp(647): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
-     1>CarbonMed3DRecon.cpp(745): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-     1>CarbonMed3DRecon.cpp(874): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
-     1>CarbonMed3DRecon.cpp(875): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
-     1>CarbonMed3DRecon.cpp(876): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
-     1>CarbonMed3DRecon.cpp(877): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
-     1>CarbonMed3DRecon.cpp(880): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
-     1>CarbonMed3DRecon.cpp(882): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
-     1>CarbonMed3DRecon.cpp(1184): warning C4267: 'argument' : conversion from 'size_t' to 'int', possible loss of data
-     1>CarbonMed3DRecon.cpp(1185): warning C4267: 'argument' : conversion from 'size_t' to 'int', possible loss of data
-     1>CarbonMed3DRecon.cpp(1186): warning C4267: 'argument' : conversion from 'size_t' to 'int', possible loss of data
-     1>CarbonMed3DRecon.cpp(1169): warning C4101: 'fps' : unreferenced local variable
-     1>CarbonMed3DRecon.cpp(1361): warning C4267: 'argument' : conversion from 'size_t' to 'int', possible loss of data
-     1>CarbonMed3DRecon.cpp(1362): warning C4267: 'argument' : conversion from 'size_t' to 'int', possible loss of data
-     1>CarbonMed3DRecon.cpp(1363): warning C4267: 'argument' : conversion from 'size_t' to 'int', possible loss of data
-     1>CarbonMed3DRecon.cpp(1447): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>CarbonMed3DRecon.cpp(1448): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>CarbonMed3DRecon.cpp(1449): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>CarbonMed3DRecon.cpp(1450): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>CarbonMed3DRecon.cpp(1451): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>CarbonMed3DRecon.cpp(1452): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>CarbonMed3DRecon.cpp(1581): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
-     1>CarbonMed3DRecon.cpp(1582): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
-     1>CarbonMed3DRecon.cpp(1596): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
-         Generating Code...
-       Link:
-         D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"..\..\lib\Debug\RenderLib.dll" /INCREMENTAL /NOLOGO /LIBPATH:D:\AMD\lib\x86_64 /LIBPATH:..\..\lib\Debug glew64.lib OpenCL.lib PrintLog_DLL.lib NDIResult.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST:NO /DEBUG /PDB:"..\..\lib\Debug\RenderLib.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"..\..\lib\Debug\RenderLib.lib" /MACHINE:X64 /DLL x64\Debug\CarbonMed3DRecon.obj
-         x64\Debug\CarbonMed3DRecon_DLL.obj
-         x64\Debug\CorRegisTration.obj
-         x64\Debug\ImageBasicProcess.obj
-         x64\Debug\InternalThread.obj
-         x64\Debug\MarchingCube.obj
-         x64\Debug\Matrices.obj
-         x64\Debug\OpenCLBase.obj
-         x64\Debug\OpenGLBase.obj
-         x64\Debug\QuaternionProcess.obj
-         x64\Debug\RenderBase.obj
-         x64\Debug\Rotateslice.obj
-         x64\Debug\ScanApple.obj
-         x64\Debug\Volumefiltering.obj
-         x64\Debug\VolumeRendering.obj
-         x64\Debug\Window.obj
-         RenderLib.vcxproj -> D:\Code_local\project_carbon\RenderLib\RenderLib\..\..\lib\Debug\RenderLib.dll
-     1>Done Building Project "D:\Code_local\project_carbon\RenderLib\RenderLib\RenderLib.vcxproj" (Build target(s)).
-
-Build succeeded.
-
-Time Elapsed 00:00:18.26
+﻿  Window.cpp
+  VolumeRendering.cpp
+d:\code\3drendering-master\include\renderbase.h(61): warning C4275: non dll-interface class 'OpenCLBase' used as base for dll-interface class 'RenderBase'
+  d:\code\3drendering-master\include\openclbase.h(30): note: see declaration of 'OpenCLBase'
+  d:\code\3drendering-master\include\renderbase.h(61): note: see declaration of 'RenderBase'
+d:\code\3drendering-master\include\renderbase.h(62): warning C4275: non dll-interface class 'InternalThread' used as base for dll-interface class 'RenderBase'
+  d:\code\3drendering-master\include\internalthread.h(10): note: see declaration of 'InternalThread'
+  d:\code\3drendering-master\include\renderbase.h(61): note: see declaration of 'RenderBase'
+d:\code\3drendering-master\include\renderbase.h(431): warning C4251: 'RenderBase::m_EyeCenterPt': struct 'RenderingDataTypes::Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
+  d:\code\3drendering-master\include\datatypes.h(215): note: see declaration of 'RenderingDataTypes::Point3'
+d:\code\3drendering-master\include\renderbase.h(432): warning C4251: 'RenderBase::m_EyeFoucusCenterPt': struct 'RenderingDataTypes::Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
+  d:\code\3drendering-master\include\datatypes.h(215): note: see declaration of 'RenderingDataTypes::Point3'
+d:\code\3drendering-master\include\renderbase.h(433): warning C4251: 'RenderBase::m_HeadDirection': struct 'RenderingDataTypes::Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
+  d:\code\3drendering-master\include\datatypes.h(215): note: see declaration of 'RenderingDataTypes::Point3'
+d:\code\3drendering-master\include\renderbase.h(435): warning C4251: 'RenderBase::volumedatafile': class 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of class 'RenderBase'
+  c:\program files (x86)\microsoft visual studio 14.0\vc\include\xstring(2633): note: see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
+d:\code\3drendering-master\include\renderbase.h(436): warning C4251: 'RenderBase::volumedatamaskfile': class 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of class 'RenderBase'
+  c:\program files (x86)\microsoft visual studio 14.0\vc\include\xstring(2633): note: see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
+d:\code\3drendering-master\include\renderbase.h(469): warning C4251: 'RenderBase::m_WorldPt': struct 'RenderingDataTypes::Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
+  d:\code\3drendering-master\include\datatypes.h(215): note: see declaration of 'RenderingDataTypes::Point3'
+d:\code\3drendering-master\include\renderbase.h(470): warning C4251: 'RenderBase::m_RefPt1': struct 'RenderingDataTypes::Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
+  d:\code\3drendering-master\include\datatypes.h(215): note: see declaration of 'RenderingDataTypes::Point3'
+d:\code\3drendering-master\include\renderbase.h(471): warning C4251: 'RenderBase::m_RefPt2': struct 'RenderingDataTypes::Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
+  d:\code\3drendering-master\include\datatypes.h(215): note: see declaration of 'RenderingDataTypes::Point3'
+d:\code\3drendering-master\include\renderbase.h(472): warning C4251: 'RenderBase::m_RefPt3': struct 'RenderingDataTypes::Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
+  d:\code\3drendering-master\include\datatypes.h(215): note: see declaration of 'RenderingDataTypes::Point3'
+d:\code\3drendering-master\include\renderbase.h(473): warning C4251: 'RenderBase::m_RefPt4': struct 'RenderingDataTypes::Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
+  d:\code\3drendering-master\include\datatypes.h(215): note: see declaration of 'RenderingDataTypes::Point3'
+d:\code\3drendering-master\include\renderbase.h(533): warning C4251: 'RenderBase::m_MaskFileNames': class 'std::vector<std::string,std::allocator<_Ty>>' needs to have dll-interface to be used by clients of class 'RenderBase'
+          with
+          [
+              _Ty=std::string
+          ]
+  d:\code\3drendering-master\include\renderbase.h(533): note: see declaration of 'std::vector<std::string,std::allocator<_Ty>>'
+          with
+          [
+              _Ty=std::string
+          ]
+d:\code\3drendering-master\renderlib\renderlib\volumerendering.cpp(271): warning C4244: 'initializing': conversion from 'float' to 'short', possible loss of data
+d:\code\3drendering-master\renderlib\renderlib\volumerendering.cpp(272): warning C4244: 'initializing': conversion from 'float' to 'short', possible loss of data
+d:\code\3drendering-master\renderlib\renderlib\volumerendering.cpp(355): warning C4244: 'initializing': conversion from 'float' to 'short', possible loss of data
+d:\code\3drendering-master\renderlib\renderlib\volumerendering.cpp(356): warning C4244: 'initializing': conversion from 'float' to 'short', possible loss of data
+  Volumefiltering.cpp
+  ScanApple.cpp
+d:\code\3drendering-master\renderlib\renderlib\scanapple.cpp(534): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+  Rotateslice.cpp
+d:\code\3drendering-master\include\scanapple.h(25): warning C4005: 'NUM_BANKS': macro redefinition
+  d:\code\3drendering-master\include\datatypes.h(89): note: see previous definition of 'NUM_BANKS'
+d:\code\3drendering-master\include\scanapple.h(29): warning C4005: 'min': macro redefinition
+  c:\program files (x86)\windows kits\8.1\include\shared\minwindef.h(197): note: see previous definition of 'min'
+d:\code\3drendering-master\renderlib\renderlib\rotateslice.cpp(581): warning C4244: '=': conversion from 'cl_uint' to 'float', possible loss of data
+d:\code\3drendering-master\renderlib\renderlib\rotateslice.cpp(607): warning C4244: '=': conversion from 'cl_uint' to 'float', possible loss of data
+d:\code\3drendering-master\renderlib\renderlib\rotateslice.cpp(632): warning C4244: '=': conversion from 'cl_uint' to 'float', possible loss of data
+d:\code\3drendering-master\renderlib\renderlib\rotateslice.cpp(1009): warning C4838: conversion from 'int' to 'std::size_t' requires a narrowing conversion
+d:\code\3drendering-master\renderlib\renderlib\rotateslice.cpp(1040): warning C4838: conversion from 'int' to 'std::size_t' requires a narrowing conversion
+d:\code\3drendering-master\renderlib\renderlib\rotateslice.cpp(1078): warning C4838: conversion from 'int' to 'std::size_t' requires a narrowing conversion
+d:\code\3drendering-master\renderlib\renderlib\rotateslice.cpp(1687): warning C4838: conversion from 'int' to 'std::size_t' requires a narrowing conversion
+d:\code\3drendering-master\renderlib\renderlib\rotateslice.cpp(1713): warning C4838: conversion from 'int' to 'std::size_t' requires a narrowing conversion
+d:\code\3drendering-master\renderlib\renderlib\rotateslice.cpp(1718): warning C4244: '=': conversion from 'float' to 'short', possible loss of data
+d:\code\3drendering-master\renderlib\renderlib\rotateslice.cpp(1746): warning C4838: conversion from 'int' to 'std::size_t' requires a narrowing conversion
+d:\code\3drendering-master\renderlib\renderlib\rotateslice.cpp(1751): warning C4244: '=': conversion from 'float' to 'short', possible loss of data
+  RenderBase.cpp
+d:\code\3drendering-master\include\renderbase.h(61): warning C4275: non dll-interface class 'OpenCLBase' used as base for dll-interface class 'RenderBase'
+  d:\code\3drendering-master\include\openclbase.h(30): note: see declaration of 'OpenCLBase'
+  d:\code\3drendering-master\include\renderbase.h(61): note: see declaration of 'RenderBase'
+d:\code\3drendering-master\include\renderbase.h(62): warning C4275: non dll-interface class 'InternalThread' used as base for dll-interface class 'RenderBase'
+  d:\code\3drendering-master\include\internalthread.h(10): note: see declaration of 'InternalThread'
+  d:\code\3drendering-master\include\renderbase.h(61): note: see declaration of 'RenderBase'
+d:\code\3drendering-master\include\renderbase.h(431): warning C4251: 'RenderBase::m_EyeCenterPt': struct 'RenderingDataTypes::Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
+  d:\code\3drendering-master\include\datatypes.h(215): note: see declaration of 'RenderingDataTypes::Point3'
+d:\code\3drendering-master\include\renderbase.h(432): warning C4251: 'RenderBase::m_EyeFoucusCenterPt': struct 'RenderingDataTypes::Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
+  d:\code\3drendering-master\include\datatypes.h(215): note: see declaration of 'RenderingDataTypes::Point3'
+d:\code\3drendering-master\include\renderbase.h(433): warning C4251: 'RenderBase::m_HeadDirection': struct 'RenderingDataTypes::Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
+  d:\code\3drendering-master\include\datatypes.h(215): note: see declaration of 'RenderingDataTypes::Point3'
+d:\code\3drendering-master\include\renderbase.h(435): warning C4251: 'RenderBase::volumedatafile': class 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of class 'RenderBase'
+  c:\program files (x86)\microsoft visual studio 14.0\vc\include\xstring(2633): note: see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
+d:\code\3drendering-master\include\renderbase.h(436): warning C4251: 'RenderBase::volumedatamaskfile': class 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of class 'RenderBase'
+  c:\program files (x86)\microsoft visual studio 14.0\vc\include\xstring(2633): note: see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
+d:\code\3drendering-master\include\renderbase.h(469): warning C4251: 'RenderBase::m_WorldPt': struct 'RenderingDataTypes::Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
+  d:\code\3drendering-master\include\datatypes.h(215): note: see declaration of 'RenderingDataTypes::Point3'
+d:\code\3drendering-master\include\renderbase.h(470): warning C4251: 'RenderBase::m_RefPt1': struct 'RenderingDataTypes::Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
+  d:\code\3drendering-master\include\datatypes.h(215): note: see declaration of 'RenderingDataTypes::Point3'
+d:\code\3drendering-master\include\renderbase.h(471): warning C4251: 'RenderBase::m_RefPt2': struct 'RenderingDataTypes::Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
+  d:\code\3drendering-master\include\datatypes.h(215): note: see declaration of 'RenderingDataTypes::Point3'
+d:\code\3drendering-master\include\renderbase.h(472): warning C4251: 'RenderBase::m_RefPt3': struct 'RenderingDataTypes::Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
+  d:\code\3drendering-master\include\datatypes.h(215): note: see declaration of 'RenderingDataTypes::Point3'
+d:\code\3drendering-master\include\renderbase.h(473): warning C4251: 'RenderBase::m_RefPt4': struct 'RenderingDataTypes::Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
+  d:\code\3drendering-master\include\datatypes.h(215): note: see declaration of 'RenderingDataTypes::Point3'
+d:\code\3drendering-master\include\renderbase.h(533): warning C4251: 'RenderBase::m_MaskFileNames': class 'std::vector<std::string,std::allocator<_Ty>>' needs to have dll-interface to be used by clients of class 'RenderBase'
+          with
+          [
+              _Ty=std::string
+          ]
+  d:\code\3drendering-master\include\renderbase.h(533): note: see declaration of 'std::vector<std::string,std::allocator<_Ty>>'
+          with
+          [
+              _Ty=std::string
+          ]
+d:\code\3drendering-master\renderlib\renderlib\renderbase.cpp(1009): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+d:\code\3drendering-master\renderlib\renderlib\renderbase.cpp(1010): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+d:\code\3drendering-master\renderlib\renderlib\renderbase.cpp(1011): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+d:\code\3drendering-master\renderlib\renderlib\renderbase.cpp(1015): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\code\3drendering-master\renderlib\renderlib\renderbase.cpp(1016): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\code\3drendering-master\renderlib\renderlib\renderbase.cpp(1017): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\code\3drendering-master\renderlib\renderlib\renderbase.cpp(1070): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+d:\code\3drendering-master\renderlib\renderlib\renderbase.cpp(1071): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+d:\code\3drendering-master\renderlib\renderlib\renderbase.cpp(1072): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+d:\code\3drendering-master\renderlib\renderlib\renderbase.cpp(1094): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+d:\code\3drendering-master\renderlib\renderlib\renderbase.cpp(1114): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+d:\code\3drendering-master\renderlib\renderlib\renderbase.cpp(1140): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\code\3drendering-master\renderlib\renderlib\renderbase.cpp(1141): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\code\3drendering-master\renderlib\renderlib\renderbase.cpp(1142): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\code\3drendering-master\renderlib\renderlib\renderbase.cpp(1215): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\code\3drendering-master\renderlib\renderlib\renderbase.cpp(1587): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\code\3drendering-master\renderlib\renderlib\renderbase.cpp(1588): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\code\3drendering-master\renderlib\renderlib\renderbase.cpp(1589): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\code\3drendering-master\renderlib\renderlib\renderbase.cpp(1596): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\code\3drendering-master\renderlib\renderlib\renderbase.cpp(1597): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\code\3drendering-master\renderlib\renderlib\renderbase.cpp(1598): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\code\3drendering-master\renderlib\renderlib\renderbase.cpp(1605): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\code\3drendering-master\renderlib\renderlib\renderbase.cpp(1606): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\code\3drendering-master\renderlib\renderlib\renderbase.cpp(1607): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\code\3drendering-master\renderlib\renderlib\renderbase.cpp(1614): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\code\3drendering-master\renderlib\renderlib\renderbase.cpp(1615): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\code\3drendering-master\renderlib\renderlib\renderbase.cpp(1616): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\code\3drendering-master\renderlib\renderlib\renderbase.cpp(1653): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+d:\code\3drendering-master\renderlib\renderlib\renderbase.cpp(1666): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+d:\code\3drendering-master\renderlib\renderlib\renderbase.cpp(1769): warning C4018: '<': signed/unsigned mismatch
+d:\code\3drendering-master\renderlib\renderlib\renderbase.cpp(1773): warning C4018: '<': signed/unsigned mismatch
+d:\code\3drendering-master\renderlib\renderlib\renderbase.cpp(1777): warning C4018: '<': signed/unsigned mismatch
+  QuaternionProcess.cpp
+  OpenGLBase.cpp
+  OpenCLBase.cpp
+  Matrices.cpp
+  MarchingCube.cpp
+d:\code\3drendering-master\include\renderbase.h(61): warning C4275: non dll-interface class 'OpenCLBase' used as base for dll-interface class 'RenderBase'
+  d:\code\3drendering-master\include\openclbase.h(30): note: see declaration of 'OpenCLBase'
+  d:\code\3drendering-master\include\renderbase.h(61): note: see declaration of 'RenderBase'
+d:\code\3drendering-master\include\renderbase.h(62): warning C4275: non dll-interface class 'InternalThread' used as base for dll-interface class 'RenderBase'
+  d:\code\3drendering-master\include\internalthread.h(10): note: see declaration of 'InternalThread'
+  d:\code\3drendering-master\include\renderbase.h(61): note: see declaration of 'RenderBase'
+d:\code\3drendering-master\include\renderbase.h(431): warning C4251: 'RenderBase::m_EyeCenterPt': struct 'RenderingDataTypes::Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
+  d:\code\3drendering-master\include\datatypes.h(215): note: see declaration of 'RenderingDataTypes::Point3'
+d:\code\3drendering-master\include\renderbase.h(432): warning C4251: 'RenderBase::m_EyeFoucusCenterPt': struct 'RenderingDataTypes::Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
+  d:\code\3drendering-master\include\datatypes.h(215): note: see declaration of 'RenderingDataTypes::Point3'
+d:\code\3drendering-master\include\renderbase.h(433): warning C4251: 'RenderBase::m_HeadDirection': struct 'RenderingDataTypes::Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
+  d:\code\3drendering-master\include\datatypes.h(215): note: see declaration of 'RenderingDataTypes::Point3'
+d:\code\3drendering-master\include\renderbase.h(435): warning C4251: 'RenderBase::volumedatafile': class 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of class 'RenderBase'
+  c:\program files (x86)\microsoft visual studio 14.0\vc\include\xstring(2633): note: see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
+d:\code\3drendering-master\include\renderbase.h(436): warning C4251: 'RenderBase::volumedatamaskfile': class 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of class 'RenderBase'
+  c:\program files (x86)\microsoft visual studio 14.0\vc\include\xstring(2633): note: see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
+d:\code\3drendering-master\include\renderbase.h(469): warning C4251: 'RenderBase::m_WorldPt': struct 'RenderingDataTypes::Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
+  d:\code\3drendering-master\include\datatypes.h(215): note: see declaration of 'RenderingDataTypes::Point3'
+d:\code\3drendering-master\include\renderbase.h(470): warning C4251: 'RenderBase::m_RefPt1': struct 'RenderingDataTypes::Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
+  d:\code\3drendering-master\include\datatypes.h(215): note: see declaration of 'RenderingDataTypes::Point3'
+d:\code\3drendering-master\include\renderbase.h(471): warning C4251: 'RenderBase::m_RefPt2': struct 'RenderingDataTypes::Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
+  d:\code\3drendering-master\include\datatypes.h(215): note: see declaration of 'RenderingDataTypes::Point3'
+d:\code\3drendering-master\include\renderbase.h(472): warning C4251: 'RenderBase::m_RefPt3': struct 'RenderingDataTypes::Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
+  d:\code\3drendering-master\include\datatypes.h(215): note: see declaration of 'RenderingDataTypes::Point3'
+d:\code\3drendering-master\include\renderbase.h(473): warning C4251: 'RenderBase::m_RefPt4': struct 'RenderingDataTypes::Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
+  d:\code\3drendering-master\include\datatypes.h(215): note: see declaration of 'RenderingDataTypes::Point3'
+d:\code\3drendering-master\include\renderbase.h(533): warning C4251: 'RenderBase::m_MaskFileNames': class 'std::vector<std::string,std::allocator<_Ty>>' needs to have dll-interface to be used by clients of class 'RenderBase'
+          with
+          [
+              _Ty=std::string
+          ]
+  d:\code\3drendering-master\include\renderbase.h(533): note: see declaration of 'std::vector<std::string,std::allocator<_Ty>>'
+          with
+          [
+              _Ty=std::string
+          ]
+d:\code\3drendering-master\include\scanapple.h(25): warning C4005: 'NUM_BANKS': macro redefinition
+  d:\code\3drendering-master\include\datatypes.h(89): note: see previous definition of 'NUM_BANKS'
+d:\code\3drendering-master\renderlib\renderlib\marchingcube.cpp(697): warning C4838: conversion from 'double' to 'GLfloat' requires a narrowing conversion
+d:\code\3drendering-master\renderlib\renderlib\marchingcube.cpp(697): warning C4305: 'initializing': truncation from 'double' to 'GLfloat'
+d:\code\3drendering-master\renderlib\renderlib\marchingcube.cpp(698): warning C4838: conversion from 'double' to 'GLfloat' requires a narrowing conversion
+d:\code\3drendering-master\renderlib\renderlib\marchingcube.cpp(698): warning C4305: 'initializing': truncation from 'double' to 'GLfloat'
+d:\code\3drendering-master\renderlib\renderlib\marchingcube.cpp(699): warning C4838: conversion from 'double' to 'GLfloat' requires a narrowing conversion
+d:\code\3drendering-master\renderlib\renderlib\marchingcube.cpp(699): warning C4305: 'initializing': truncation from 'double' to 'GLfloat'
+d:\code\3drendering-master\renderlib\renderlib\marchingcube.cpp(700): warning C4838: conversion from 'double' to 'GLfloat' requires a narrowing conversion
+d:\code\3drendering-master\renderlib\renderlib\marchingcube.cpp(700): warning C4305: 'initializing': truncation from 'double' to 'GLfloat'
+d:\code\3drendering-master\renderlib\renderlib\marchingcube.cpp(708): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
+d:\code\3drendering-master\renderlib\renderlib\marchingcube.cpp(1236): warning C4018: '<': signed/unsigned mismatch
+d:\code\3drendering-master\renderlib\renderlib\marchingcube.cpp(1493): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+d:\code\3drendering-master\renderlib\renderlib\marchingcube.cpp(1510): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+  InternalThread.cpp
+  ImageBasicProcess.cpp
+d:\code\3drendering-master\renderlib\renderlib\imagebasicprocess.cpp(76): warning C4018: '<': signed/unsigned mismatch
+d:\code\3drendering-master\renderlib\renderlib\imagebasicprocess.cpp(125): warning C4101: 'value': unreferenced local variable
+  CorRegisTration.cpp
+d:\code\3drendering-master\renderlib\renderlib\corregistration.cpp(298): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\code\3drendering-master\renderlib\renderlib\corregistration.cpp(576): warning C4101: 'i': unreferenced local variable
+  CarbonMed3DRecon_DLL.cpp
+d:\code\3drendering-master\include\renderbase.h(61): warning C4275: non dll-interface class 'OpenCLBase' used as base for dll-interface class 'RenderBase'
+  d:\code\3drendering-master\include\openclbase.h(30): note: see declaration of 'OpenCLBase'
+  d:\code\3drendering-master\include\renderbase.h(61): note: see declaration of 'RenderBase'
+d:\code\3drendering-master\include\renderbase.h(62): warning C4275: non dll-interface class 'InternalThread' used as base for dll-interface class 'RenderBase'
+  d:\code\3drendering-master\include\internalthread.h(10): note: see declaration of 'InternalThread'
+  d:\code\3drendering-master\include\renderbase.h(61): note: see declaration of 'RenderBase'
+d:\code\3drendering-master\include\renderbase.h(431): warning C4251: 'RenderBase::m_EyeCenterPt': struct 'RenderingDataTypes::Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
+  d:\code\3drendering-master\include\datatypes.h(215): note: see declaration of 'RenderingDataTypes::Point3'
+d:\code\3drendering-master\include\renderbase.h(432): warning C4251: 'RenderBase::m_EyeFoucusCenterPt': struct 'RenderingDataTypes::Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
+  d:\code\3drendering-master\include\datatypes.h(215): note: see declaration of 'RenderingDataTypes::Point3'
+d:\code\3drendering-master\include\renderbase.h(433): warning C4251: 'RenderBase::m_HeadDirection': struct 'RenderingDataTypes::Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
+  d:\code\3drendering-master\include\datatypes.h(215): note: see declaration of 'RenderingDataTypes::Point3'
+d:\code\3drendering-master\include\renderbase.h(435): warning C4251: 'RenderBase::volumedatafile': class 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of class 'RenderBase'
+  c:\program files (x86)\microsoft visual studio 14.0\vc\include\xstring(2633): note: see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
+d:\code\3drendering-master\include\renderbase.h(436): warning C4251: 'RenderBase::volumedatamaskfile': class 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of class 'RenderBase'
+  c:\program files (x86)\microsoft visual studio 14.0\vc\include\xstring(2633): note: see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
+d:\code\3drendering-master\include\renderbase.h(469): warning C4251: 'RenderBase::m_WorldPt': struct 'RenderingDataTypes::Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
+  d:\code\3drendering-master\include\datatypes.h(215): note: see declaration of 'RenderingDataTypes::Point3'
+d:\code\3drendering-master\include\renderbase.h(470): warning C4251: 'RenderBase::m_RefPt1': struct 'RenderingDataTypes::Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
+  d:\code\3drendering-master\include\datatypes.h(215): note: see declaration of 'RenderingDataTypes::Point3'
+d:\code\3drendering-master\include\renderbase.h(471): warning C4251: 'RenderBase::m_RefPt2': struct 'RenderingDataTypes::Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
+  d:\code\3drendering-master\include\datatypes.h(215): note: see declaration of 'RenderingDataTypes::Point3'
+d:\code\3drendering-master\include\renderbase.h(472): warning C4251: 'RenderBase::m_RefPt3': struct 'RenderingDataTypes::Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
+  d:\code\3drendering-master\include\datatypes.h(215): note: see declaration of 'RenderingDataTypes::Point3'
+d:\code\3drendering-master\include\renderbase.h(473): warning C4251: 'RenderBase::m_RefPt4': struct 'RenderingDataTypes::Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
+  d:\code\3drendering-master\include\datatypes.h(215): note: see declaration of 'RenderingDataTypes::Point3'
+d:\code\3drendering-master\include\renderbase.h(533): warning C4251: 'RenderBase::m_MaskFileNames': class 'std::vector<std::string,std::allocator<_Ty>>' needs to have dll-interface to be used by clients of class 'RenderBase'
+          with
+          [
+              _Ty=std::string
+          ]
+  d:\code\3drendering-master\include\renderbase.h(533): note: see declaration of 'std::vector<std::string,std::allocator<_Ty>>'
+          with
+          [
+              _Ty=std::string
+          ]
+  CarbonMed3DRecon.cpp
+d:\code\3drendering-master\include\renderbase.h(61): warning C4275: non dll-interface class 'OpenCLBase' used as base for dll-interface class 'RenderBase'
+  d:\code\3drendering-master\include\openclbase.h(30): note: see declaration of 'OpenCLBase'
+  d:\code\3drendering-master\include\renderbase.h(61): note: see declaration of 'RenderBase'
+d:\code\3drendering-master\include\renderbase.h(62): warning C4275: non dll-interface class 'InternalThread' used as base for dll-interface class 'RenderBase'
+  d:\code\3drendering-master\include\internalthread.h(10): note: see declaration of 'InternalThread'
+  d:\code\3drendering-master\include\renderbase.h(61): note: see declaration of 'RenderBase'
+d:\code\3drendering-master\include\renderbase.h(431): warning C4251: 'RenderBase::m_EyeCenterPt': struct 'RenderingDataTypes::Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
+  d:\code\3drendering-master\include\datatypes.h(215): note: see declaration of 'RenderingDataTypes::Point3'
+d:\code\3drendering-master\include\renderbase.h(432): warning C4251: 'RenderBase::m_EyeFoucusCenterPt': struct 'RenderingDataTypes::Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
+  d:\code\3drendering-master\include\datatypes.h(215): note: see declaration of 'RenderingDataTypes::Point3'
+d:\code\3drendering-master\include\renderbase.h(433): warning C4251: 'RenderBase::m_HeadDirection': struct 'RenderingDataTypes::Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
+  d:\code\3drendering-master\include\datatypes.h(215): note: see declaration of 'RenderingDataTypes::Point3'
+d:\code\3drendering-master\include\renderbase.h(435): warning C4251: 'RenderBase::volumedatafile': class 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of class 'RenderBase'
+  c:\program files (x86)\microsoft visual studio 14.0\vc\include\xstring(2633): note: see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
+d:\code\3drendering-master\include\renderbase.h(436): warning C4251: 'RenderBase::volumedatamaskfile': class 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of class 'RenderBase'
+  c:\program files (x86)\microsoft visual studio 14.0\vc\include\xstring(2633): note: see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
+d:\code\3drendering-master\include\renderbase.h(469): warning C4251: 'RenderBase::m_WorldPt': struct 'RenderingDataTypes::Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
+  d:\code\3drendering-master\include\datatypes.h(215): note: see declaration of 'RenderingDataTypes::Point3'
+d:\code\3drendering-master\include\renderbase.h(470): warning C4251: 'RenderBase::m_RefPt1': struct 'RenderingDataTypes::Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
+  d:\code\3drendering-master\include\datatypes.h(215): note: see declaration of 'RenderingDataTypes::Point3'
+d:\code\3drendering-master\include\renderbase.h(471): warning C4251: 'RenderBase::m_RefPt2': struct 'RenderingDataTypes::Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
+  d:\code\3drendering-master\include\datatypes.h(215): note: see declaration of 'RenderingDataTypes::Point3'
+d:\code\3drendering-master\include\renderbase.h(472): warning C4251: 'RenderBase::m_RefPt3': struct 'RenderingDataTypes::Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
+  d:\code\3drendering-master\include\datatypes.h(215): note: see declaration of 'RenderingDataTypes::Point3'
+d:\code\3drendering-master\include\renderbase.h(473): warning C4251: 'RenderBase::m_RefPt4': struct 'RenderingDataTypes::Point3' needs to have dll-interface to be used by clients of class 'RenderBase'
+  d:\code\3drendering-master\include\datatypes.h(215): note: see declaration of 'RenderingDataTypes::Point3'
+d:\code\3drendering-master\include\renderbase.h(533): warning C4251: 'RenderBase::m_MaskFileNames': class 'std::vector<std::string,std::allocator<_Ty>>' needs to have dll-interface to be used by clients of class 'RenderBase'
+          with
+          [
+              _Ty=std::string
+          ]
+  d:\code\3drendering-master\include\renderbase.h(533): note: see declaration of 'std::vector<std::string,std::allocator<_Ty>>'
+          with
+          [
+              _Ty=std::string
+          ]
+d:\code\3drendering-master\renderlib\renderlib\carbonmed3drecon.cpp(890): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\code\3drendering-master\renderlib\renderlib\carbonmed3drecon.cpp(898): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\code\3drendering-master\renderlib\renderlib\carbonmed3drecon.cpp(918): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+d:\code\3drendering-master\renderlib\renderlib\carbonmed3drecon.cpp(919): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+d:\code\3drendering-master\renderlib\renderlib\carbonmed3drecon.cpp(1017): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+d:\code\3drendering-master\renderlib\renderlib\carbonmed3drecon.cpp(1147): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+d:\code\3drendering-master\renderlib\renderlib\carbonmed3drecon.cpp(1148): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+d:\code\3drendering-master\renderlib\renderlib\carbonmed3drecon.cpp(1149): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+d:\code\3drendering-master\renderlib\renderlib\carbonmed3drecon.cpp(1150): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+d:\code\3drendering-master\renderlib\renderlib\carbonmed3drecon.cpp(1153): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+d:\code\3drendering-master\renderlib\renderlib\carbonmed3drecon.cpp(1155): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+d:\code\3drendering-master\renderlib\renderlib\carbonmed3drecon.cpp(1223): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+d:\code\3drendering-master\renderlib\renderlib\carbonmed3drecon.cpp(1224): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+d:\code\3drendering-master\renderlib\renderlib\carbonmed3drecon.cpp(1225): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+d:\code\3drendering-master\renderlib\renderlib\carbonmed3drecon.cpp(1226): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+d:\code\3drendering-master\renderlib\renderlib\carbonmed3drecon.cpp(1229): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+d:\code\3drendering-master\renderlib\renderlib\carbonmed3drecon.cpp(1231): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+d:\code\3drendering-master\renderlib\renderlib\carbonmed3drecon.cpp(1252): warning C4800: 'BOOL': forcing value to bool 'true' or 'false' (performance warning)
+d:\code\3drendering-master\renderlib\renderlib\carbonmed3drecon.cpp(1267): warning C4800: 'BOOL': forcing value to bool 'true' or 'false' (performance warning)
+d:\code\3drendering-master\renderlib\renderlib\carbonmed3drecon.cpp(1277): warning C4800: 'BOOL': forcing value to bool 'true' or 'false' (performance warning)
+d:\code\3drendering-master\renderlib\renderlib\carbonmed3drecon.cpp(1534): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+d:\code\3drendering-master\renderlib\renderlib\carbonmed3drecon.cpp(1535): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+d:\code\3drendering-master\renderlib\renderlib\carbonmed3drecon.cpp(1536): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+d:\code\3drendering-master\renderlib\renderlib\carbonmed3drecon.cpp(1519): warning C4101: 'fps': unreferenced local variable
+d:\code\3drendering-master\renderlib\renderlib\carbonmed3drecon.cpp(1731): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+d:\code\3drendering-master\renderlib\renderlib\carbonmed3drecon.cpp(1732): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+d:\code\3drendering-master\renderlib\renderlib\carbonmed3drecon.cpp(1733): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+d:\code\3drendering-master\renderlib\renderlib\carbonmed3drecon.cpp(1822): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\code\3drendering-master\renderlib\renderlib\carbonmed3drecon.cpp(1823): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\code\3drendering-master\renderlib\renderlib\carbonmed3drecon.cpp(1824): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\code\3drendering-master\renderlib\renderlib\carbonmed3drecon.cpp(1825): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\code\3drendering-master\renderlib\renderlib\carbonmed3drecon.cpp(1826): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\code\3drendering-master\renderlib\renderlib\carbonmed3drecon.cpp(1827): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\code\3drendering-master\renderlib\renderlib\carbonmed3drecon.cpp(1957): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+d:\code\3drendering-master\renderlib\renderlib\carbonmed3drecon.cpp(1958): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+d:\code\3drendering-master\renderlib\renderlib\carbonmed3drecon.cpp(1972): warning C4244: '-=': conversion from 'double' to 'float', possible loss of data
+  Generating Code...
+d:\code\3drendering-master\include\datatypes.h(262): warning C4172: returning address of local variable or temporary: temppt
+d:\code\3drendering-master\include\datatypes.h(252): warning C4172: returning address of local variable or temporary: temppt
+d:\code\3drendering-master\include\datatypes.h(252): warning C4172: returning address of local variable or temporary: temppt
+d:\code\3drendering-master\include\datatypes.h(262): warning C4172: returning address of local variable or temporary: temppt
+d:\code\3drendering-master\renderlib\renderlib\quaternionprocess.cpp(75): warning C4172: returning address of local variable or temporary: ConjugateQuat
+d:\code\3drendering-master\include\datatypes.h(262): warning C4172: returning address of local variable or temporary: temppt
+     Creating library ..\..\lib\Debug\RenderLib.lib and object ..\..\lib\Debug\RenderLib.exp
+  RenderLib.vcxproj -> D:\Code\3DRendering-master\RenderLib\RenderLib\..\..\lib\Debug\RenderLib.dll
+  RenderLib.vcxproj -> ..\..\lib\Debug\RenderLib.pdb (Full PDB)

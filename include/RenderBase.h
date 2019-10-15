@@ -31,7 +31,9 @@
 #include "Volumefiltering.h"
 #include "InternalThread.h"
 #include "OpenCLBase.h"
+#include "opencv2/opencv.hpp"
 using namespace std;
+using namespace RenderingDataTypes;
 
 #ifdef RENDERLIB_EXPORTS  
 #define RENDERLIB_API __declspec(dllexport)  
@@ -47,6 +49,7 @@ using namespace std;
 #define PROBEICONWIDTH  162
 #define PROBEICONHEIGHT 192
 #define DEFAULTSENSORCOUNT 4
+#define DEFAULTEXTURENUM 4
 #define CHANGE_THRESH 0.001745
 
 // PrintLog
@@ -72,6 +75,7 @@ public:
 	virtual void RenderProcess();
 	virtual void GLDataRendering(cl_float translate[4], cl_float clrotate[4], int orderflag);
 	virtual void WGLDataRendering(int orderflag);
+	virtual void WGLSliceRendering(int orderflag);
 	//Rendering Feature
 	virtual void SetRenderingFeature(RenderParam param);
 	virtual void GetRenderingFeature(RenderParam &param);
@@ -103,6 +107,9 @@ public:
 	//volumedata
 	void VolumeDataInit();
 
+	//SlicePBO
+	void SlicePBOInit();
+
 	//Registration Rendering
 	void RegistrationProcessRendering(int orderflag);
 
@@ -115,8 +122,12 @@ public:
 	void LoadGLTextures(short *imdata, int width, int height);
 	void Init2DTexture();
 	void Init2DTexturePBO();
+	void Init2DFusionPBO();
 	void InitRegProcessHintPBO();
+	void InitOriginSliceBuffer();
 	void GetPBO();
+	void GetFusionPBO(float* h_pbo);
+	void GetOriginSlice(float* h_slice);
 	void GetRegProcessHintPBO();
 	void GetRegProcessFinishedHintPBO();
 	void ClearSlicePBO(cl_mem &slicepbo);
@@ -320,6 +331,20 @@ public:
 		}
 	}
 
+	void SetPixelScale(float scalex, float scaley)
+	{
+		m_SlicePixelScaleX = scalex;
+		m_SlicePixelScaleY = scaley;
+	}
+
+	void SetUltraSoundBuf(float *buf, int len);
+
+	void GetPixelScale(float &scalex, float scaley)
+	{
+		scalex = m_SlicePixelScaleX;
+		scaley = m_SlicePixelScaleY;
+	}
+
 	//以下函数基类中只做声明不做实现，继承时实现
 	//Get coefs of the cut plane
 	void GetCoefsOfCutplane(float &pa, float &pb, float &pc, float &pd);
@@ -337,6 +362,8 @@ public:
 	//Get the SliceData On GPU
 	void GetSliceDataU8GPU(cl_mem &sliceu8gpu);
 	void GetSlicePBO(cl_mem &slicepbo, bool resizeflag);
+	void GetFusionSliceTexture(cl_mem &slicetex, bool resizeflag);
+	void GetOriginSlice(cl_mem &slicetex, bool resizeflag);
 
 	//Get the SliceData On CPU
 	void GetNomalizedSliceData(float *normslice);
@@ -393,7 +420,7 @@ protected:
 	//openGL Shader
 	GLint m_GLShader;
 	//openGL Texture
-	GLuint m_Texture[3];
+	GLuint m_Texture[DEFAULTEXTURENUM];
 	GLuint m_ProbeTexture;
 	GLubyte *m_Pixels;
 	GLshort *m_Pixels16;
@@ -425,6 +452,7 @@ protected:
 
 	//slice pbo
 	GLuint slicepbo;
+	GLuint slicefusionpbo;
 	GLuint regpbo;
 
 	//Registration Angle Info
@@ -446,8 +474,12 @@ protected:
 
 	//pbo device
 	cl_mem m_SlicePboCL;
+	cl_mem m_SliceFusionCL;
 	cl_mem m_RegPboCL;
 	bool m_PboResizeFlag;
+
+	//slice gpu buffer
+	cl_mem m_OriginSliceCL;
 
 	// x y start offset
 	cl_mem d_xstartoffset;
@@ -570,6 +602,12 @@ protected:
 	Rotateslice *m_Sliceobj;
 	//VolumeFilteringObj
 	VolumeFiler *m_VoFilterObj;
+	
+	//slice buf
+	float *m_HostSliceBuf;
+
+	//ultrasound buf
+	float *m_HostUSBuf;
 
 	//volume mem on host
 	float *m_HostVolume;
@@ -586,5 +624,12 @@ protected:
 
 	PositionAngleUnit m_CurRecord[DEFAULTSENSORCOUNT];
 	PositionAngleUnit m_OldRecord[DEFAULTSENSORCOUNT];
+
+	//QuaterNion Buffer
+	double m_Qnionvalue[DEFAULTSENSORCOUNT * 4];
+	//QuaterNion Buffer End
+
+	float m_SlicePixelScaleX;
+	float m_SlicePixelScaleY;
 };
 #endif // !_RENDERBASE_H_

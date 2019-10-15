@@ -8,6 +8,7 @@
 #include "MarchingCube.h"
 #include "VolumeRendering.h"
 #include "OpenGLBase.h"
+#include "ImageBasicProcess.h"
 
 using namespace std;
 using namespace openglRendering;
@@ -33,8 +34,16 @@ float CCarbonMed3DRecon::bgColor[4] = {0.0f};
 float CCarbonMed3DRecon::m_ZoomAspect = 0.0f;
 int CCarbonMed3DRecon::m_WinWidth = WIDTH;
 int CCarbonMed3DRecon::m_WinHeight = HEIGHT;
+int CCarbonMed3DRecon::m_SliceWinW = WIDTH;
+int CCarbonMed3DRecon::m_SliceWinH = HEIGHT;
+int CCarbonMed3DRecon::m_UltrasoundWinW = WIDTH;
+int CCarbonMed3DRecon::m_UltrasoundWinH = HEIGHT;
 BOOL CCarbonMed3DRecon::winactiveflag = TRUE;
+BOOL CCarbonMed3DRecon::slicewinactiveflag = TRUE;
+BOOL CCarbonMed3DRecon::uswinactiveflag = TRUE;
 Window *CCarbonMed3DRecon::m_GlWin = NULL;
+Window *CCarbonMed3DRecon::m_GlSliceWin = NULL;
+Window *CCarbonMed3DRecon::m_GlUltrasoundWin = NULL;
 Matrix4 CCarbonMed3DRecon::matrixView;
 Matrix4 CCarbonMed3DRecon::matrixModel;
 Matrix4 CCarbonMed3DRecon::matrixModelView;
@@ -108,10 +117,18 @@ const float FAR_PLANE = 300.0f;
 const float CAMERA_ANGLE_X = 45.0f;     // pitch in degree
 const float CAMERA_ANGLE_Y = -45.0f;    // heading in degree
 const float CAMERA_DISTANCE = 50.0f;    // camera distance
+//3d Window info
 HDC             CarbonhDC = 0;
 HGLRC           CarbonhRC = 0;
-HWND            CarbonhWnd = NULL;                          // 保存我们的窗口句柄
-HINSTANCE       CarbonhInstance;                          // 保存程序的实例
+HWND            CarbonhWnd = NULL;
+//slice Window info
+HDC             CarbonSlicehDC = 0;
+HGLRC           CarbonSlicehRC = 0;
+HWND            CarbonSlicehWnd = NULL;
+//ultrasound Window info
+HDC             CarbonUltrasoundhDC = 0;
+HGLRC           CarbonUltrasoundhRC = 0;
+HWND            CarbonUltrasoundhWnd = NULL;
 
 LRESULT CALLBACK windowProcedure(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -120,20 +137,20 @@ LRESULT CALLBACK windowProcedure(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
 	// route messages to the associated controller
 	switch (msg)
 	{
-	case WM_ACTIVATE:                       // 监视窗口激活消息
-		if (!HIWORD(wParam))                    // 检查最小化状态
+	case WM_ACTIVATE:
+		if (!HIWORD(wParam))
 		{
-			CCarbonMed3DRecon::winactiveflag = TRUE;                    // 程序处于激活状态
+			CCarbonMed3DRecon::winactiveflag = TRUE;
 		}
 		else
 		{
-			CCarbonMed3DRecon::winactiveflag = FALSE;                   // 程序不再激活
+			CCarbonMed3DRecon::winactiveflag = FALSE;
 		}
 		returnValue = 0;
 		break;
 
 	case WM_CREATE:
-		if (!CCarbonMed3DRecon::WincreateContext(hwnd, 32, 24, 8))
+		if(!CCarbonMed3DRecon::WincreateContextWithHandle(hwnd, CarbonhDC, CarbonhRC, 32, 24, 8))
 		{
 			return -1;
 		}
@@ -170,35 +187,223 @@ LRESULT CALLBACK windowProcedure(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
 
 	case WM_KEYDOWN:
 	case WM_SYSKEYDOWN:
-		returnValue = CCarbonMed3DRecon::keyDown((int)wParam, lParam);                       // keyCode, keyDetail
+		returnValue = CCarbonMed3DRecon::keyDown((int)wParam, lParam);
 		break;
 
 	case WM_LBUTTONDOWN:
-		returnValue = CCarbonMed3DRecon::lButtonDown(wParam, LOWORD(lParam), HIWORD(lParam)); // state, x, y
+		returnValue = CCarbonMed3DRecon::lButtonDown(wParam, LOWORD(lParam), HIWORD(lParam));
 		break;
 
 	case WM_LBUTTONUP:
-		returnValue = CCarbonMed3DRecon::lButtonUp(wParam, LOWORD(lParam), HIWORD(lParam));   // state, x, y
+		returnValue = CCarbonMed3DRecon::lButtonUp(wParam, LOWORD(lParam), HIWORD(lParam));
 		break;
 
 	case WM_RBUTTONDOWN:
-		returnValue = CCarbonMed3DRecon::rButtonDown(wParam, LOWORD(lParam), HIWORD(lParam)); // state, x, y
+		returnValue = CCarbonMed3DRecon::rButtonDown(wParam, LOWORD(lParam), HIWORD(lParam));
 		break;
 
 	case WM_RBUTTONUP:
-		returnValue = CCarbonMed3DRecon::rButtonUp(wParam, LOWORD(lParam), HIWORD(lParam));   // state, x, y
+		returnValue = CCarbonMed3DRecon::rButtonUp(wParam, LOWORD(lParam), HIWORD(lParam));
 		break;
 
 	case WM_MBUTTONDOWN:
-		returnValue = CCarbonMed3DRecon::mButtonDown(wParam, LOWORD(lParam), HIWORD(lParam)); // state, x, y
+		returnValue = CCarbonMed3DRecon::mButtonDown(wParam, LOWORD(lParam), HIWORD(lParam));
 		break;
 
 	case WM_MBUTTONUP:
-		returnValue = CCarbonMed3DRecon::mButtonUp(wParam, LOWORD(lParam), HIWORD(lParam));   // state, x, y
+		returnValue = CCarbonMed3DRecon::mButtonUp(wParam, LOWORD(lParam), HIWORD(lParam));
 		break;
 
 	case WM_MOUSEWHEEL:
 		returnValue = CCarbonMed3DRecon::mouseWheel((short)LOWORD(wParam), (short)HIWORD(wParam) / WHEEL_DELTA, (short)LOWORD(lParam), (short)HIWORD(lParam));   // state, delta, x, y
+		break;
+
+	default:
+		returnValue = ::DefWindowProc(hwnd, msg, wParam, lParam);
+	}
+
+	return returnValue;
+}
+
+LRESULT CALLBACK SlicewindowProcedure(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
+{
+	LRESULT returnValue = 0;
+	switch (msg)
+	{
+	case WM_ACTIVATE:
+		if (!HIWORD(wParam))
+		{
+			CCarbonMed3DRecon::slicewinactiveflag = TRUE;
+		}
+		else
+		{
+			CCarbonMed3DRecon::slicewinactiveflag = FALSE;
+		}
+		returnValue = 0;
+		break;
+
+	case WM_CREATE:
+		if (!CCarbonMed3DRecon::WincreateContextWithHandle(hwnd, CarbonSlicehDC, CarbonSlicehRC, 32, 24, 8))
+		{
+			return -1;
+		}
+		returnValue = 0;
+		break;
+
+	case WM_SIZE:
+		returnValue = 0;
+		break;
+
+	case WM_ENABLE:
+		returnValue = 0;
+		break;
+
+	case WM_COMMAND:
+		returnValue = CCarbonMed3DRecon::command(LOWORD(wParam), HIWORD(wParam), lParam);
+		break;
+
+	case WM_MOUSEMOVE:
+		//returnValue = CCarbonMed3DRecon::mouseMove(wParam, LOWORD(lParam), HIWORD(lParam));
+		returnValue = 0;
+		break;
+
+	case WM_CLOSE:
+		returnValue = 0;
+		break;
+
+	case WM_DESTROY:
+		returnValue = CCarbonMed3DRecon::destroy();
+		break;
+
+	case WM_SYSCOMMAND:
+		returnValue = ::DefWindowProc(hwnd, msg, wParam, lParam);
+		break;
+
+	case WM_KEYDOWN:
+	case WM_SYSKEYDOWN:
+		returnValue = CCarbonMed3DRecon::keyDown((int)wParam, lParam);
+		break;
+
+	case WM_LBUTTONDOWN:
+		returnValue = 0;
+		break;
+
+	case WM_LBUTTONUP:
+		returnValue = 0;
+		break;
+
+	case WM_RBUTTONDOWN:
+		returnValue = 0;
+		break;
+
+	case WM_RBUTTONUP:
+		returnValue = 0;
+		break;
+
+	case WM_MBUTTONDOWN:
+		returnValue = 0;
+		break;
+
+	case WM_MBUTTONUP:
+		returnValue = 0;
+		break;
+
+	case WM_MOUSEWHEEL:
+		returnValue = CCarbonMed3DRecon::mouseWheel((short)LOWORD(wParam), (short)HIWORD(wParam) / WHEEL_DELTA, (short)LOWORD(lParam), (short)HIWORD(lParam));
+		break;
+
+	default:
+		returnValue = ::DefWindowProc(hwnd, msg, wParam, lParam);
+	}
+
+	return returnValue;
+}
+
+LRESULT CALLBACK UltrasoundwindowProcedure(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
+{
+	LRESULT returnValue = 0;
+	switch (msg)
+	{
+	case WM_ACTIVATE:
+		if (!HIWORD(wParam))
+		{
+			CCarbonMed3DRecon::uswinactiveflag = TRUE;
+		}
+		else
+		{
+			CCarbonMed3DRecon::uswinactiveflag = FALSE;
+		}
+		returnValue = 0;
+		break;
+
+	case WM_CREATE:
+		if (!CCarbonMed3DRecon::WincreateContextWithHandle(hwnd, CarbonUltrasoundhDC, CarbonUltrasoundhRC, 32, 24, 8))
+		{
+			return -1;
+		}
+		returnValue = 0;
+		break;
+
+	case WM_SIZE:
+		returnValue = 0;
+		break;
+
+	case WM_ENABLE:
+		returnValue = 0;
+		break;
+
+	case WM_COMMAND:
+		returnValue = CCarbonMed3DRecon::command(LOWORD(wParam), HIWORD(wParam), lParam);
+		break;
+
+	case WM_MOUSEMOVE:
+		//returnValue = CCarbonMed3DRecon::mouseMove(wParam, LOWORD(lParam), HIWORD(lParam));
+		returnValue = 0;
+		break;
+
+	case WM_CLOSE:
+		returnValue = 0;
+		break;
+
+	case WM_DESTROY:
+		returnValue = CCarbonMed3DRecon::destroy();
+		break;
+
+	case WM_SYSCOMMAND:
+		returnValue = ::DefWindowProc(hwnd, msg, wParam, lParam);
+		break;
+
+	case WM_KEYDOWN:
+	case WM_SYSKEYDOWN:
+		returnValue = CCarbonMed3DRecon::keyDown((int)wParam, lParam);
+		break;
+
+	case WM_LBUTTONDOWN:
+		returnValue = 0;
+		break;
+
+	case WM_LBUTTONUP:
+		returnValue = 0;
+		break;
+
+	case WM_RBUTTONDOWN:
+		returnValue = 0;
+		break;
+
+	case WM_RBUTTONUP:
+		returnValue = 0;
+		break;
+
+	case WM_MBUTTONDOWN:
+		returnValue = 0;
+		break;
+
+	case WM_MBUTTONUP:
+		returnValue = 0;
+		break;
+
+	case WM_MOUSEWHEEL:
+		returnValue = CCarbonMed3DRecon::mouseWheel((short)LOWORD(wParam), (short)HIWORD(wParam) / WHEEL_DELTA, (short)LOWORD(lParam), (short)HIWORD(lParam));
 		break;
 
 	default:
@@ -298,6 +503,30 @@ bool CCarbonMed3DRecon::WincreateContext(HWND handle, int colorBits, int depthBi
 	return true;
 }
 
+bool CCarbonMed3DRecon::WincreateContextWithHandle(HWND handle, HDC &windc, HGLRC &winRc, int colorBits, int depthBits, int stencilBits)
+{
+	// retrieve a handle to a display device context
+	windc = ::GetDC(handle);
+
+	PIXELFORMATDESCRIPTOR pfd;
+	GLuint pixelFormat;
+	//使用openGL GlutCreateWindow创建窗口后获取的窗口的pixelFormat为33
+	pixelFormat = 33;
+	DescribePixelFormat(windc, pixelFormat, sizeof(PIXELFORMATDESCRIPTOR), &pfd);
+	if (!::SetPixelFormat(windc, pixelFormat, &pfd))
+		return false;
+
+	// create a new OpenGL rendering context
+	winRc = wglCreateContext(windc);
+	//wglMakeCurrent(windc, winRc);
+	return true;
+}
+
+void  CCarbonMed3DRecon::MakeCurrentWin(HDC &windc, HGLRC &winRc)
+{
+	wglMakeCurrent(windc, winRc);
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 // choose pixel format
 // By default, pdf.dwFlags is set PFD_DRAW_TO_WINDOW, PFD_DOUBLEBUFFER and PFD_SUPPORT_OPENGL.
@@ -335,7 +564,6 @@ bool CCarbonMed3DRecon::setPixelFormat(HDC hdc, int colorBits, int depthBits, in
 ///////////////////////////////////////////////////////////////////////////////
 int CCarbonMed3DRecon::findPixelFormat(HDC hdc, int colorBits, int depthBits, int stencilBits)
 {
-	int currMode;                               // pixel format mode ID
 	int bestMode = 0;                           // return value, best pixel format
 	int currScore = 0;                          // points of current mode
 	int bestScore = 0;                          // points of best candidate
@@ -414,26 +642,26 @@ void CCarbonMed3DRecon::InitModelGL()
 ///////////////////////////////////////////////////////////////////////////////
 // swap OpenGL frame buffers
 ///////////////////////////////////////////////////////////////////////////////
-void CCarbonMed3DRecon::WinswapBuffers()
+void CCarbonMed3DRecon::WinswapBuffers(HDC &windc)
 {
-	::SwapBuffers(CarbonhDC);
+	::SwapBuffers(windc);
 }
 
-void CCarbonMed3DRecon::closeContext(HWND handle)
+void CCarbonMed3DRecon::closeContext(HWND handle, HDC &windc, HGLRC &winRc)
 {
-	if (!CarbonhDC || !CarbonhRC)
+	if (!windc || !winRc)
 		return;
 
 	// delete DC and RC
 	::wglMakeCurrent(0, 0);
-	::wglDeleteContext(CarbonhRC);
-	::ReleaseDC(handle, CarbonhDC);
+	::wglDeleteContext(winRc);
+	::ReleaseDC(handle, windc);
 
-	CarbonhDC = 0;
-	CarbonhRC = 0;
+	windc = 0;
+	winRc = 0;
 }
 
-bool CCarbonMed3DRecon::InitWGL(HWND cwnd, int startx, int starty, int winwidth, int winheight)
+bool CCarbonMed3DRecon::InitWGL(HWND cwnd[3], int *_3dwindowinfo, int *slicewindowinfo, int *uswindowinfo)
 {
 	int ps = 0;
 	char *cmd[128] = { 0 };
@@ -454,25 +682,62 @@ bool CCarbonMed3DRecon::InitWGL(HWND cwnd, int startx, int starty, int winwidth,
 
 	if (cwnd == NULL)
 	{
-		m_GlWin = new Window(windowProcedure);
+		//3d Window
+		m_GlWin = new Window(windowProcedure, L"3DGL", L"3DGL");
 		m_GlWin->setWindowStyle(WS_VISIBLE | WS_CLIPSIBLINGS | WS_OVERLAPPEDWINDOW);
-		m_GlWin->setWidth(winwidth);
-		m_GlWin->setHeight(winheight);
+		m_GlWin->setWidth(_3dwindowinfo[2]);
+		m_GlWin->setHeight(_3dwindowinfo[3]);
 		m_GlWin->setWindowStyleEx(WS_EX_WINDOWEDGE);
 		m_GlWin->setClassStyle(CS_OWNDC);
 		CarbonhWnd = m_GlWin->create();
-		render_obj->SetRenderingWindowSize(winwidth, winheight);
-		m_WinWidth = winwidth;
-		m_WinHeight = winheight;
+		MakeCurrentWin(CarbonhDC, CarbonhRC);
+		render_obj->SetRenderingWindowSize(_3dwindowinfo[2], _3dwindowinfo[3]);
+		m_WinWidth = _3dwindowinfo[2];
+		m_WinHeight = _3dwindowinfo[3];
 		m_GlWin->show();
+		//Slice Window
+		m_GlSliceWin = new Window(SlicewindowProcedure, L"SliceGL", L"SliceGL");
+		m_GlSliceWin->setWindowStyle(WS_VISIBLE | WS_CLIPSIBLINGS | WS_OVERLAPPEDWINDOW);
+		m_GlSliceWin->setWidth(slicewindowinfo[2]);
+		m_GlSliceWin->setHeight(slicewindowinfo[3]);
+		m_GlSliceWin->setWindowStyleEx(WS_EX_WINDOWEDGE);
+		m_GlSliceWin->setClassStyle(CS_OWNDC);
+		CarbonSlicehWnd = m_GlSliceWin->create();
+
+		render_obj->SetRenderingWindowSize(slicewindowinfo[2], slicewindowinfo[3]);
+		m_SliceWinW = slicewindowinfo[2];
+		m_SliceWinH = slicewindowinfo[3];
+	    //m_GlSliceWin->show();
+        //Us window
+		m_GlUltrasoundWin = new Window(UltrasoundwindowProcedure, L"UltrasoundGL", L"UltrasoundGL");
+		m_GlUltrasoundWin->setWindowStyle(WS_VISIBLE | WS_CLIPSIBLINGS | WS_OVERLAPPEDWINDOW);
+		m_GlUltrasoundWin->setWidth(uswindowinfo[2]);
+		m_GlUltrasoundWin->setHeight(uswindowinfo[3]);
+		m_GlUltrasoundWin->setWindowStyleEx(WS_EX_WINDOWEDGE);
+		m_GlUltrasoundWin->setClassStyle(CS_OWNDC);
+		CarbonSlicehWnd = m_GlUltrasoundWin->create();
+
+		render_obj->SetRenderingWindowSize(uswindowinfo[2], uswindowinfo[3]);
+		m_UltrasoundWinW = uswindowinfo[2];
+		m_UltrasoundWinH = uswindowinfo[3];
 	}
 	else
 	{
-		CarbonhWnd = cwnd;
-		WincreateContext(CarbonhWnd, 32, 24, 8);
-		m_WinWidth = winwidth;
-		m_WinHeight = winheight;
-		render_obj->SetRenderingWindowSize(winwidth, winheight);
+		CarbonhWnd = cwnd[0];
+		WincreateContextWithHandle(CarbonhWnd, CarbonhDC, CarbonhRC, 32, 24, 8);
+		m_WinWidth = _3dwindowinfo[2];
+		m_WinHeight = _3dwindowinfo[3];
+		render_obj->SetRenderingWindowSize(m_WinWidth, m_WinHeight);
+		CarbonSlicehWnd = cwnd[1];
+		WincreateContextWithHandle(CarbonSlicehWnd, CarbonSlicehDC, CarbonSlicehRC, 32, 24, 8);
+		m_SliceWinW = _3dwindowinfo[2];
+		m_SliceWinH = _3dwindowinfo[3];
+		render_obj->SetRenderingWindowSize(m_SliceWinW, m_SliceWinH);
+		CarbonUltrasoundhWnd = cwnd[2];
+		WincreateContextWithHandle(CarbonUltrasoundhWnd, CarbonUltrasoundhDC, CarbonUltrasoundhRC, 32, 24, 8);
+		m_UltrasoundWinW = _3dwindowinfo[2];
+		m_UltrasoundWinH = _3dwindowinfo[3];
+		render_obj->SetRenderingWindowSize(m_UltrasoundWinW, m_UltrasoundWinH);
 	}
 
 	if (!CarbonhWnd)
@@ -519,6 +784,13 @@ void CCarbonMed3DRecon::VolumeInit()
 	render_obj->TextureInit();
 	render_obj->OpenGLBufferInit();
 }
+
+//slice PBO init
+void CCarbonMed3DRecon::SlicePBOInit()
+{
+	render_obj->SlicePBOInit();
+}
+
 void CCarbonMed3DRecon::NdiDeviceInit()
 {
 	SliceInit();
@@ -627,7 +899,7 @@ void CCarbonMed3DRecon::ReadArray(LPCTSTR szSection, LPCTSTR szKey, float *resul
 }
 
 
-int CCarbonMed3DRecon::InitialFunctorTest(float *dicominfo, float *dicomdata, int framecount, HWND cwnd, int startx, int starty, int winwidth, int winheight)
+int CCarbonMed3DRecon::InitialFunctorTest(float *dicominfo, float *dicomdata, int framecount, HWND cwnd[3], int *_3dwindowinfo, int *slicewindowinfow, int *uswindowinfo)
 {
 	OpenLog();
 
@@ -743,7 +1015,7 @@ int CCarbonMed3DRecon::InitialFunctorTest(float *dicominfo, float *dicomdata, in
 	render_obj->SetRenderingFeature(rParam);
 	render_obj->SetGridSize(WIDTH, HEIGHT, framecount);
 	render_obj->SetRoiInfo(0, 0, 0, WIDTH, HEIGHT, framecount);
-	render_obj->SetOrganNum(MaskNum);
+	render_obj->SetOrganNum((int)MaskNum);
 	render_obj->SetDpRenderingFlag(SkinRenderFlag, BoneRenderFlag, SliceRenderFlag, PuncLineRenderFlag, OrganRenderFlag);
 	render_obj->SetPboSWFlag(PboSWFlag);
 	render_obj->SetDicomData(dicomdata);
@@ -763,7 +1035,7 @@ int CCarbonMed3DRecon::InitialFunctorTest(float *dicominfo, float *dicomdata, in
 	}
 	else
 	{
-		if (false == InitWGL(cwnd, startx, starty, winwidth, winheight))
+		if (false == InitWGL(cwnd, _3dwindowinfo, slicewindowinfow, uswindowinfo))
 		{
 			PrintLog("OpenGL init failed!\n");
 			return -1;
@@ -795,7 +1067,8 @@ void CCarbonMed3DRecon::ReleaseFunctor()
 
 	if (!OpenGLWinFlag)
 	{
-		closeContext(CarbonhWnd);
+		closeContext(CarbonhWnd, CarbonhDC, CarbonhRC);
+		closeContext(CarbonSlicehWnd, CarbonSlicehDC, CarbonSlicehRC);
 	}
 	if (!m_GlWin)
 	{
@@ -869,7 +1142,7 @@ void CCarbonMed3DRecon::grab(int index)
 	free(pPixelData);
 }
 
-void  CCarbonMed3DRecon::Functor(float *maskdata, float *maskinfo)
+void CCarbonMed3DRecon::Functor(float *maskdata, float *maskinfo)
 {
 	Point3f refpt1(260.0f, 368.0f, 35.0f, 0.0f);
 	Point3f refpt2(260.0f, 368.0f, 35.0f, 0.0f);
@@ -901,7 +1174,9 @@ void  CCarbonMed3DRecon::Functor(float *maskdata, float *maskinfo)
 	else
 	{
 		bool done = false;
+
 		VolumeInit();
+
 		WaitingForRegFlag();
 		PrintLog("WaitingForRegFlag end.");
 		MSG msg;                                // Windowsx消息结构
@@ -923,9 +1198,16 @@ void  CCarbonMed3DRecon::Functor(float *maskdata, float *maskinfo)
 			{
 				if (winactiveflag)                     // 程序激活的么?
 				{
-
+					wglMakeCurrent(0, 0);
+					MakeCurrentWin(CarbonhDC, CarbonhRC);
 					draw(m_WinWidth, m_WinHeight);
-					WinswapBuffers();
+					m_GlWin->show();
+					WinswapBuffers(CarbonhDC);
+					wglMakeCurrent(0, 0);
+					MakeCurrentWin(CarbonSlicehDC, CarbonSlicehRC);
+					drawSlice(m_SliceWinW, m_SliceWinH);
+					m_GlSliceWin->show();
+					WinswapBuffers(CarbonSlicehDC);
 					//grab(count);
 					count++;
 				}
@@ -934,6 +1216,65 @@ void  CCarbonMed3DRecon::Functor(float *maskdata, float *maskinfo)
 		wglMakeCurrent(0, 0);             // unset RC
 	}
 	PrintLog("run this functor successfully.");
+}
+
+void CCarbonMed3DRecon::RenderingInit(float *maskdata, float *maskinfo)
+{
+	Point3f refpt1(260.0f, 368.0f, 35.0f, 0.0f);
+	Point3f refpt2(260.0f, 368.0f, 35.0f, 0.0f);
+	Point3f refpt3(260.0f, 368.0f, 35.0f, 0.0f);
+	Point3f refpt4(260.0f, 368.0f, 35.0f, 0.0f);
+	InitRegRefPts(refpt1, refpt2, refpt3, refpt4);
+	render_obj->SetInterpVoxelInfo((int)maskinfo[2], maskinfo[1]);
+	render_obj->SetStartSliceNo(maskinfo[0]);
+	render_obj->SetOrganData(maskdata);
+	render_obj->SetMaskGridSize(WIDTH, HEIGHT, maskinfo[2]);
+	render_obj->SetMaskRoiInfo(0, 0, 0, WIDTH, HEIGHT, maskinfo[0]);
+
+	PrintLog("Mask Rendering Setting Finished!");
+	VolumeInit();
+	PrintLog("3D Rendering Setting Finished!");
+	WaitingForRegFlag();
+	PrintLog("WaitingForRegFlag end.");
+}
+
+void CCarbonMed3DRecon::Showing3D()
+{
+	wglMakeCurrent(0, 0);
+	MakeCurrentWin(CarbonhDC, CarbonhRC);
+	draw(m_WinWidth, m_WinHeight);
+	m_GlWin->show();
+	WinswapBuffers(CarbonhDC);
+}
+
+bool CCarbonMed3DRecon::Get3DWindowActiveFlag()
+{
+	return CCarbonMed3DRecon::winactiveflag;
+}
+
+
+void CCarbonMed3DRecon::ShowingSlice()
+{
+	wglMakeCurrent(0, 0);
+	MakeCurrentWin(CarbonSlicehDC, CarbonSlicehRC);
+	drawSlice(m_SliceWinW, m_SliceWinH);
+	m_GlSliceWin->show();
+	WinswapBuffers(CarbonSlicehDC);
+}
+
+bool CCarbonMed3DRecon::GetSliceWindowActiveFlag()
+{
+	return CCarbonMed3DRecon::slicewinactiveflag;
+}
+
+void CCarbonMed3DRecon::ShowingUltrasound()
+{
+
+}
+
+bool CCarbonMed3DRecon::GetUSWindowActiveFlag()
+{
+	return CCarbonMed3DRecon::uswinactiveflag;
 }
 
 void CCarbonMed3DRecon::InitRegRefPts(Point3f refpt1, Point3f refpt2, Point3f refpt3, Point3f refpt4)
@@ -1145,12 +1486,21 @@ void CCarbonMed3DRecon::setViewport(int x, int y, int w, int h)
 ///////////////////////////////////////////////////////////////////////////////
 void CCarbonMed3DRecon::draw(int winwidth, int winheight)
 {
-	wglMakeCurrent(CarbonhDC, CarbonhRC);
 	shrDeltaT(0);
 	RenderWinInfo(winwidth, winheight);
 	draw3DReconstruction(winwidth, winheight);
 	totalTime += shrDeltaT(0);
 	drawAxisInterface();
+}
+
+void CCarbonMed3DRecon::drawSlice(int slicewinwidth, int slicewinheight)
+{
+	shrDeltaT(0);
+	RenderWinInfo(slicewinwidth, slicewinheight);
+
+	drawSliceImage();
+	totalTime += shrDeltaT(0);
+	//drawAxisInterface();
 }
 
 void CCarbonMed3DRecon::RenderWinInfo(int width, int height)
@@ -1219,12 +1569,6 @@ void CCarbonMed3DRecon::drawString(const char* str, int len, GLfloat strcolor[4]
 void CCarbonMed3DRecon::draw3DReconstruction(int winwidth, int winheight)
 {
 	GLfloat modelView[16];
-	// set bottom viewport
-	//setViewport(100, 100, winwidth, winheight);
-	setViewport(0, 0, winwidth, winheight);
-
-	// clear buffer
-	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	glPushMatrix();
 
@@ -1237,6 +1581,24 @@ void CCarbonMed3DRecon::draw3DReconstruction(int winwidth, int winheight)
 	render_obj->RegistrationProcessRendering(m_TextureOrderFlag);
 	glPopMatrix();
 	render_obj->SetModelView(modelView);
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// draw upper window (view from the camera)
+///////////////////////////////////////////////////////////////////////////////
+void CCarbonMed3DRecon::drawSliceImage()
+{
+	GLfloat modelView[16];
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+	glPushMatrix();
+	glTranslatef(0, 0, -cameraDistance);
+	//glRotatef(cameraAngleX, 1, 0, 0); // pitch
+	//glRotatef(cameraAngleY, 0, 1, 0); // heading
+	glGetFloatv(GL_MODELVIEW_MATRIX, modelView);
+	render_obj->WGLSliceRendering(m_TextureOrderFlag);
+	glPopMatrix();
+	render_obj->SetModelView(modelView);
+	drawAxisInterface();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1342,7 +1704,7 @@ void CCarbonMed3DRecon::drawAxis(float size)
 	// draw arrows on the end of the axis using cone
 	GLfloat xvertspt[3];
 	xvertspt[0] = size;
-	xvertspt[1] = 0.0f;
+	xvertspt[1] = 0.0;
 	xvertspt[2] = 0.0f;
 	GLfloat yvertspt[3];
 	yvertspt[0] = 0.0f;
@@ -1438,6 +1800,11 @@ void CCarbonMed3DRecon::UIKeyEvent(int key)
 void CCarbonMed3DRecon::UIGetSliceData(float *buf, int len)
 {
 	render_obj->GetNomalizedSliceData(buf);
+}
+//UI Set Ultrasound
+void CCarbonMed3DRecon::UISetUltraSoundBuf(float *buf, int len)
+{
+	render_obj->SetUltraSoundBuf(buf, len);
 }
 //UI Get NDI Result
 void CCarbonMed3DRecon::UIGetNDIResult(float &x, float &y, float &z, float &azimuth, float &elevation, float &roll)
@@ -1569,7 +1936,8 @@ int CCarbonMed3DRecon::size(int w, int h, WPARAM wParam)
 int CCarbonMed3DRecon::destroy()
 {
 	// close OpenGL rendering context (RC)
-	closeContext(CarbonhWnd);
+	closeContext(CarbonhWnd, CarbonhDC, CarbonhRC);
+	closeContext(CarbonSlicehWnd, CarbonSlicehDC, CarbonSlicehRC);
 
 	return 0;
 }

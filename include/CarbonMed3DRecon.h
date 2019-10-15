@@ -37,13 +37,20 @@ class  CCarbonMed3DRecon //CARBONMED3DRECONCLASS_API
 public:
 	CCarbonMed3DRecon() {}
 	virtual ~CCarbonMed3DRecon();
-	static int InitialFunctorTest(float *dicominfo, float *dicomdata, int framecount, HWND cwnd, int startx, int starty, int winwidth, int winheight);
+	static int InitialFunctorTest(float *dicominfo, float *dicomdata, int framecount, HWND cwnd[3], int *_3dwindowinfo, int *slicewindowinfow, int *uswindowinfo);
 	// initial Functor resource
 	static int InitialFunctor();
 	// release Functor resource
 	static void ReleaseFunctor();
 	// functor
 	static void Functor(float *maskdata, float *maskinfo);
+	static void RenderingInit(float *maskdata, float *maskinfo);
+	static void Showing3D();
+	static bool Get3DWindowActiveFlag();
+	static void ShowingSlice();
+	static bool GetSliceWindowActiveFlag();
+	static void ShowingUltrasound();
+	static bool GetUSWindowActiveFlag();
 	static void grab(int index);
 //C# UI Interface start
 public:
@@ -55,6 +62,8 @@ public:
 	static void UIKeyEvent(int key);
 	//UI Get slice
 	static void UIGetSliceData(float *buf, int len);
+	//UI Set Ultrasound
+	static void UISetUltraSoundBuf(float *buf, int len);
 	//UI Get NDI Result
 	static void UIGetNDIResult(float &x, float &y, float &z, float &azimuth, float &elevation, float &roll);
 	//UI Draw Result
@@ -86,8 +95,10 @@ public:
 	static void reshapeWgl(int w, int h);
 	//WGL CreateContext
 	static bool WincreateContext(HWND handle, int colorBits, int depthBits, int stencilBits);
-	static void closeContext(HWND handle);
-	static void WinswapBuffers();
+	static bool WincreateContextWithHandle(HWND handle, HDC &windc, HGLRC &winRc, int colorBits, int depthBits, int stencilBits);
+	static void closeContext(HWND handle, HDC &windc, HGLRC &winRc);
+	static void WinswapBuffers(HDC &windc);
+	static void MakeCurrentWin(HDC &windc, HGLRC &winRc);
 	// pixel Format
 	static bool setPixelFormat(HDC hdc, int colorBits, int depthBits, int stencilBits);
 	static int findPixelFormat(HDC hdc, int colorbits, int depthBits, int stencilBits); // return best matched format ID
@@ -100,10 +111,11 @@ protected:
 	static void OpenCLRelease();
 	// Initial OpenGL components
 	static bool InitGL();
-	static bool InitWGL(HWND cwnd, int startx, int starty, int winwidth, int winheight);
+	static bool InitWGL(HWND cwnd[3], int *_3dwindowinfo, int *slicewindowinfo, int *uswindowinfo);
 	// Initial Volume data;
 	static void GetVolumeInfoFromFile(const char *filename, _DICOMInfo *dicomobj, int *slicenum);
 	static void VolumeInit();
+	static void SlicePBOInit();
 	static void SliceInit();
 	static void NdiDeviceInit();
 	//opengl
@@ -121,8 +133,15 @@ protected:
 	// run time
 	static double shrDeltaT(int iCounterID);
 public:
+	//3D Win
 	static Win::Window *m_GlWin;
-	static BOOL    winactiveflag;
+	//Slice Win
+	static Win::Window *m_GlSliceWin;
+	//Ultrasound Win
+	static Win::Window *m_GlUltrasoundWin;
+	static BOOL winactiveflag;
+	static BOOL slicewinactiveflag;
+	static BOOL uswinactiveflag;
 public:
 	//Window Event
 	static int command(int id, int cmd, LPARAM msg);   // for WM_COMMAND
@@ -195,6 +214,7 @@ protected:
 
 private:
 	static void draw(int winwidth, int winheight);
+	static void drawSlice(int slicewinwidth, int slicewinheight);
 	static void RenderWinInfo(int width, int height);
 	static void drawString(const char* str, int len, GLfloat strcolor[4], float drawstartx, float drawstarty, float drawstartz);
 	static void setViewport(int x, int y, int width, int height);
@@ -203,7 +223,9 @@ private:
 	static void drawAxis(float size);                      // draw 3 axis
 	static void drawAxisVBO(float size);
 	static void drawAxisInterface();
-	static void draw3DReconstruction(int winwidth, int winheight);                                // draw upper window
+	static void draw3DReconstruction(int winwidth, int winheight);
+	//slice window
+	static void drawSliceImage();                                                        
 	static void setFrustum(float l, float r, float b, float t, float n, float f);
 	static void setFrustum(float fovy, float ratio, float n, float f);
 	static void setOrthoFrustum(float l, float r, float b, float t, float n = -1, float f = 1);
@@ -221,6 +243,11 @@ private:
 	//OpenGL win
 	static int m_WinWidth;
 	static int m_WinHeight;
+	static int m_SliceWinW;
+	static int m_SliceWinH;
+	static int m_UltrasoundWinW;
+	static int m_UltrasoundWinH;
+
 	// global sizes and local sizes
 	static size_t _GlobalWorkSize[2];
 	static size_t _LocalWorkSize[2];

@@ -47,12 +47,13 @@ class NDIDriveBay
 {
 public:
 	NDIDriveBay();
-	~NDIDriveBay(){};
+	~NDIDriveBay() {};
 
 	void CInitNDIDriveBay(const char *err, int &errorCode);
 	void CGetNDIDriveBaySynRecord(void *pRecord, int elementsize, int recordSize, int &validsensornum, int *sensorindex, int &errorCode, const char *err);
 	void GetNDIDriveBayRecordOffset(void *pRecord, int elementsize, int recordsize, int sensorid, double offsetx, double offsety, double offsetz, int &errorcode, const char *err);
 	void GetNDIDriveBaySensorRMatrix(int sensorid, double *RMatrix, int &errorCode, const char *err);
+	void GetNDIDriveBaySensorQuaterNion(int sensorid, double *Quaternion, int &errorCode, const char *err);
 	void CReleaseNDIDriveBayResource();
 protected:
 	const char* errorHandler(int error);

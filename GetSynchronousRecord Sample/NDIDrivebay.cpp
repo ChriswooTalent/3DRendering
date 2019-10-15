@@ -36,8 +36,8 @@ void NDIDriveBay::CInitNDIDriveBay(const char *err, int &errorCode)
 			return;
 		}
 		//设置基准位置
-		DOUBLE_ANGLES_RECORD anglesRecord = { 90.0, 0.0, 90.0 };
 		//DOUBLE_ANGLES_RECORD anglesRecord = { 0.0, 0.0, 0.0 };
+		DOUBLE_ANGLES_RECORD anglesRecord = { -90.0, 90.0, 0.0 };
 		double pbuffer[3] = { 0.0 };
 		pbuffer[0] = anglesRecord.a;
 		pbuffer[1] = anglesRecord.e;
@@ -86,7 +86,7 @@ void NDIDriveBay::CInitNDIDriveBay(const char *err, int &errorCode)
 		BOOL *pBuffer = &buffer;
 		//printf("METRIC: %d\n", buffer);
 		errorCode = SetSystemParameter(METRIC, pBuffer, sizeof(buffer));
-		if (errorCode != BIRD_ERROR_SUCCESS) 
+		if (errorCode != BIRD_ERROR_SUCCESS)
 			errorHandler(errorCode);
 	}
 
@@ -133,6 +133,46 @@ void NDIDriveBay::GetNDIDriveBaySensorRMatrix(int sensorid, double *RMatrix, int
 		RMatrix[6] = pRecord[sensorid].s[2][0];
 		RMatrix[7] = pRecord[sensorid].s[2][1];
 		RMatrix[8] = pRecord[sensorid].s[2][2];
+	}
+	// reset Set the data format type as record for each attached sensor.
+	for (int i = 0; i < tracker.m_config.numberSensors; i++)
+	{
+		DATA_FORMAT_TYPE type = DOUBLE_POSITION_ANGLES_TIME_Q;
+		errorCode = SetSensorParameter(i, DATA_FORMAT, &type, sizeof(type));
+		if (errorCode != BIRD_ERROR_SUCCESS)
+		{
+			err = errorHandler(errorCode);
+		}
+	}
+}
+
+void NDIDriveBay::GetNDIDriveBaySensorQuaterNion(int sensorid, double *Quaternion, int &errorCode, const char *err)
+{
+	DOUBLE_QUATERNIONS_RECORD QuaternionRecord[4], *pRecord = QuaternionRecord;
+
+	// Set the data format type for each attached sensor.
+	for (int i = 0; i < tracker.m_config.numberSensors; i++)
+	{
+		DATA_FORMAT_TYPE type = DOUBLE_QUATERNIONS;
+		errorCode = SetSensorParameter(i, DATA_FORMAT, &type, sizeof(type));
+		if (errorCode != BIRD_ERROR_SUCCESS)
+		{
+			err = errorHandler(errorCode);
+		}
+	}
+	errorCode = GetSynchronousRecord(ALL_SENSORS, pRecord, sizeof(QuaternionRecord[0]) * tracker.m_config.numberSensors);
+	if (errorCode != BIRD_ERROR_SUCCESS)
+	{
+		err = errorHandler(errorCode);
+	}
+	unsigned int status = GetSensorStatus(sensorid);
+
+	if (status == VALID_STATUS)
+	{
+		Quaternion[0] = pRecord[sensorid].q[0];
+		Quaternion[1] = pRecord[sensorid].q[1];
+		Quaternion[2] = pRecord[sensorid].q[2];
+		Quaternion[3] = pRecord[sensorid].q[3];
 	}
 	// reset Set the data format type as record for each attached sensor.
 	for (int i = 0; i < tracker.m_config.numberSensors; i++)

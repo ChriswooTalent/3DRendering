@@ -21,9 +21,11 @@ enum SliceKernelMethods
 	GETSLICEPBO = 3,
 	CopySlice = 4,
 	GETRESIZESLICEPBO = 5,
-	CLEARPBOBUF = 6,
-	CLEARSLICEPBO = 7,
-	GETWORLDSLICECORXYZ = 8
+	GETORIGINSLICEPBO = 6,
+	GETRESIZEORIGINSLICEPBO = 7,
+	CLEARPBOBUF = 8,
+	CLEARSLICEPBO = 9,
+	GETWORLDSLICECORXYZ = 10,
 };
  
 static const char* SliceKernelNames[] =
@@ -34,6 +36,8 @@ static const char* SliceKernelNames[] =
 	"GetSlicePBO",
 	"GetSliceDirectly",
 	"GetRESIZESLICEPBO",
+	"GetOriginSlicePBO",
+	"GetOriginResizeSlicePBO",
 	"ClearPBOBuffer",
 	"ClearSlicePbo",
 	"GetWorldSliceCorXYZ"
@@ -140,6 +144,8 @@ void Rotateslice::RotateSliceOpenCLRelease()
 {
 	if (m_DSliceImageU8)
 		clReleaseMemObject(m_DSliceImageU8);
+	if (m_DSliceImageorigin)
+		clReleaseMemObject(m_DSliceImageorigin);
 	if (m_DSliceImagefloat)
 		clReleaseMemObject(m_DSliceImagefloat);
 	if (m_DSliceZero)
@@ -170,6 +176,8 @@ void Rotateslice::InitSlice(int width, int height, int slicenum)
 	check_CL_error(error, "SliceImageU8 created failed!");
 	m_DSliceImagefloat = clCreateBuffer(m_Context, CL_MEM_READ_WRITE, imagesizefloat, 0, &error);
 	check_CL_error(error, "SliceImagefloat created failed!");
+	m_DSliceImageorigin = clCreateBuffer(m_Context, CL_MEM_READ_WRITE, imagesizefloat, 0, &error);
+	check_CL_error(error, "m_DSliceImageorigin created failed!");
 	m_DSliceZero = clCreateBuffer(m_Context, CL_MEM_READ_WRITE, imagesizefloat, 0, &error);
 	check_CL_error(error, "m_DSliceZero created failed!");
 	m_DSliceZeroScan = clCreateBuffer(m_Context, CL_MEM_READ_WRITE, imagesizefloat, 0, &error);
@@ -200,6 +208,11 @@ void Rotateslice::GetQuaternionRotation(float azimuth, float roll, float elevati
 	resultvec.fX = q_obj_result.GetQuaternionX();
 	resultvec.fY = q_obj_result.GetQuaternionY();
 	resultvec.fZ = q_obj_result.GetQuaternionZ();
+}
+
+void Rotateslice::GetQuaternionRotation(Quaternion cur_qn, Vector3f &inputvec, Vector3f &resultvec)
+{
+	resultvec = cur_qn*inputvec;
 }
 
 void Rotateslice::GetRotationMat(float azimuth, float roll, float elevation, float *RMat)
@@ -336,6 +349,12 @@ vector3d Rotateslice::calcNormal(vector3d &v0, vector3d &v1, vector3d &v2)
 float Rotateslice::CalcNValueofVec(vector3d v)
 {
 	return sqrt(v.fX*v.fX + v.fY*v.fY + v.fZ*v.fZ);
+}
+
+float Rotateslice::CalcDistance(Point3f pt1, Point3f pt2)
+{
+	Point3f diff_pt = pt1 - pt2;
+	return sqrt(diff_pt.x*diff_pt.x + diff_pt.y*diff_pt.y + diff_pt.z*diff_pt.z);
 }
 
 float Rotateslice::Dot3D(vector3d a, vector3d b)
@@ -924,7 +943,7 @@ bool Rotateslice::SliceBorderConfine()
 		returnflagin = true;
 	}
 	bool returnflag = (((returnflagdirection&&returnflagout) && returnflagLRdirection)&&returnflagin);
-	return returnflag;
+	return true;
 }
 
 void Rotateslice::CalcInterpGridSize()
@@ -936,20 +955,6 @@ void Rotateslice::CalcInterpGridSize()
 	Resizeratio[1] = m_CtPixelSpacey;
 	Resizeratio[2] = m_CtPixelSpacez;
 	Resizeratio[3] = 0;
-}
-
-void Rotateslice::GetSliceNormalized(float *dst)
-{
-	if ((m_DstWidth == 0) && (m_DstHeight == 0))
-	{
-		dst = NULL;
-	}
-	else
-	{
-		error = clEnqueueReadBuffer(m_Queue, m_DSliceImagefloat, CL_TRUE, 0, WIDTH*HEIGHT* sizeof(float), m_HSliceImagefloat, 0, 0, 0);
-		check_CL_error(error, "sliceimage Copy from GPU failed!");
-		memcpy(dst, m_HSliceImagefloat, WIDTH*HEIGHT* sizeof(float));
-	}
 }
 
 void Rotateslice::GetSliceDataU8(UINT8 *dst)
@@ -969,6 +974,11 @@ void Rotateslice::GetSliceDataU8(UINT8 *dst)
 void Rotateslice::GetSliceDataU8GPU(cl_mem &sliceu8GPU)
 {
 	sliceu8GPU = m_DSliceImageU8;
+}
+
+void Rotateslice::GetOriginSlice(cl_mem &originslice)
+{
+	originslice = m_DSliceImageorigin;
 }
 
 void Rotateslice::ClearSlicePbo(cl_mem &slicepbo)
@@ -1035,6 +1045,44 @@ void Rotateslice::GetSliceDataPBO(cl_mem &slicepbo, bool resizeflag)
 	else
 	{
 		Launch_GetSlicePBO(global, local, m_DSliceImageU8, m_DSliceImagefloat, slicepbo, resizewidth, resizeheight);
+	}
+}
+
+void Rotateslice::GetSliceDataTex(cl_mem &slicetex, bool resizeflag)
+{
+	int dstwidth = GetDstWidth();
+	int dstheight = GetDstHeight();
+	int resizewidth = WIDTH;
+	int resizeheight = HEIGHT;
+	size_t local[2] = { BLOCKX, BLOCKY };
+	int iWideDim = resizewidth / BLOCKX;
+	int iHeightDim = resizeheight / BLOCKY;
+
+	if (resizewidth % BLOCKX)
+	{
+		iWideDim = (iWideDim + 1) * BLOCKX;
+	}
+	else
+	{
+		iWideDim = iWideDim * BLOCKX;
+	}
+
+	if (resizeheight % BLOCKY)
+	{
+		iHeightDim = (iHeightDim + 1) * BLOCKY;
+	}
+	else
+	{
+		iHeightDim = iHeightDim * BLOCKY;
+	}
+	size_t global[2] = { iWideDim, iHeightDim };
+	if (resizeflag == true)
+	{
+		Launch_GetResizeOriginSlice(global, local, m_DSliceImageorigin, m_DSliceImagefloat, slicetex, dstwidth, dstheight, resizewidth, resizeheight);
+	}
+	else
+	{
+		Launch_GetOriginSlice(global, local, m_DSliceImageorigin, m_DSliceImagefloat, slicetex, resizewidth, resizeheight);
 	}
 }
 
@@ -1365,39 +1413,128 @@ void Rotateslice::InitSlicePlaneInfo(vector3d axisvec, float x, float y, float z
 	m_Ymid = y;
 	m_Zmid = z;
 	Point3f ptop(m_Xmid, m_Ymid, m_Zmid, 0);
-	//GetRotationMat(azimuth, roll, elevation, m_TempRMat);
-	//matrix_matrix_mult(basicRmat, m_TempRMat, m_RMat);
-	/*printf("TempRMat\n");
-	for (int i = 0; i < 9; i++)
-	{
-		printf("%f ", m_TempRMat[i]);
-		if (i % 3 == 0)
-		{
-			printf("\n");
-		}
-	}
-	float RDirectionMat[9] = { 0.0f };
-	GetRotationMatDirectly(azimuth, roll, elevation, RDirectionMat);
-	printf("\n");
-	printf("\n");
-	printf("RDirectionMat\n");
-	for (int i = 0; i < 9; i++)
-	{
-		printf("%f ", RDirectionMat[i]);
-		if (i % 3 == 0)
-		{
-			printf("\n");
-		}
-	}*/
-	/*printf("angles!\n");
-	printf("x angle %f\n", roll);
-	printf("y angle %f\n", elevation);
-	printf("z angle %f\n", azimuth);
-	printf("\n");*/
 
 	GetQuaternionRotation(azimuth, roll, elevation, 1, axisvec, transformvec);
 
 	vector3d normvec = transformvec;
+
+	/*printf("rotate axis!\n");
+	printf("%f ", normvec.fX);
+	printf("%f ", normvec.fY);
+	printf("%f ", normvec.fZ);
+	printf("\n");*/
+
+	m_Zind = (int)std::round(z);
+
+	vector3d originz;
+	vector3d originx;
+	vector3d originy;
+	CalcingClipPlaneCoefs(normvec.fX, normvec.fY, normvec.fZ, ptop);
+	//x axis
+	originx.fX = 1.0f;
+	originx.fY = 0.0f;
+	originx.fZ = 0.0f;
+	//y axis
+	originy.fX = 0.0f;
+	originy.fY = 1.0f;
+	originy.fZ = 0.0f;
+	//z axis
+	originz.fX = 0.0f;
+	originz.fY = 0.0f;
+	originz.fZ = 1.0f;
+	float zangle = ClacAngleOfAxis(normvec, originz);
+	float yangle = ClacAngleOfAxis(normvec, originy);
+	float xangle = ClacAngleOfAxis(normvec, originx);
+	float xanglethr = 45.0f;
+	float zanglethr = 30.0f;
+	float yangletiny = 0.01f;
+	float xangletiny = 0.01f;
+
+	//生成与法线垂直的切片平面
+	//zangle = 0表示该切面平行于z轴
+	//第一种情况，切面与z轴夹角较小，同时平行于y轴, 切面以yz平面为主，flag定义为1
+	if ((fabs(zangle) < zanglethr) && (fabs(yangle) < yangletiny))
+	{
+		m_DstWidth = GridSize[1];
+		m_DstHeight = GridSize[2];
+		m_VHeight = GridSize[0];
+
+		if (xangle == 0.0f)
+		{
+			m_Interpflag = 0;
+			m_Directcopyflag = 1;
+		}
+		else
+		{
+			m_Interpflag = 1;
+			m_Directcopyflag = 0;
+		}
+	}
+	//第二种情况，切面与z轴夹角较小，同时平行于x轴, 切面以xz平面为主，flag定义为2
+	else if ((fabs(zangle) < zanglethr) && (fabs(xangle) < xangletiny))
+	{
+		m_DstWidth = GridSize[0];
+		m_DstHeight = GridSize[2];
+		m_VHeight = GridSize[1];
+
+		m_Interpflag = 2;
+
+		if (yangle == 0.0f)
+		{
+			m_Interpflag = 0;
+			m_Directcopyflag = 1;
+		}
+		else
+		{
+			m_Interpflag = 2;
+			m_Directcopyflag = 0;
+		}
+	}
+	//第三种情况，切面与z轴夹角较小，x轴夹角绝对值在45度以内，取xz平面, 切面以xz平面为主，flag定义为2
+	else if ((fabs(zangle) < zanglethr) && (fabs(xangle) <= xanglethr))
+	{
+		m_DstWidth = GridSize[0];
+		m_DstHeight = GridSize[2];
+		m_VHeight = GridSize[1];
+
+		m_Interpflag = 2;
+		m_Directcopyflag = 0;
+	}
+	//第四种情况，切面与z轴夹角较小，x轴夹角绝对值大于45度，取yz平面， 切面以yz平面为主，flag定义为1
+	else if ((fabs(zangle) < zanglethr) && (fabs(xangle) > xanglethr))
+	{
+		m_DstWidth = GridSize[1];
+		m_DstHeight = GridSize[2];
+		m_VHeight = GridSize[0];
+
+		m_Interpflag = 1;
+		m_Directcopyflag = 0;
+	}
+	//第五种情况，切面与z轴夹角绝对值大于10度，x轴夹角绝对值大于45度，取xy平面，flag定义为3， 后续还要考虑下x, y正负数的情况
+	else
+	{
+		m_DstWidth = GridSize[0];
+		m_DstHeight = GridSize[1];
+		m_VHeight = GridSize[2];
+
+		m_Interpflag = 3;
+		m_Directcopyflag = 0;
+	}
+}
+
+//初始化切片计算信息
+void Rotateslice::InitSlicePlaneInfoQn(Vector3f axisvec, float x, float y, float z, Quaternion rotate_qn, float *basicRmat)
+{
+	Vector3f transformvec(0.0f, 0.0f, 0.0f);
+
+	m_Xmid = x;
+	m_Ymid = y;
+	m_Zmid = z;
+	Point3f ptop(m_Xmid, m_Ymid, m_Zmid, 0);
+
+	GetQuaternionRotation(rotate_qn, axisvec, transformvec);
+
+	vector3d normvec(-transformvec.z_, transformvec.x_, transformvec.y_);
 
 	/*printf("rotate axis!\n");
 	printf("%f ", normvec.fX);
@@ -1614,15 +1751,15 @@ void Rotateslice::GenerateSlicePts(float a, float b, float c, int width, int hei
 	vmax = (float)((float)m_CtWinCenter + 0.5f*m_CtWinWidth);
 	if (1 == flag)
 	{
-		GetSliceYZX(global, local, shared, volume, m_DSliceImageU8, width, height, slicenum, dstwidth, dstheight, vheight, a, b, c, m_Xmid, m_Ymid, m_Zmid, m_MaxValue, m_MinValue);
+		GetSliceYZX(global, local, shared, volume, m_DSliceImageU8, m_DSliceImageorigin, width, height, slicenum, dstwidth, dstheight, vheight, a, b, c, m_Xmid, m_Ymid, m_Zmid, m_MaxValue, m_MinValue);
 	}
 	else if (2 == flag)
 	{
-		GetSliceXZY(global, local, shared, volume, m_DSliceImageU8, width, height, slicenum, dstwidth, dstheight, vheight, a, b, c, m_Xmid, m_Ymid, m_Zmid, m_MaxValue, m_MinValue);
+		GetSliceXZY(global, local, shared, volume, m_DSliceImageU8, m_DSliceImageorigin, width, height, slicenum, dstwidth, dstheight, vheight, a, b, c, m_Xmid, m_Ymid, m_Zmid, m_MaxValue, m_MinValue);
 	}
 	else if (3 == flag)
 	{
-		GetSliceXYZ(global, local, shared, volume, m_DSliceImageU8, width, height, slicenum, dstwidth, dstheight, vheight, a, b, c, m_Xmid, m_Ymid, m_Zmid, m_MaxValue, m_MinValue);
+		GetSliceXYZ(global, local, shared, volume, m_DSliceImageU8, m_DSliceImageorigin, width, height, slicenum, dstwidth, dstheight, vheight, a, b, c, m_Xmid, m_Ymid, m_Zmid, m_MaxValue, m_MinValue);
 	}
 }
 
@@ -1641,7 +1778,7 @@ float Rotateslice::ClacAngleOfAxis(vector3d normvec, vector3d axisvec)
 	return angle;
 }
 
-void Rotateslice::GetSliceYZX(size_t *global, size_t *local, size_t shared, cl_mem volume, cl_mem sliceu8, cl_uint width, cl_uint height, cl_uint slicenum,
+void Rotateslice::GetSliceYZX(size_t *global, size_t *local, size_t shared, cl_mem volume, cl_mem sliceu8, cl_mem sliceorigin, cl_uint width, cl_uint height, cl_uint slicenum,
 	cl_uint dstwidth, cl_uint dstheight, cl_uint vheight, cl_float na, cl_float nb, cl_float nc, cl_float x_mid, cl_float y_mid, cl_float z_mid, cl_float maxval, cl_float minval)
 {
 	unsigned int k = SLICEYZX;
@@ -1650,6 +1787,7 @@ void Rotateslice::GetSliceYZX(size_t *global, size_t *local, size_t shared, cl_m
 	int err = CL_SUCCESS;
 	err |= clSetKernelArg(m_ComputeKernels[k], a++, sizeof(cl_mem), &volume);
 	err |= clSetKernelArg(m_ComputeKernels[k], a++, sizeof(cl_mem), &sliceu8);
+	err |= clSetKernelArg(m_ComputeKernels[k], a++, sizeof(cl_mem), &sliceorigin);
 	err |= clSetKernelArg(m_ComputeKernels[k], a++, sizeof(cl_mem), &m_DSliceZero);
 	err |= clSetKernelArg(m_ComputeKernels[k], a++, shared, 0);
 	err |= clSetKernelArg(m_ComputeKernels[k], a++, 4 * sizeof(cl_uint), GridSize);
@@ -1673,7 +1811,7 @@ void Rotateslice::GetSliceYZX(size_t *global, size_t *local, size_t shared, cl_m
 	check_CL_error(err, "GetSliceYZX failed!");
 }
 
-void Rotateslice::GetSliceXZY(size_t *global, size_t *local, size_t shared, cl_mem volume, cl_mem sliceu8, cl_uint width, cl_uint height, cl_uint slicenum,
+void Rotateslice::GetSliceXZY(size_t *global, size_t *local, size_t shared, cl_mem volume, cl_mem sliceu8, cl_mem sliceorigin, cl_uint width, cl_uint height, cl_uint slicenum,
 	cl_uint dstwidth, cl_uint dstheight, cl_uint vheight, cl_float na, cl_float nb, cl_float nc, cl_float x_mid, cl_float y_mid, cl_float z_mid, cl_float maxval, cl_float minval)
 {
 	unsigned int k = SLICEXZY;
@@ -1682,6 +1820,7 @@ void Rotateslice::GetSliceXZY(size_t *global, size_t *local, size_t shared, cl_m
 	int err = CL_SUCCESS;
 	err |= clSetKernelArg(m_ComputeKernels[k], a++, sizeof(cl_mem), &volume);
 	err |= clSetKernelArg(m_ComputeKernels[k], a++, sizeof(cl_mem), &sliceu8);
+	err |= clSetKernelArg(m_ComputeKernels[k], a++, sizeof(cl_mem), &sliceorigin);
 	err |= clSetKernelArg(m_ComputeKernels[k], a++, sizeof(cl_mem), &m_DSliceZero);
 	err |= clSetKernelArg(m_ComputeKernels[k], a++, shared, 0);
 	err |= clSetKernelArg(m_ComputeKernels[k], a++, 4 * sizeof(cl_uint), GridSize);
@@ -1705,7 +1844,7 @@ void Rotateslice::GetSliceXZY(size_t *global, size_t *local, size_t shared, cl_m
 	check_CL_error(err, "GetSliceXZY failed!");
 }
 
-void Rotateslice::GetSliceXYZ(size_t *global, size_t *local, size_t shared, cl_mem volume, cl_mem sliceu8, cl_uint width, cl_uint height, cl_uint slicenum,
+void Rotateslice::GetSliceXYZ(size_t *global, size_t *local, size_t shared, cl_mem volume, cl_mem sliceu8, cl_mem sliceorigin, cl_uint width, cl_uint height, cl_uint slicenum,
 	cl_uint dstwidth, cl_uint dstheight, cl_uint vheight, cl_float na, cl_float nb, cl_float nc, cl_float x_mid, cl_float y_mid, cl_float z_mid, cl_float maxval, cl_float minval)
 {
 	unsigned int k = SLICEXYZ;
@@ -1714,6 +1853,7 @@ void Rotateslice::GetSliceXYZ(size_t *global, size_t *local, size_t shared, cl_m
 	int err = CL_SUCCESS;
 	err |= clSetKernelArg(m_ComputeKernels[k], a++, sizeof(cl_mem), &volume);
 	err |= clSetKernelArg(m_ComputeKernels[k], a++, sizeof(cl_mem), &sliceu8);
+	err |= clSetKernelArg(m_ComputeKernels[k], a++, sizeof(cl_mem), &sliceorigin);
 	err |= clSetKernelArg(m_ComputeKernels[k], a++, sizeof(cl_mem), &m_DSliceZero);
 	err |= clSetKernelArg(m_ComputeKernels[k], a++, shared, 0);
 	err |= clSetKernelArg(m_ComputeKernels[k], a++, 4 * sizeof(cl_uint), GridSize);
@@ -1815,6 +1955,62 @@ void Rotateslice::Launch_GetResizeSlicePBO(size_t *global, size_t *local, cl_mem
 	err |= clSetKernelArg(m_ComputeKernels[k], a++, sizeof(cl_uint), &resizeheight);
 
 	check_CL_error(err, "Setting Launch_GetResizeSlicePBO failed");
+
+	err = CL_SUCCESS;
+	err |= clEnqueueNDRangeKernel(m_Queue, m_ComputeKernels[k], 2, NULL, global, local, 0, NULL, NULL);
+	check_CL_error(err, "Launch_GetResizeSlicePBO failed!");
+}
+
+void Rotateslice::Launch_GetOriginSlice(size_t *global, size_t *local, cl_mem slicegpu, cl_mem slicenorm, cl_mem slicepbo, cl_uint width, cl_uint height)
+{
+	unsigned int k = GETORIGINSLICEPBO;
+	unsigned int a = 0;
+
+	int err = CL_SUCCESS;
+	err |= clSetKernelArg(m_ComputeKernels[k], a++, sizeof(cl_mem), &slicegpu);
+	err |= clSetKernelArg(m_ComputeKernels[k], a++, sizeof(cl_mem), &slicenorm);
+	err |= clSetKernelArg(m_ComputeKernels[k], a++, sizeof(cl_mem), &slicepbo);
+	err |= clSetKernelArg(m_ComputeKernels[k], a++, sizeof(cl_uint), &width);
+	err |= clSetKernelArg(m_ComputeKernels[k], a++, sizeof(cl_uint), &height);
+
+	check_CL_error(err, "Setting Launch_GetSlicePBO failed!");
+
+	err = CL_SUCCESS;
+	err |= clEnqueueNDRangeKernel(m_Queue, m_ComputeKernels[k], 2, NULL, global, local, 0, NULL, NULL);
+	check_CL_error(err, "Launch_GetOriginSlice failed!");
+#if 0
+	unsigned int *sliceResult = (unsigned int *)malloc(width*height * sizeof(unsigned int));
+	error = clEnqueueReadBuffer(m_SliceQueue, slicepbo, CL_TRUE, 0, width*height * sizeof(unsigned int), sliceResult, 0, 0, NULL);
+	FILE *fp = NULL;
+	fopen_s(&fp, "D:/GetBindata/GetBindata/slicepboReadBack.txt", "w+");
+	for (int i = 0; i < height; i++)
+	{
+		for (int j = 0; j < width; j++)
+		{
+			fprintf_s(fp, "%d ", sliceResult[i*width + j]);
+		}
+		fprintf_s(fp, "\n");
+	}
+	fclose(fp);
+	free(sliceResult);
+#endif
+}
+
+void Rotateslice::Launch_GetResizeOriginSlice(size_t *global, size_t *local, cl_mem slicegpu, cl_mem slicenorm, cl_mem slicepbo, cl_uint width, cl_uint height, cl_uint resizewidth, cl_uint resizeheight)
+{
+	unsigned int k = GETRESIZEORIGINSLICEPBO;
+	unsigned int a = 0;
+
+	int err = CL_SUCCESS;
+	err |= clSetKernelArg(m_ComputeKernels[k], a++, sizeof(cl_mem), &slicegpu);
+	err |= clSetKernelArg(m_ComputeKernels[k], a++, sizeof(cl_mem), &slicenorm);
+	err |= clSetKernelArg(m_ComputeKernels[k], a++, sizeof(cl_mem), &slicepbo);
+	err |= clSetKernelArg(m_ComputeKernels[k], a++, sizeof(cl_uint), &width);
+	err |= clSetKernelArg(m_ComputeKernels[k], a++, sizeof(cl_uint), &height);
+	err |= clSetKernelArg(m_ComputeKernels[k], a++, sizeof(cl_uint), &resizewidth);
+	err |= clSetKernelArg(m_ComputeKernels[k], a++, sizeof(cl_uint), &resizeheight);
+
+	check_CL_error(err, "Setting Launch_GetResizeOriginSlice failed");
 
 	err = CL_SUCCESS;
 	err |= clEnqueueNDRangeKernel(m_Queue, m_ComputeKernels[k], 2, NULL, global, local, 0, NULL, NULL);

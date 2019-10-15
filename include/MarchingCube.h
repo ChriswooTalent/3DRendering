@@ -11,6 +11,9 @@
 #include "Rotateslice.h"
 #include <map>
 #include <algorithm>
+//#include <OpenMesh/Core/IO/MeshIO.hh>
+//#include <OpenMesh/Core/Mesh/TriMesh_ArrayKernelT.hh>
+//#include <OpenMesh/Core/Geometry/VectorT.hh>
 
 using namespace std;
  
@@ -55,9 +58,11 @@ public:
 
 	void GLDataRendering(cl_float translate[4], cl_float clrotate[4], int orderflag);
 	void WGLDataRendering(int orderflag);
+	void WGLSliceRendering(int orderflag);
 
 	//Rendering TexSlice
 	void RenderTexSlice(GLuint tex2d, int orderflag);
+	void Render2DSlicePBO(GLuint tex2d);
 	void RenderTexSlicePBO(GLuint tex2d);
 	void RenderRegHintPBO(GLuint tex2d, int bufindex, int orderflag);
 	void RenderingPunctureLine(int index);

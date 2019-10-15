@@ -16,6 +16,7 @@
 #define GROUP_SIZE 256
 #define MAXSLICENUM 512
 using namespace QuaternionProcess;
+using namespace RenderingDataTypes;
 
 typedef struct PositionAngleUnit
 {
@@ -41,11 +42,12 @@ public:
 	void RotateSliceOpenCLRelease();
 	//外部接口函数,获取切片数据，完成从GPU到CPU的拷贝
 	void GetSliceDataU8(UINT8 *dst);
-	void GetSliceNormalized(float *dst);
 
 	//获取显存中的切片数据
 	void GetSliceDataU8GPU(cl_mem &sliceu8GPU);
+	void GetOriginSlice(cl_mem &originslice);
 	void GetSliceDataPBO(cl_mem &slicepbo, bool resizeflag);
+	void GetSliceDataTex(cl_mem &slicetex, bool resizeflag);
 	void ClearSlicePbo(cl_mem &slicepbo);
 
 	//接口函数1, 直接传入法向量
@@ -62,6 +64,8 @@ public:
 	void GetSlicePlane(cl_mem volume);
     //初始化切片计算信息
 	void InitSlicePlaneInfo(vector3d axisvec, float x, float y, float z, float azimuth, float elevation, float roll, float *basicRmat);
+	//初始化切片计算信息
+	void InitSlicePlaneInfoQn(Vector3f axisvec, float x, float y, float z, Quaternion rotate_qn, float *basicRmat);
 	//根据已有信息构建切割平面,得到平面的法向量,同时确定最后的切面的长和宽
 	void ConstructSlicePlaneNormVec(float startx, float starty, float startz, float endx, float endy, float endz, float &a, float &b, float &c);
 
@@ -78,6 +82,9 @@ public:
 	//根据四元数获取相应的旋转结果
 	void GetQuaternionRotation(float azimuth, float roll, float elevation, int radian_flag, vector3d &inputvec, vector3d &resultvec);
 
+	//根据四元数计算旋转后的向量
+	void GetQuaternionRotation(Quaternion cur_qn, Vector3f &inputvec, Vector3f &resultvec);
+
 	//根据旋转角度和公式直接获取旋转矩阵
 	void GetRotationMatDirectly(float azimuth, float elevation, float roll, float *RMat);
 
@@ -89,6 +96,9 @@ public:
 
 	//计算向量的模
 	float CalcNValueofVec(vector3d v);
+
+	//计算两点间距离
+	float CalcDistance(Point3f pt1, Point3f pt2);
 
 	//向量点乘
 	float Dot3D(vector3d a, vector3d b);
@@ -273,19 +283,21 @@ protected:
 	void GetSliceDirectly(size_t *global, size_t *local, size_t shared, cl_mem volume, cl_mem sliceu8, cl_uint width, cl_uint height, cl_uint slicenum,
 		cl_uint dstwidth, cl_uint dstheight, cl_uint vheight,
 		cl_uint z_ind, cl_float maxval, cl_float minval);
-	void GetSliceYZX(size_t *global, size_t *local, size_t shared, cl_mem volume, cl_mem sliceu8, cl_uint width, cl_uint height, cl_uint slicenum,
+	void GetSliceYZX(size_t *global, size_t *local, size_t shared, cl_mem volume, cl_mem sliceu8, cl_mem slice_origin, cl_uint width, cl_uint height, cl_uint slicenum,
 		cl_uint dstwidth, cl_uint dstheight, cl_uint vheight,
 		cl_float a, cl_float b, cl_float c, cl_float x_mid, cl_float y_mid, cl_float z_mid, cl_float maxval, cl_float minval);
-	void GetSliceXZY(size_t *global, size_t *local, size_t shared, cl_mem volume, cl_mem sliceu8, cl_uint width, cl_uint height, cl_uint slicenum,
+	void GetSliceXZY(size_t *global, size_t *local, size_t shared, cl_mem volume, cl_mem sliceu8, cl_mem slice_origin, cl_uint width, cl_uint height, cl_uint slicenum,
 		cl_uint dstwidth, cl_uint dstheight, cl_uint vheight,
 		cl_float a, cl_float b, cl_float c, cl_float x_mid, cl_float y_mid, cl_float z_mid, cl_float maxval, cl_float minval);
-	void GetSliceXYZ(size_t *global, size_t *local, size_t shared, cl_mem volume, cl_mem sliceu8, cl_uint width, cl_uint height, cl_uint slicenum,
+	void GetSliceXYZ(size_t *global, size_t *local, size_t shared, cl_mem volume, cl_mem sliceu8, cl_mem slice_origin, cl_uint width, cl_uint height, cl_uint slicenum,
 		cl_uint dstwidth, cl_uint dstheight, cl_uint vheight,
 		cl_float a, cl_float b, cl_float c, cl_float x_mid, cl_float y_mid, cl_float z_mid, cl_float maxval, cl_float minval);
 	void GetSliceCorXYZ(size_t *global, size_t *local, size_t shared, cl_mem worldslicecor, cl_uint dstwidth, cl_uint dstheight, cl_uint dstvheight,
 		cl_float a, cl_float b, cl_float c, cl_float x_mid, cl_float y_mid, cl_float z_mid);
 	void Launch_GetSlicePBO(size_t *global, size_t *local, cl_mem slicegpu, cl_mem slicenorm, cl_mem slicepbo, cl_uint width, cl_uint height);
 	void Launch_GetResizeSlicePBO(size_t *global, size_t *local, cl_mem slicegpu, cl_mem slicenorm, cl_mem slicepbo, cl_uint width, cl_uint height, cl_uint resizewidth, cl_uint resizeheight);
+	void Launch_GetOriginSlice(size_t *global, size_t *local, cl_mem slicegpu, cl_mem slicenorm, cl_mem slicepbo, cl_uint width, cl_uint height);
+	void Launch_GetResizeOriginSlice(size_t *global, size_t *local, cl_mem slicegpu, cl_mem slicenorm, cl_mem slicepbo, cl_uint width, cl_uint height, cl_uint resizewidth, cl_uint resizeheight);
 	void Launch_ClearPBOBuffer(size_t *global, size_t *local, cl_mem slicegpu_u8, cl_mem slicenorm, cl_uint resizewidth, cl_uint resizeheight);
 	void Launch_ClearSlicePBO(size_t *global, size_t *local, cl_mem slicepbo, cl_uint resizewidth, cl_uint resizeheight);
 
@@ -397,6 +409,7 @@ private:
 
 	// opencl mem
 	cl_mem                  m_DSliceImageU8;
+	cl_mem                  m_DSliceImageorigin;
 	cl_mem                  m_DSliceImagefloat;
 	cl_mem                  m_DSliceZero;
 	cl_mem                  m_DSliceZeroScan;

@@ -22,7 +22,7 @@ namespace Win
     {
     public:
         // ctor/dtor with minimal args
-		Window(WNDPROC _procfunc);
+		Window(WNDPROC _procfunc, wchar_t const* win_name, wchar_t const* win_title);
         ~Window();
 
         void printSelf() const;                 // print itself

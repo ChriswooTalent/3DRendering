@@ -2,31 +2,23 @@
 #define _DATA_TYPES_H_
 
 #ifdef __cplusplus //#ifdef __cplusplus ---------------------------------------------------------
-extern "C" {
+	extern "C" {
 #endif 
-  
-	// Portable STANDARD data types (the built-in standard C/C++ data types *shall* never be used)
+
+		// Portable STANDARD data types (the built-in standard C/C++ data types *shall* never be used)
 #define INT8		char
 #define UINT8		unsigned char
 #define BYTE		unsigned char
 #define INT16		short
 #define UINT16	unsigned short
 #define INT32		int
-#define UINT32	unsigned int
-#define UINT64	unsigned __int64    
+#define UINT32	unsigned int 
 #define LONG		long
 #define ULONG		unsigned long
-#define FLOAT		float
 #define DOUBLE	double
-#define STRING	char*
-#define WSTRING	unsigned short int*
 #ifdef __cplusplus
-}
+	}
 #endif // #ifdef __cplusplus -------------------------------------------------------------------
-
-typedef void *PVOID;
-typedef void *HANDLE;
-typedef __int64 LONGLONG;
 
 #ifndef NULL
 #define NULL	(0L)
@@ -72,7 +64,7 @@ typedef __int64 LONGLONG;
 
 #define ATOMIC_TYPE_SZ	(4)
 
-// Other useful macros
+	// Other useful macros
 #ifndef MIN
 #define MIN( a, b )	((( a ) < ( b )) ? ( a ) : ( b ))	// Minimum of a and b
 #endif //#ifndef MIN
@@ -80,27 +72,6 @@ typedef __int64 LONGLONG;
 #ifndef MAX
 #define MAX( a, b )	((( a ) > ( b )) ? ( a ) : ( b ))	// Maximum of a and b
 #endif //ifndef MAX
-
-#ifndef CHUNCK  // CHUNCK accesses PARTS of a data type
-#define CHUNCK(type, variable, offset) \
-	(*( (type *)(&(variable)) + (offset) ))
-#endif //#ifndef CHUNCK
-
-#define ALIGN_BUF_PTR( ptr, next_size ) \
-	switch (( next_size ) % 16 ) \
-{ \
-	case 0: /* 16-byte alignment needed */ \
-	ptr = ( VOID* ) ((( UINT32 )( ptr ) + 15 ) & 0xFFFFFFF0 ); \
-	break; \
-	case 2: /* 2-byte alignment needed */ \
-	ptr = ( VOID* ) ((( UINT32 )( ptr ) + 1 ) & 0xFFFFFFFE ); \
-	break; \
-	case 4: /* 4-byte alignment needed */ \
-	ptr = ( VOID* ) ((( UINT32 )( ptr ) + 3 ) & 0xFFFFFFFC ); \
-	break; \
-	default: \
-	break; \
-}
 
 //ImageSize
 #define TIMEPARA	1000000.0
@@ -121,254 +92,255 @@ typedef __int64 LONGLONG;
 #define  MAXNEIGHBORNUM 120
 #define  MAXNEIGHBORNUMUD 30
 #define  MAXITERTIMES 8
-
-typedef struct DICOMInfo
+namespace RenderingDataTypes
 {
-	DICOMInfo() :
-		// 				ImageModality('\0'),
-		// 				InstituteName('\0'),
-		// 				PatientName('\0'),
-		// 				PatientID('\0'),
-		// 				PatientBirthday('\0'),
-		// 				PatientSex('\0'),
-		// 				PatientAge('\0'),
-		// 				BodyPartExamined('\0'),
-		SliceThickness(0),
-		UpperLeft_X(0),
-		UpperLeft_Y(0),
-		UpperLeft_Z(0),
-		SliceLocation(0),
-		SamplePerPixel(0),
-		ImageWidth(512),
-		ImageHeight(512),
-		PixelSpacing_X(0),
-		PixelSpacing_Y(0),
-		BitsAllocated(0),
-		BitsStored(0),
-		WindowWidth(0),
-		WindowCenter(0),
-		RescaleIntercept(0),
-		RescaleSlope(0),
-		PixelPaddingValue(0),
-		GPixelMaxValue(4095),
-		GPixelMinValue(0) {}
-
-	char ImageModality[16];
-
-	char InstituteName[64];
-	char PatientName[64];
-	char PatientID[64];
-	char PatientBirthday[9];
-
-	char PatientSex[16];
-
-	char PatientAge[5];
-
-	char BodyPartExamined[16];
-
-	float SliceThickness;
-
-	// image position (patient)
-	float UpperLeft_X;
-	float UpperLeft_Y;
-	float UpperLeft_Z;
-
-	float SliceLocation;
-
-	unsigned short SamplePerPixel;
-
-	unsigned short ImageWidth;
-	unsigned short ImageHeight;
-
-	// Pixel Spacing
-	float PixelSpacing_X;
-	float PixelSpacing_Y;
-
-	unsigned short BitsAllocated;
-	unsigned short BitsStored;
-
-	float WindowWidth;
-	float WindowCenter;
-
-	float RescaleIntercept;
-	float RescaleSlope;
-
-	unsigned short PixelPaddingValue;
-
-	unsigned short GPixelMaxValue;
-	unsigned short GPixelMinValue;
-}_DICOMInfo;
-
-typedef struct DICOMImage
-{
-	float * _pBuff;
-	short _offset;
-}_DICOMImage;
-
-typedef struct vector3
-{
-	float fX;
-	float fY;
-	float fZ;
-	vector3()
+	typedef struct DICOMInfo
 	{
-		fX = 0.0f;
-		fY = 0.0f;
-		fZ = 0.0f;
-	}
-	vector3(float x_as, float y_as, float z_as)
-	{
-		fX = x_as;
-		fY = y_as;
-		fZ = z_as;
-	}
-	vector3& operator=(vector3& vec)
-	{
-		fX = vec.fX;
-		fY = vec.fY;
-		fZ = vec.fZ;
-		return *this;
-	}
+		DICOMInfo() :
+			// 				ImageModality('\0'),
+			// 				InstituteName('\0'),
+			// 				PatientName('\0'),
+			// 				PatientID('\0'),
+			// 				PatientBirthday('\0'),
+			// 				PatientSex('\0'),
+			// 				PatientAge('\0'),
+			// 				BodyPartExamined('\0'),
+			SliceThickness(0),
+			UpperLeft_X(0),
+			UpperLeft_Y(0),
+			UpperLeft_Z(0),
+			SliceLocation(0),
+			SamplePerPixel(0),
+			ImageWidth(512),
+			ImageHeight(512),
+			PixelSpacing_X(0),
+			PixelSpacing_Y(0),
+			BitsAllocated(0),
+			BitsStored(0),
+			WindowWidth(0),
+			WindowCenter(0),
+			RescaleIntercept(0),
+			RescaleSlope(0),
+			PixelPaddingValue(0),
+			GPixelMaxValue(4095),
+			GPixelMinValue(0) {}
 
-	vector3& operator+(vector3 &pt)//实现加法重载
-	{
-		vector3 temppt(0.0f, 0.0f, 0.0f);
-		temppt.fX = fX + pt.fX;
-		temppt.fY = fY + pt.fY;
-		temppt.fZ = fZ + pt.fZ;
-		return temppt;//返回当前对象
-	}
-}vector3d;
+		char ImageModality[16];
 
-typedef struct Point3
-{
-	float x;
-	float y;
-	float z;
-	int indsort;
+		char InstituteName[64];
+		char PatientName[64];
+		char PatientID[64];
+		char PatientBirthday[9];
 
-	Point3()
-	{
-		x = 0.0f;
-		y = 0.0f;
-		z = 0.0f;
-		indsort = 0;
-	}
-	Point3(float x_as, float y_as, float z_as, int ind)
-	{
-		x = x_as;
-		y = y_as;
-		z = z_as;
-		indsort = ind;
-	}
+		char PatientSex[16];
 
-	Point3& operator=(Point3& pt)
-	{
-		x = pt.x;
-		y = pt.y;
-		z = pt.z;
-		indsort = pt.indsort;
-		return *this;
-	}
+		char PatientAge[5];
 
-	Point3& operator+(Point3 &pt)//实现加法重载
-	{
-		Point3 temppt(0.0f, 0.0f, 0.0f, 0);
-		temppt.x = x + pt.x;
-		temppt.y = y + pt.y;
-		temppt.z = z + pt.z;
-		temppt.indsort = pt.indsort;
-		return temppt;//返回当前对象
-	}
+		char BodyPartExamined[16];
 
-	Point3& operator-(Point3 &pt)
-	{
-		Point3 temppt(0.0f, 0.0f, 0.0f, 0);
-		temppt.x = x - pt.x;
-		temppt.y = y - pt.y;
-		temppt.z = z - pt.z;
-		temppt.indsort = indsort;
-		return temppt;//返回当前对象
-	}
+		float SliceThickness;
 
-	bool operator<(const Point3& pt) const
+		// image position (patient)
+		float UpperLeft_X;
+		float UpperLeft_Y;
+		float UpperLeft_Z;
+
+		float SliceLocation;
+
+		unsigned short SamplePerPixel;
+
+		unsigned short ImageWidth;
+		unsigned short ImageHeight;
+
+		// Pixel Spacing
+		float PixelSpacing_X;
+		float PixelSpacing_Y;
+
+		unsigned short BitsAllocated;
+		unsigned short BitsStored;
+
+		float WindowWidth;
+		float WindowCenter;
+
+		float RescaleIntercept;
+		float RescaleSlope;
+
+		unsigned short PixelPaddingValue;
+
+		unsigned short GPixelMaxValue;
+		unsigned short GPixelMinValue;
+	}_DICOMInfo;
+
+	typedef struct DICOMImage
 	{
-		/*if (x == pt.x)
-		return indsort < pt.indsort;
-		else
-		return x < pt.x;*/
-		if (x < pt.x)
+		float * _pBuff;
+		short _offset;
+	}_DICOMImage;
+
+	typedef struct vector3
+	{
+		float fX;
+		float fY;
+		float fZ;
+		vector3()
 		{
-			return true;
+			fX = 0.0f;
+			fY = 0.0f;
+			fZ = 0.0f;
 		}
-		else
+		vector3(float x_as, float y_as, float z_as)
 		{
-			return false;
+			fX = x_as;
+			fY = y_as;
+			fZ = z_as;
 		}
-	}
-	bool operator==(const Point3& pt) const
+		vector3& operator=(vector3& vec)
+		{
+			fX = vec.fX;
+			fY = vec.fY;
+			fZ = vec.fZ;
+			return *this;
+		}
+
+		vector3& operator+(vector3 &pt)//实现加法重载
+		{
+			fX += pt.fX;
+			fY += pt.fY;
+			fZ += pt.fZ;
+			return *this;//返回当前对象
+		}
+	}vector3d;
+
+	typedef struct Point3
 	{
-		return ((x == pt.x) && (y == pt.y) && (z == pt.z));
-	}
-}Point3f;
+		float x;
+		float y;
+		float z;
+		int indsort;
 
-class dim3 {
-public:
-	size_t x;
-	size_t y;
-	size_t z;
+		Point3()
+		{
+			x = 0.0f;
+			y = 0.0f;
+			z = 0.0f;
+			indsort = 0;
+		}
+		Point3(float x_as, float y_as, float z_as, int ind)
+		{
+			x = x_as;
+			y = y_as;
+			z = z_as;
+			indsort = ind;
+		}
 
-	dim3(size_t _x = 1, size_t _y = 1, size_t _z = 1) { x = _x; y = _y; z = _z; }
-};
+		Point3& operator=(Point3& pt)
+		{
+			x = pt.x;
+			y = pt.y;
+			z = pt.z;
+			indsort = pt.indsort;
+			return *this;
+		}
 
-class RenderParam
-{
-public:
-	float IsoValue;
-	float IsoValueBone;
-	float IsoValueMask;
-	float IsoUp;
-	float IsoBot;
-	float DisoValue;
-	float Density;
-	float Brightness;
-	float TransferOffset;
-	float TransferScale;
-	int MaskStartSlice;
-	int MaskEndSlice;
+		Point3& operator+(Point3 &pt)//实现加法重载
+		{
+			Point3 temppt(0.0f, 0.0f, 0.0f, 0);
+			temppt.x = x + pt.x;
+			temppt.y = y + pt.y;
+			temppt.z = z + pt.z;
+			temppt.indsort = pt.indsort;
+			return temppt;//返回当前对象
+		}
 
-	RenderParam(float _isoval = 0.0f, float _isovalbone = 0.0f, float _isovalmask = 0.0f, float _disoval = 0.5f, float _isoup = 500, float _isobot = -800,
-		        int _startno = 0, int _endno = 5, float _density = 0.05f, float _brightness = 1.0f, float _transoffset = 0.0f, float _transcale = 1.0f)
+		Point3& operator-(Point3 &pt)
+		{
+			Point3 temppt(0.0f, 0.0f, 0.0f, 0);
+			temppt.x = x - pt.x;
+			temppt.y = y - pt.y;
+			temppt.z = z - pt.z;
+			temppt.indsort = indsort;
+			return temppt;//返回当前对象
+		}
+
+		bool operator<(const Point3& pt) const
+		{
+			/*if (x == pt.x)
+			return indsort < pt.indsort;
+			else
+			return x < pt.x;*/
+			if (x < pt.x)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		bool operator==(const Point3& pt) const
+		{
+			return ((x == pt.x) && (y == pt.y) && (z == pt.z));
+		}
+	}Point3f;
+
+	class dim3 {
+	public:
+		size_t x;
+		size_t y;
+		size_t z;
+
+		dim3(size_t _x = 1, size_t _y = 1, size_t _z = 1) { x = _x; y = _y; z = _z; }
+	};
+
+	class RenderParam
 	{
-		IsoValue = _isoval;
-		IsoValueBone = _isovalbone;
-		IsoValueMask = _isovalmask;
-		DisoValue = _disoval;
-		IsoUp = _isoup;
-		IsoBot = _isobot;
-		Density = _density;
-		Brightness = _brightness;
-		TransferOffset = _transoffset;
-		TransferScale = _transcale;
-		MaskStartSlice = _startno;
-		MaskEndSlice = _endno;
-	}
+	public:
+		float IsoValue;
+		float IsoValueBone;
+		float IsoValueMask;
+		float IsoUp;
+		float IsoBot;
+		float DisoValue;
+		float Density;
+		float Brightness;
+		float TransferOffset;
+		float TransferScale;
+		int MaskStartSlice;
+		int MaskEndSlice;
 
-	RenderParam &operator=(RenderParam& rp_obj)
-	{
-		IsoValue = rp_obj.IsoValue;
-		IsoValueBone = rp_obj.IsoValueBone;
-		IsoValueMask = rp_obj.IsoValueMask;
-		DisoValue = rp_obj.DisoValue;
-		IsoUp = rp_obj.IsoUp;
-		IsoBot = rp_obj.IsoBot;
-		Density = rp_obj.Density;
-		Brightness = rp_obj.Brightness;
-		TransferOffset = rp_obj.TransferOffset;
-		TransferScale = rp_obj.TransferScale;
-		MaskStartSlice = rp_obj.MaskStartSlice;
-		MaskEndSlice = rp_obj.MaskEndSlice;
-	}
-};
+		RenderParam(float _isoval = 0.0f, float _isovalbone = 0.0f, float _isovalmask = 0.0f, float _disoval = 0.5f, float _isoup = 500, float _isobot = -800,
+			int _startno = 0, int _endno = 5, float _density = 0.05f, float _brightness = 1.0f, float _transoffset = 0.0f, float _transcale = 1.0f)
+		{
+			IsoValue = _isoval;
+			IsoValueBone = _isovalbone;
+			IsoValueMask = _isovalmask;
+			DisoValue = _disoval;
+			IsoUp = _isoup;
+			IsoBot = _isobot;
+			Density = _density;
+			Brightness = _brightness;
+			TransferOffset = _transoffset;
+			TransferScale = _transcale;
+			MaskStartSlice = _startno;
+			MaskEndSlice = _endno;
+		}
+
+		RenderParam &operator=(RenderParam& rp_obj)
+		{
+			IsoValue = rp_obj.IsoValue;
+			IsoValueBone = rp_obj.IsoValueBone;
+			IsoValueMask = rp_obj.IsoValueMask;
+			DisoValue = rp_obj.DisoValue;
+			IsoUp = rp_obj.IsoUp;
+			IsoBot = rp_obj.IsoBot;
+			Density = rp_obj.Density;
+			Brightness = rp_obj.Brightness;
+			TransferOffset = rp_obj.TransferOffset;
+			TransferScale = rp_obj.TransferScale;
+			MaskStartSlice = rp_obj.MaskStartSlice;
+			MaskEndSlice = rp_obj.MaskEndSlice;
+		}
+	};
+}
 
 #endif //#ifndef _DATA_TYPES_H_

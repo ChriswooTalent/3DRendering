@@ -10,8 +10,8 @@ namespace openglRendering
 		middlevertpt[2] = (topvertpt[2] + bottomvertpt[2]) / 2.0f;
 		for (int i = 0; i < slices; i++)
 		{
-			float theta = ((float)i)*2.0*PI;
-			float nextTheta = ((float)i + 1)*2.0*PI;
+			float theta = ((float)i)*2.0f*PI;
+			float nextTheta = ((float)i + 1)*2.0f*PI;
 			glBegin(GL_TRIANGLE_STRIP);
 			/*vertex at middle of end */ 
 			glVertex3f(topvertpt[0], topvertpt[1], topvertpt[2]);
@@ -68,7 +68,7 @@ namespace openglRendering
 		int i = 0;
 		for (i = 0; i <= 390; i += 15)
 		{
-			float p = i * 3.14 / 180;
+			float p = i * 3.14f / 180.0f;
 			glVertex3f(sin(p), cos(p), 0.0f);
 		}
 		glEnd();

@@ -8,6 +8,7 @@
 using namespace std;
 #define DEFAULTCYLINDERSLICE 1080
 using namespace QuaternionProcess;
+using namespace RenderingDataTypes;
 
 enum RegistrationStep
 {
@@ -79,9 +80,9 @@ public:
 	//PunctureLine
 	void GetPuncNeedlePtArray(GLfloat *topcptarray, GLfloat *botcptarray, GLfloat *cylindercenter, GLfloat *ConeCircleArray, GLfloat *NeedleTop);
 	void GetDrawingSensorPositionDown(Point3f sensor_pt, int interpflag);
-	void CalcingCylinderPtArray();
-	void CalcingPunctureLineStart(Point3f &pt_start);
-	void CalcingPunctureLineEnd(Point3f &pt_end);
+	void CalcingCylinderPtArraySpace();
+	void CalcingPunctureLineStartSpace(Point3f &pt_start);
+	void CalcingPunctureLineEndSpace(Point3f &pt_end);
 	void CalcingPunctureLineVector(float &x, float &y, float &z);
 
 	//Registration Process

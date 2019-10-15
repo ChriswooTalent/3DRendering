@@ -10,11 +10,18 @@
 #include "QuaternionProcess.h"
 #include <fstream> 
 #include <sstream>
+#include <opencv2/opencv.hpp>
+#include "opencv2/core/core.hpp"
+#include "opencv2/highgui/highgui.hpp"
+#include "opencv2/imgproc/imgproc.hpp"
+
 
 using namespace QuaternionProcess;
 //NDIDriveBay
 extern "C" __declspec(dllimport) void InitNDIDriveBay(const char *err, int &errorCode);
 extern "C" __declspec(dllimport) void GetNDIDriveBaySynRecord(void *pRecord, int elementsize, int recordSize, int &validsensornum, int *sensorindex, int &errorCode, const char *err);
+extern "C" __declspec(dllimport) void GetNDIDriveBayRotationMatrix(int sensorid, double *RMatrix, int &errorCode, const char *err);
+extern "C" __declspec(dllimport) void GetNDIDriveBayQuaterNion(int sensorid, double *Quaternion, int &errorCode, const char *err);
 extern "C" __declspec(dllimport) void ReleaseNDIDriveBayResource();
 
 RenderBase::RenderBase()
@@ -27,8 +34,12 @@ RenderBase::RenderBase()
 	//error message
 	error_message = NULL;
 	slicepbo = 0;
+	slicefusionpbo = 0;
+	regpbo = 0;
 	m_SlicePboCL = 0;
+	m_SliceFusionCL = 0;
 	m_RegPboCL = 0;
+	m_OriginSliceCL = 0;
 	d_volume = 0;
 	d_volumarraybase = 0;
 	d_volumeBone = 0;
@@ -133,6 +144,7 @@ RenderBase::RenderBase()
 	memset(m_OldRecord, 0, DEFAULTSENSORCOUNT * sizeof(m_OldRecord[0]));
 	memset(m_CurRecord, 0, DEFAULTSENSORCOUNT * sizeof(m_CurRecord[0]));
 	memset(m_SensorInd, 0, DEFAULTSENSORCOUNT * sizeof(int));
+	memset(m_Qnionvalue, 0, DEFAULTSENSORCOUNT * sizeof(double));
 
 	//Registration Im buf
 	for (int i = 0; i < MAXREGDIRECIMNUM; i++)
@@ -145,6 +157,12 @@ RenderBase::RenderBase()
 	m_WorkBuf = (UINT8 *)malloc(4 * WIDTH*HEIGHT);
 	memset(m_WorkBuf, 0, 4 * WIDTH*HEIGHT);
 	memset(m_RegHintFilePath, 0, 255 * sizeof(char));
+
+	m_HostSliceBuf = (float *)malloc(WIDTH*HEIGHT * sizeof(float));
+	memset(m_HostSliceBuf, 0, WIDTH*HEIGHT * sizeof(float));
+
+	m_HostUSBuf = (float *)malloc(WIDTH*HEIGHT * sizeof(float));
+	memset(m_HostUSBuf, 0, WIDTH*HEIGHT * sizeof(float));
 	m_RegHintChangeTickCount = 0;
 	m_RegHintFinishWaitTickCount = 0;
 	m_RegHintIndex = 0;
@@ -152,6 +170,7 @@ RenderBase::RenderBase()
 	m_Texture[0] = 0;
 	m_Texture[1] = 0;
 	m_Texture[2] = 0;
+	m_Texture[3] = 0;
 	m_ProbeTexture = 0;
 
 	//Registration Angle Info
@@ -164,6 +183,10 @@ RenderBase::RenderBase()
 	m_CurRoll = 0.0f;
 	m_CurElevation = 0.0f;
 	m_CurAzimuth = 0.0f;
+
+	//Pixel mm
+	m_SlicePixelScaleX = 1.0f;
+	m_SlicePixelScaleY = 1.0f;
 }
 
 RenderBase::~RenderBase()
@@ -182,6 +205,16 @@ RenderBase::~RenderBase()
 	{
 		free(m_HostVolume);
 		m_HostVolume = NULL;
+	}
+	if (m_HostSliceBuf)
+	{
+		free(m_HostSliceBuf);
+		m_HostSliceBuf = NULL;
+	}
+	if (m_HostUSBuf)
+	{
+		free(m_HostUSBuf);
+		m_HostUSBuf = NULL;
 	}
 	for (int i = 0; i < DEFAULTSENSORCOUNT; i++)
 	{
@@ -223,6 +256,10 @@ RenderBase::~RenderBase()
 	if (d_upperzp) clReleaseMemObject(d_upperzp);
 	if (d_xstartoffset) clReleaseMemObject(d_xstartoffset);
 	if (d_ystartoffset) clReleaseMemObject(d_ystartoffset);
+	if (m_OriginSliceCL) clReleaseMemObject(m_OriginSliceCL);
+	deletePBO(slicepbo, m_SlicePboCL);
+	deletePBO(slicefusionpbo, m_SliceFusionCL);
+	deletePBO(regpbo, m_RegPboCL);
 	OpenCLRelease();
 	ReleaseNDIDriveBayResource();
 	StopInternalThread();
@@ -250,6 +287,10 @@ void RenderBase::GLDataRendering(cl_float translate[4], cl_float clrotate[4], in
 }
 
 void RenderBase::WGLDataRendering(int orderflag)
+{
+}
+
+void RenderBase::WGLSliceRendering(int orderflag)
 {
 }
 
@@ -530,14 +571,14 @@ void RenderBase::GetPBO()
 	ClearSlicePBO(m_SlicePboCL);
 	GetSlicePBO(m_SlicePboCL, m_PboResizeFlag);
 #if 0
-	UINT32* h_pbo = (UINT32 *)malloc(WIDTH*HEIGHT*sizeof(UINT32));
-	int err = clEnqueueReadBuffer(m_Queue, m_SlicePboCL, CL_TRUE, 0, WIDTH*HEIGHT*sizeof(UINT32), h_pbo, 0, 0, 0);
+	UINT32* h_pbo = (UINT32 *)malloc(WIDTH*HEIGHT * sizeof(UINT32));
+	int err = clEnqueueReadBuffer(m_Queue, m_SlicePboCL, CL_TRUE, 0, WIDTH*HEIGHT * sizeof(UINT32), h_pbo, 0, 0, 0);
 	if (err != 0)
 	{
 		return;
 	}
 	FILE *fp = NULL;
-	fopen_s(&fp, "pbo_test.txt", "w+");
+	fopen_s(&fp, "D:/slice_test/pbo_test.txt", "w+");
 	for (int i = 0; i < HEIGHT; i++)
 	{
 		for (int j = 0; j < WIDTH; j++)
@@ -558,6 +599,93 @@ void RenderBase::GetPBO()
 	}
 }
 
+void RenderBase::GetFusionPBO(float* h_pbo)
+{
+	int pbowidth = m_Sliceobj->GetDstWidth();
+	int pboheight = m_Sliceobj->GetDstHeight();
+	if ((WIDTH == pbowidth) && (HEIGHT == pboheight))
+	{
+		m_PboResizeFlag = false;
+	}
+	else
+	{
+		m_PboResizeFlag = true;
+	}
+	if (g_glInterop)
+	{
+		// Acquire PBO for OpenCL writing
+		glFlush();
+		error |= clEnqueueAcquireGLObjects(m_Queue, 1, &m_SliceFusionCL, 0, 0, 0);
+	}
+
+	ClearSlicePBO(m_SliceFusionCL);
+	GetFusionSliceTexture(m_SliceFusionCL, m_PboResizeFlag);
+	int err = clEnqueueReadBuffer(m_Queue, m_SliceFusionCL, CL_TRUE, 0, WIDTH*HEIGHT * sizeof(float), h_pbo, 0, 0, 0);
+	if (err != 0)
+	{
+		return;
+	}
+#if 0
+	UINT32* h_pbo = (UINT32 *)malloc(WIDTH*HEIGHT * sizeof(UINT32));
+	int err = clEnqueueReadBuffer(m_Queue, m_SliceFusionCL, CL_TRUE, 0, WIDTH*HEIGHT * sizeof(UINT32), h_pbo, 0, 0, 0);
+	if (err != 0)
+	{
+		return;
+	}
+	FILE *fp = NULL;
+	fopen_s(&fp, "D:/slice_test/pbo_test.txt", "w+");
+	for (int i = 0; i < HEIGHT; i++)
+	{
+		for (int j = 0; j < WIDTH; j++)
+		{
+			fprintf_s(fp, "%d ", h_pbo[i*GridSize[0] + j]);
+		}
+		fprintf_s(fp, "\n");
+	}
+	fclose(fp);
+	free(h_pbo);
+#endif
+	if (g_glInterop)
+	{
+		// Transfer ownership of buffer back from CL to GL    
+		error |= clEnqueueReleaseGLObjects(m_Queue, 1, &m_SliceFusionCL, 0, 0, 0);
+		check_CL_error(error, "PBO Error Occured while transfering from openCL to openGL");
+		clFinish(m_Queue);
+	}
+}
+
+void RenderBase::GetOriginSlice(float* h_slice)
+{
+	int pbowidth = m_Sliceobj->GetDstWidth();
+	int pboheight = m_Sliceobj->GetDstHeight();
+	if ((WIDTH == pbowidth) && (HEIGHT == pboheight))
+	{
+		m_PboResizeFlag = false;
+	}
+	else
+	{
+		m_PboResizeFlag = true;
+	}
+	//GetOriginSlice(m_OriginSliceCL, m_PboResizeFlag);
+	GetFusionSliceTexture(m_OriginSliceCL, m_PboResizeFlag);
+	int err = clEnqueueReadBuffer(m_Queue, m_OriginSliceCL, CL_TRUE, 0, WIDTH*HEIGHT * sizeof(float), h_slice, 0, 0, 0);
+	if (err != 0)
+	{
+		return;
+	}
+	/*FILE *fp = NULL;
+	fopen_s(&fp, "D:/CarbonMed/testdata1/pbo_test.txt", "w+");
+	for (int i = 0; i < HEIGHT; i++)
+	{
+		for (int j = 0; j < WIDTH; j++)
+		{
+			fprintf_s(fp, "%f ", h_slice[i*WIDTH + j]);
+		}
+		fprintf_s(fp, "\n");
+	}
+	fclose(fp);*/
+}
+
 void RenderBase::Init2DTexturePBO()
 {
 	createPBO(slicepbo, WIDTH*HEIGHT*sizeof(GLubyte)* 4, m_SlicePboCL, 1);
@@ -574,9 +702,25 @@ void RenderBase::Init2DTexturePBO()
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
+void RenderBase::Init2DFusionPBO()
+{
+	createPBO(slicefusionpbo, WIDTH*HEIGHT * sizeof(GLubyte) * 4, m_SliceFusionCL, 1);
+	PrintLog("createPBO end!");
+	glGenTextures(1, &m_Texture[3]);
+	glBindTexture(GL_TEXTURE_2D, m_Texture[3]);
+
+	// Step2 设定wrap参数
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, WIDTH, HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glBindTexture(GL_TEXTURE_2D, 0);
+}
+
 void RenderBase::InitRegProcessHintPBO()
 {
-	createPBO(regpbo, REGDIRECIMWIDTH*REGDIRECIMHEIGHT*sizeof(GLubyte) * 4, m_RegPboCL, 2);
+	createPBO(regpbo, REGDIRECIMWIDTH*REGDIRECIMHEIGHT*sizeof(GLubyte) * 4, m_RegPboCL, 1);
 	glGenTextures(1, &m_Texture[2]);
 	glBindTexture(GL_TEXTURE_2D, m_Texture[2]);
 
@@ -587,6 +731,12 @@ void RenderBase::InitRegProcessHintPBO()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+void RenderBase::InitOriginSliceBuffer()
+{
+	m_OriginSliceCL = clCreateBuffer(m_Context, CL_MEM_READ_WRITE, WIDTH*HEIGHT * sizeof(float), 0, &error);
+	check_CL_error(error, "d_vertexUD created failed");
 }
 
 void RenderBase::LoadGLU8ColorTextures(UINT8 *imdata, GLuint tex2d, int width, int height, int channels)
@@ -627,9 +777,9 @@ void RenderBase::LoadGLU8Textures(UINT8 *imdata, GLuint tex2d, int width, int he
 	int pixellength = width*height;
 	m_Pixels = (GLubyte *)malloc(pixellength*sizeof(GLubyte));
 	memcpy(m_Pixels, imdata, pixellength*sizeof(GLubyte));
-#if 0
+#if 1
 	FILE *fp = 0;
-	fopen_s(&fp, "texture_matlab.txt", "w+");
+	fopen_s(&fp, "D:/texture_matlab.txt", "w+");
 	for (int i = 0; i < height; i++)
 	{
 		for (int j = 0; j < width; j++)
@@ -643,6 +793,29 @@ void RenderBase::LoadGLU8Textures(UINT8 *imdata, GLuint tex2d, int width, int he
 
 	if (imdata)
 	{
+		width = 512;
+		height = 512;
+		UINT8 *data_buf = (UINT8 *)malloc(width*height * 4 * sizeof(UINT8));
+		int image_channels = 3;
+		memset(data_buf, 0, width*height * 4 * sizeof(UINT8));
+		int count = 0;
+		for (int i = 0; i < height; i++)
+		{
+			UINT8 *dst_buf = &data_buf[i*width * 4];
+			for (int j = 0; j < width; j++)
+			{
+				for (int c = 0; c < image_channels; c++)
+				{
+					dst_buf[j * 4 + c] = 255;
+					count++;
+					if (count == 255)
+					{
+						count = 0;
+					}
+				}
+				dst_buf[j * 4 + 3] = 255;
+			}
+		}
 		glGenTextures(1, &tex2d);
 		glBindTexture(GL_TEXTURE_2D, tex2d);
 		// Step2 设定wrap参数
@@ -653,8 +826,9 @@ void RenderBase::LoadGLU8Textures(UINT8 *imdata, GLuint tex2d, int width, int he
 		// Step3 设定filter参数
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, m_Pixels);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data_buf);
 		glBindTexture(GL_TEXTURE_2D, 0);
+		free(data_buf);
 	}
 	free(m_Pixels);
 }
@@ -702,8 +876,8 @@ void RenderBase::createPBO(GLuint &pbo, UINT32 size, cl_mem &pbo_cl, GLuint pboi
 	}
 
 	// create pixel buffer object for display
-	glGenBuffers(pboid, &pbo);
-	//glGenBuffersARB(pboid, &pbo);
+	//glGenBuffers(pboid, &pbo);
+	glGenBuffersARB(pboid, &pbo);
 	glBindBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB, pbo);
 	glBufferDataARB(GL_PIXEL_UNPACK_BUFFER_ARB, size, 0, GL_STREAM_DRAW_ARB);
 	glBindBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB, 0);
@@ -857,6 +1031,8 @@ void RenderBase::GetRealTimeNDIRecord()
 	axisvectest.fX = 0.0f;
 	axisvectest.fY = 0.0f;
 	axisvectest.fZ = 1.0f;
+	Vector3f qn_norm(0.0f, 1.0f, 0.0f);
+	Vector3f qn_needle(1.0f, 0.0f, 0.0f);
 	error = 0;
 	float Regrmat[9] = { 0.0f };
 	Regrmat[0] = 1.0f;
@@ -908,89 +1084,19 @@ void RenderBase::GetRealTimeNDIRecord()
 				rotatedpt.fZ = tempquater.GetQuaternionZ();
 				transformpt = rotatedpt + transvec3d;
 
-				float azimuth = -1.0f*(pRecord[kn].r - m_Rollstart)*PI / 180.0;//z angle
-				float elevation = -1.0f*(pRecord[kn].a - m_Azimuthstart)*PI / 180.0;//y angle
-				float roll = (pRecord[kn].e - m_Elevationstart)*PI / 180;//x angle
+				static double RotMat[9] = { 0.0 };
+				double RMatrix[9] = { 0.0 };
+				static double Qnionvalue[4] = { 0.0 };
 
-				//float elevation = 1.0f*(pRecord[kn].r+180.0f - m_Rollstart)*PI / 180.0;//z angle
-				//float roll = 1.0f*(pRecord[kn].a+180.0f - m_Azimuthstart)*PI / 180.0;//y angle
-				//float azimuth = (pRecord[kn].e+180.0f - m_Elevationstart)*PI / 180;//x angle
-
-				printf("transformptCMP X is %f\n", transformptCMP.fX);
-				printf("transformptCMP Y is %f\n", transformptCMP.fY);
-				printf("transformptCMP Z is %f\n", transformptCMP.fZ);
-
-				printf("transformpt X is %f\n", transformpt.fX);
-				printf("transformpt Y is %f\n", transformpt.fY);
-				printf("transformpt Z is %f\n", transformpt.fZ);
-
-				/*TestQuaternion.FromEuler(azimuth, roll, elevation, 1);
-				TempResQuaternion = RegQuaternion.GetQRotationResult(TestQuaternion);
-				float xangletest = 0.0f;
-				float yangletest = 0.0f;
-				float zangletest = 0.0f;
-				TempResQuaternion.GetXYZAxisAngleByQuaternion(xangletest, yangletest, zangletest);*/
-				if (fabs(azimuth - m_OldAzimuth) >= CHANGE_THRESH)
-				{
-					if (azimuth > PI)
-					{
-						azimuth = azimuth - 2 * PI;
-					}
-					else if (azimuth < -PI)
-					{
-						azimuth = azimuth + 2 * PI;
-					}
-					m_OldAzimuth = azimuth;
-					m_CurAzimuth = azimuth;
-				}
-				else
-				{
-					m_CurAzimuth = m_OldAzimuth;
-				}
-				if (fabs(elevation - m_OldElevation) >= CHANGE_THRESH)
-				{
-					if (elevation > PI)
-					{
-						elevation = elevation - 2 * PI;
-					}
-					else if (elevation < -PI)
-					{
-						elevation = elevation + 2 * PI;
-					}
-					m_OldElevation = elevation;
-					m_CurElevation = elevation;
-				}
-				else
-				{
-					m_CurElevation = m_OldElevation;
-				}
-				if (fabs(roll - m_OldRoll) >= CHANGE_THRESH)
-				{
-					if (roll > PI)
-					{
-						roll = roll - 2 * PI;
-					}
-					else if (roll < -PI)
-					{
-						roll = roll + 2 * PI;
-					}
-					m_OldRoll = roll;
-					m_CurRoll = roll;
-				}
-				else
-				{
-					m_CurRoll = m_OldRoll;
-				}
 				if (kn == 0)
 				{
-					m_Sliceobj->InitSlicePlaneInfo(axisvectest, transformpt.fX, transformpt.fY, transformpt.fZ, m_CurAzimuth, m_CurRoll, m_CurElevation, Regrmat);
+					GetNDIDriveBayQuaterNion(0, &m_Qnionvalue[kn * 4], error, error_message);
+					Quaternion cur_qn(m_Qnionvalue[kn * 4 + 3], m_Qnionvalue[kn * 4], m_Qnionvalue[kn * 4 + 1], m_Qnionvalue[kn * 4 + 2]);
+					//m_Sliceobj->InitSlicePlaneInfo(axisvectest, transformpt.fX, transformpt.fY, transformpt.fZ, m_CurAzimuth, m_CurRoll, m_CurElevation, Regrmat);
+					m_Sliceobj->InitSlicePlaneInfoQn(qn_norm, transformpt.fX, transformpt.fY, transformpt.fZ, cur_qn, Regrmat);
 					m_Sliceobj->GetDrawingSensorPositionReal();
 
 					Point3f pt_sensor = m_Sliceobj->GetWorldSensorPosition();
-					float rmat[9] = { 0.0f };
-					/*m_Sliceobj->GetRotationMat(rmat);
-					m_RegObj[kn]->SetSensorRotationMat(rmat);
-					m_RegObj[kn]->SetSensorPoint(pt_sensor);*/
 					m_Sliceobj->GetRotationQuaternion(QuNionTemp[kn]);
 					m_RegObj[kn]->SetRotationQuaternion(QuNionTemp[kn]);
 					m_RegObj[kn]->SetSensorPoint(pt_sensor);
@@ -1004,22 +1110,9 @@ void RenderBase::GetRealTimeNDIRecord()
 					pt_sensor.x = transformpt.fX;
 					pt_sensor.y = transformpt.fY;
 					pt_sensor.z = transformpt.fZ;
-					/*m_Sliceobj->GetRotationMat(m_CurAzimuth, m_OldRoll, m_OldElevation, rmat);
-					m_RegObj[kn]->SetSensorRotationMat(rmat);
-					m_RegObj[kn]->SetSensorPoint(pt_sensor);*/
-					printf("\n");
-					printf("start X ANGLE is %f\n", m_Azimuthstart);
-					printf("start Y ANGLE is %f\n", m_Rollstart);
-					printf("start Z ANGLE is %f\n", m_Elevationstart);
-
-					printf("X ANGLE is %f\n", roll);
-					printf("Y ANGLE is %f\n", elevation);
-					printf("Z ANGLE is %f\n", azimuth);
-
-					printf("CUR X ANGLE is %f\n", m_CurRoll);
-					printf("CUR Y ANGLE is %f\n", m_CurElevation);
-					printf("CUR Z ANGLE is %f\n", m_CurAzimuth);
-					QuNionTemp[kn].FromEuler(m_CurAzimuth, m_CurRoll, m_CurElevation, 1);
+					GetNDIDriveBayQuaterNion(1, &m_Qnionvalue[kn * 4], error, error_message);
+					Quaternion cur_qn(m_Qnionvalue[kn * 4 + 3], m_Qnionvalue[kn * 4], m_Qnionvalue[kn * 4 + 1], m_Qnionvalue[kn * 4 + 2]);
+					QuNionTemp[kn] = cur_qn;
 					m_RegObj[kn]->SetRotationQuaternion(QuNionTemp[kn]);
 					m_RegObj[kn]->SetSensorPoint(pt_sensor);
 				}
@@ -1049,19 +1142,6 @@ void RenderBase::GetRealTimeNDIRecord()
 				elevation = (90.0f - m_Elevationstart)*PI / 180.0;
 				roll = (-1.0f*m_Count - m_Rollstart)*PI / 180;
 
-				/*azimuth = 0.0f*PI / 180.0f;
-				elevation = 30.0f*PI / 180.0f;
-				roll = 0.0f*PI / 180.0f;
-				RegQuaternion.FromEuler(0.0f, PI / 2, PI, 1);
-				TestQuaternion.FromEuler(azimuth, roll, elevation, 1);
-				TempResQuaternion = RegQuaternion.GetQRotationResult(TestQuaternion);
-				float xangletest = 0.0f;
-				float yangletest = 0.0f;
-				float zangletest = 0.0f;
-				TempResQuaternion.GetXYZAxisAngleByQuaternion(xangletest, yangletest, zangletest);
-				printf("xangletest is %f\n", xangletest);
-				printf("yangletest is %f\n", yangletest);
-				printf("zangletest is %f\n", zangletest);*/
 				if (fabs(azimuth - m_OldAzimuth) >= CHANGE_THRESH)
 				{
 					if (azimuth > PI)
@@ -1705,6 +1785,11 @@ void RenderBase::SetOrganData(float *maskdata)
     }
 }
 
+void RenderBase::SlicePBOInit()
+{
+	Init2DFusionPBO();
+}
+
 void RenderBase::VolumeDataInit()
 {
 	//set interp
@@ -1767,13 +1852,32 @@ void RenderBase::VolumeDataInit()
 	error = clEnqueueWriteBuffer(m_Queue, d_ystartoffset, CL_TRUE, 0, startoffsetarraysize, m_UpperLeftYOffset, 0, 0, NULL);
 	check_CL_error(error, "d_ystartoffset init failed");
 	
+	
 	Init2DTexturePBO();
+	Init2DFusionPBO();
 	InitRegDirectionImBuffer();
 	InitRegProcessHintPBO();
+	InitOriginSliceBuffer();
 	LoadProbeICon();
 	PrintLog("LoadProbeICon done!");
 	//calc center pt
 	CalcVolumeCenterPt();
+}
+
+void RenderBase::SetUltraSoundBuf(float *buf, int len)
+{
+	memcpy(m_HostUSBuf, buf, len);
+	printf("set us buffer!\n");
+}
+
+void RenderBase::GetNomalizedSliceData(float *normslice)
+{
+	cv::Mat normsliceMat = cv::Mat(HEIGHT, WIDTH, CV_32FC1, m_HostSliceBuf);
+	double max_value = 0.0;
+	double min_value = 0.0;
+	cv::minMaxLoc(normsliceMat, &min_value, &max_value);
+	normsliceMat = (normsliceMat - min_value) / (max_value - min_value);
+	memcpy(normslice, normsliceMat.ptr<float>(0), HEIGHT*WIDTH*sizeof(float));
 }
 
 void RenderBase::GetSliceInfo(int &width, int &height)
@@ -1785,11 +1889,6 @@ void RenderBase::GetSliceInfo(int &width, int &height)
 void RenderBase::GetSliceRotationMat(float *rmat)
 {
 	m_Sliceobj->GetRotationMat(rmat);
-}
-
-void RenderBase::GetNomalizedSliceData(float *normslice)
-{
-	m_Sliceobj->GetSliceNormalized(normslice);
 }
 
 void RenderBase::GetSliceDataU8CPU(UINT8 *slicecpu)
@@ -1810,6 +1909,16 @@ void RenderBase::ClearSlicePBO(cl_mem &slicepbo)
 void RenderBase::GetSlicePBO(cl_mem &slicepbo, bool resizeflag)
 {
 	m_Sliceobj->GetSliceDataPBO(slicepbo, resizeflag);
+}
+
+void RenderBase::GetFusionSliceTexture(cl_mem &slicetex, bool resizeflag)
+{
+	m_Sliceobj->GetSliceDataTex(slicetex, resizeflag);
+}
+
+void RenderBase::GetOriginSlice(cl_mem &slicetex, bool resizeflag)
+{
+	m_Sliceobj->GetOriginSlice(slicetex);
 }
 
 void RenderBase::GetCoefsOfCutplane(float &pa, float &pb, float &pc, float &pd)
